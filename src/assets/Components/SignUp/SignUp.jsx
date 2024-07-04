@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import GoogleIcon from '@mui/icons-material/Google';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
@@ -34,7 +35,7 @@ const defaultTheme = createTheme();
 export default function SignUp() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { signup } = useContext(AuthContext);
+    const { signup, googleSignIn } = useContext(AuthContext);
     const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -45,6 +46,16 @@ export default function SignUp() {
     navigate("/");
     } catch (error) {
     console.log('Sign-up error:', error);
+    }
+    };
+
+  const handleGoogleSignIn = async () => {
+    try {
+    await googleSignIn();
+    console.log("Google sign-in successful");
+    navigate("/");
+    } catch (error) {
+    console.log('Google sign-in error:', error);
     }
     };
 
@@ -123,6 +134,15 @@ export default function SignUp() {
               sx={{ mt: 3, mb: 2 }}
             >
               Sign Up
+            </Button>
+            <Button
+                fullWidth
+                variant="outlined"
+                startIcon={<GoogleIcon />}
+                onClick={handleGoogleSignIn}
+                sx={{ mb: 2 }}
+                >
+                Sign in with Google
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
