@@ -5,6 +5,7 @@ import LogIn from './assets/Components/LogIn/LogIn'
 import SignUp from './assets/Components/SignUp/SignUp'
 import NavBar from './assets/Components/NavBar/NavBar'
 import { AuthProvider } from './assets/helpers/AuthContext'
+import ShowcaseForm from './assets/Components/Showcase/ShowcaseForm'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LogIn />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path='/showcaseForm' element={<ShowcaseForm />} />
           </Routes>
         </AuthProvider>
       </Router>
