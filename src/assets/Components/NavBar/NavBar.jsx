@@ -84,6 +84,11 @@ export default function NavBar() {
     handleClose();
   };
 
+  const handleShowcase = () => {
+    navigate("/showcaseForm");
+    handleClose();
+  }
+
   return (
     <AppBar position="fixed">
       <Toolbar>
@@ -131,6 +136,7 @@ export default function NavBar() {
             >
               <MenuItem onClick={handleProfile}>Profile</MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              <MenuItem onClick={handleShowcase}>Showcase</MenuItem>
             </Menu>
           </div>
         ) : (

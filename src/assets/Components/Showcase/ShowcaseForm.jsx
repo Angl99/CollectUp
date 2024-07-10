@@ -1,46 +1,56 @@
-import React, { useState, useEffect } from "react";
-// import { v4 as uuidv4 } from 'uuid';
-
+import React, { useState, useEffect } from 'react';
+import { fetchData } from '../../helpers/ShowcaseApi';
 
 export default function ShowcaseForm() {
+  const [itemCode, setItemCode] = useState('');
+  const [itemType, setItemType] = useState('UPC');
 
-    return (
-        <>
-            <h1> Create Your Showcase! </h1>
-            <form>
-                <label for='name'> Enter Item UPC, ISBN, or EAN: 
-                    <input type="text" name="item-code" value={""}/>
-                    <select name="code-type">
-                        {/* <option disabled autoFocus>Enter Item UPC, ISBN, or EAN</option> */}
-                        <option value="UPC">UPC</option>
-                        <option value="ISBN">ISBN</option>
-                        <option value="EAN">EAN</option>
-                    </select>
-                </label>
-                <hr />
+  const handleInputChange = (e) => {
+    setItemCode(e.target.value);
+  };
 
-                <label for='name'> Name: 
-                    <input type="text" name="title" value={""}/>
-                </label>
-                <hr />
+  const handleDropdownChange = (e) => {
+    setItemType(e.target.value);
+  };
 
-                <label for='name'> Brand: 
-                    <input type="text" name="brand" value={""}/>
-                </label>
-                <hr />
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const LookupCode = await fetchData(itemCode, itemType);
+      console.log("Api Requested Item:", LookupCode);
+    } catch (error) {
+      console.error('Error looking up item:', error);
+    }
+  };
 
-                <label for='name'> Year: 
-                    <input type="text" name="year" value={""}/>
-                </label>
-                <hr />
-
-                <label for='name'> Category: 
-                    <input type="text" name="category" value={""}/>
-                </label>
-                <hr />
-
-                {/* Add section for verifying appraised/ verified items */}
-            </form>
-        </>
-    )
+  return (
+    <>
+      <h1>Create Your Showcase!</h1>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor='item-code'>
+          Item Code:
+          <input
+            type='text'
+            name='item-code'
+            value={itemCode}
+            onChange={handleInputChange}
+          />
+        </label>
+        <label htmlFor='code-type'>
+          Code Type:
+          <select
+            name='code-type'
+            value={itemType}
+            onChange={handleDropdownChange}
+          >
+            <option value='UPC'>UPC</option>
+            <option value='ISBN'>ISBN</option>
+            <option value='EAN'>EAN</option>
+          </select>
+        </label>
+        <br />
+        <button type='submit'>Submit</button>
+      </form>
+    </>
+  );
 }
