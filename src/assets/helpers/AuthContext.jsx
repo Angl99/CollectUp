@@ -10,7 +10,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);  // Renamed from currentUser to user
+  const [user, setUser] = useState(null); 
   const [loading, setLoading] = useState(true);
 
   const signup = async (email, password) => {
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const value = {
-    user,  // Changed from currentUser to user
+    user,
     signup,
     googleSignIn,
     login,

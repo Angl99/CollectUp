@@ -16,6 +16,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../helpers/AuthContext";
 import backgroundImage from "../../helpers/photo-1620928572438-075c466c48da.avif";
 import Alert from '@mui/material/Alert';
+import { create, index, updateById, deleteById, getById } from '../../helpers/userHelpers';
 
 function Copyright(props) {
   return (
@@ -84,6 +85,13 @@ export default function SignUp() {
       }
 
       setShowPasswordAlert(false);
+
+      try {
+        await create({ firstName, lastName, email });
+        console.log("User added successfully");
+      } catch (error) {
+        console.log('Error adding user:', error);
+      }
 
       try {
         await signup(email, password);
