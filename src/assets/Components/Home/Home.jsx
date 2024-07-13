@@ -16,10 +16,11 @@ export default function Home() {
                     alignItems: 'center',
                 }}
             />
-                <Typography component="h1" variant="h5">
-                    Welcome to Collectup
-                </Typography>
-
+                <div class="container mx-auto px-20 py-32 bg-black">
+                    <Typography    component="h1" variant="h5">
+                        Welcome to Collectup
+                    </Typography>
+                </div>
                 <main class="container mx-auto px-20 py-8">
                     <h1 class="text-2xl font-bold mb-6">Suggestions</h1>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

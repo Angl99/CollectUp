@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, createContext } from "react";
 import { auth } from "../Components/firebase/firebaseConfig";
 import { doCreateUserWithEmailAndPassword, doSignInWithEmailAndPassword, doSignOut } from "../Components/firebase/auth";
 import { onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { create } from "../helpers/userHelpers";
 
 export const AuthContext = createContext();
 
@@ -29,7 +30,21 @@ export const AuthProvider = ({ children }) => {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       setUser(result.user);
-      console.log('Google sign-in successful');
+      console.log('Google sign-in successful', result.user);
+      console.log(result.user.displayName);
+      console.log(result.user.email);
+
+      const firstName = result.user.displayName.split(' ')[0];
+      const lastName = result.user.displayName.split(' ')[1];
+      const email = result.user.email;
+
+      try {
+        await create({ firstName, lastName, email });
+        console.log("User added successfully");
+      } catch (error) {
+        console.log('Error adding user:', error);
+      }
+
     } catch (error) {
       console.error('Google sign-in error:', error);
     }
