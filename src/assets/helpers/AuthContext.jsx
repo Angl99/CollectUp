@@ -33,13 +33,15 @@ export const AuthProvider = ({ children }) => {
       console.log('Google sign-in successful', result.user);
       console.log(result.user.displayName);
       console.log(result.user.email);
+      console.log(result.user.uid);
 
       const firstName = result.user.displayName.split(' ')[0];
       const lastName = result.user.displayName.split(' ')[1];
       const email = result.user.email;
+      const uid = result.user.uid;
 
       try {
-        await create({ firstName, lastName, email });
+        await create({ firstName, lastName, email, uid });
         console.log("User added successfully");
       } catch (error) {
         console.log('Error adding user:', error);
