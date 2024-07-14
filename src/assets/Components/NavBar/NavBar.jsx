@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AppBar, Toolbar, Button, Typography, Menu, MenuItem, IconButton, InputBase } from '@mui/material';
+import { AppBar, Toolbar, Button, Box, Typography, Menu, MenuItem, IconButton, InputBase, Collapse } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import { AuthContext } from "../../helpers/AuthContext";
 import { useNavigate } from "react-router-dom";
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
+import MoreIcon from '@mui/icons-material/MoreVert';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -16,21 +17,11 @@ const Search = styled('div')(({ theme }) => ({
   },
   marginRight: theme.spacing(2),
   marginLeft: 0,
-  width: '100%',
+  width: '95%',
   [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(3),
     width: 'auto',
   },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
@@ -50,6 +41,7 @@ export default function NavBar() {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -57,6 +49,10 @@ export default function NavBar() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleSearchClick = () => {
+    setIsSearchOpen(!isSearchOpen);
   };
 
   const handleLogout = async () => {
@@ -97,54 +93,58 @@ export default function NavBar() {
             LOGO
           </Typography>
         </Link>
-        <Search>
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBase
-            placeholder="Search…"
-            inputProps={{ 'aria-label': 'search' }}
-          />
-        </Search>
         <div style={{ flexGrow: 1 }} />
-        {user ? (
-          <div>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenu}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={handleProfile}>Profile</MenuItem>
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
-              <MenuItem onClick={handleShowcase}>Showcase</MenuItem>
-            </Menu>
-          </div>
-        ) : (
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Button size="small" color="inherit" onClick={handleSignUp}>SignUp</Button>
-            <Button size="small" color="inherit" onClick={handleLogin}>Login</Button>
-          </div>
-        )}
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Collapse in={isSearchOpen} timeout="auto" unmountOnExit>
+            <Search>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+              />
+            </Search>
+          </Collapse>
+          <IconButton color="inherit" onClick={handleSearchClick}>
+            <SearchIcon />
+          </IconButton>
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleMenu}
+            color="inherit"
+          >
+            {user ? <AccountCircle /> : <MoreIcon />}
+          </IconButton>
+        </Box>
+        <Menu
+          id="menu-appbar"
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          {user ? (
+            [
+              <MenuItem key="showcase" onClick={handleShowcase}>Showcase</MenuItem>,
+              <MenuItem key="profile" onClick={handleProfile}>Profile</MenuItem>,
+              <MenuItem key="logout" onClick={handleLogout}>Logout</MenuItem>
+            ]
+          ) : (
+            [
+              <MenuItem key="signup" onClick={handleSignUp}>Sign Up</MenuItem>,
+              <MenuItem key="login" onClick={handleLogin}>Login</MenuItem>
+            ]
+          )}
+        </Menu>
       </Toolbar>
     </AppBar>
   );

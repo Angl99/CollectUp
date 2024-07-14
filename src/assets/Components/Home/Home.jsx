@@ -1,84 +1,98 @@
 import React, { useContext } from 'react';
-import { Button, Typography, Box } from '@mui/material';
+import { Button, Typography, Box, Paper } from '@mui/material';
 import { AuthContext } from "../../helpers/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
+import Carousel from 'react-material-ui-carousel';
 
 export default function Home() {
+        const listings = [
+        {
+            title: "Manga 1",
+            description: "Description",
+            price: "Price",
+            image: "https://via.placeholder.com/300x200"
+        },
+        {
+            title: "Manga 2",
+            description: "Description",
+            price: "Price",
+            image: "https://via.placeholder.com/300x200"
+        },
+        {
+            title: "Manga 3",
+            description: "Description",
+            price: "Price",
+            image: "https://via.placeholder.com/300x200"
+        },
+        {
+            title: "Manga 4",
+            description: "Description",
+            price: "Price",
+            image: "https://via.placeholder.com/300x200"
+        },
+        {
+            title: "Manga 5",
+            description: "Description",
+            price: "Price",
+            image: "https://via.placeholder.com/300x200"
+        },
+        {
+            title: "Manga 6",
+            description: "Description",
+            price: "Price",
+            image: "https://via.placeholder.com/300x200"
+        }
+    ];
 
     return (
-        <div>
-            <Box
-                sx={{
-                    marginTop: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                }}
-            />
-                <div class="container mx-auto px-20 py-32 bg-black">
-                    <Typography    component="h1" variant="h5">
-                        Welcome to Collectup
-                    </Typography>
-                </div>
-                <main class="container mx-auto px-20 py-8">
-                    <h1 class="text-2xl font-bold mb-6">Suggestions</h1>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                            <img src="https://via.placeholder.com/300x200" alt="Listing 1" class="w-full h-48 object-cover"/>
-                            <div class="p-4">
-                                <h3 class="font-bold text-lg mb-2">Manga 1</h3>
-                                <p class="text-gray-600 mb-2">Description</p>
-                                <p class="font-bold">Price</p>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                            <img src="https://via.placeholder.com/300x200" alt="Listing 1" class="w-full h-48 object-cover"/>
-                            <div class="p-4">
-                                <h3 class="font-bold text-lg mb-2">Manga 2</h3>
-                                <p class="text-gray-600 mb-2">Description</p>
-                                <p class="font-bold">Price</p>
-                            </div>
-                        </div>
+        <Box sx={{ width: '100vw', overflowX: 'hidden' }}>
+            <Box sx={{
+                width: '100%',
+                backgroundColor: 'black',
+                height: { xs: '300px', sm: '400px', md: '500px' },
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
+            }}>
+                <Typography component="h1" variant="h5" color="white" align="center">
+                    Welcome to Collectup
+                </Typography>
+            </Box>
+            <Box sx={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
+            }}>
+                <Typography variant="h4" component="h1" gutterBottom align="center">
+                    Suggestions
+                </Typography>
+                <Box sx={{ width: '100%', maxWidth: '1200px' }}>
+                    <Carousel indicators={false} navButtonsAlwaysVisible={false}>
+                        {listings.map((item, i) => <Item key={i} item={item} />)}
+                    </Carousel>
+                </Box>
+            </Box>
+        </Box>
+    );
 
-                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                            <img src="https://via.placeholder.com/300x200" alt="Listing 1" class="w-full h-48 object-cover"/>
-                            <div class="p-4">
-                                <h3 class="font-bold text-lg mb-2">Manga 3</h3>
-                                <p class="text-gray-600 mb-2">Description</p>
-                                <p class="font-bold">Price</p>
-                            </div>
-                        </div>
+}
 
-                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                            <img src="https://via.placeholder.com/300x200" alt="Listing 1" class="w-full h-48 object-cover"/>
-                            <div class="p-4">
-                                <h3 class="font-bold text-lg mb-2">Manga 4</h3>
-                                <p class="text-gray-600 mb-2">Description</p>
-                                <p class="font-bold">Price</p>
-                            </div>
-                        </div>
-
-                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                            <img src="https://via.placeholder.com/300x200" alt="Listing 1" class="w-full h-48 object-cover"/>
-                            <div class="p-4">
-                                <h3 class="font-bold text-lg mb-2">Manga 5</h3>
-                                <p class="text-gray-600 mb-2">Description</p>
-                                <p class="font-bold">Price</p>
-                            </div>
-                        </div>
-
-                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                            <img src="https://via.placeholder.com/300x200" alt="Listing 1" class="w-full h-48 object-cover"/>
-                            <div class="p-4">
-                                <h3 class="font-bold text-lg mb-2">Manga 6</h3>
-                                <p class="text-gray-600 mb-2">Description</p>
-                                <p class="font-bold">Price</p>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-        </div>
+function Item(props) {
+    return (
+        <Paper>
+            <img src={props.item.image} alt={props.item.title} className="w-full h-48 object-cover"/>
+            <Box p={2}>
+                <Typography variant="h6">{props.item.title}</Typography>
+                <Typography variant="body2">{props.item.description}</Typography>
+                <Typography variant="subtitle1" fontWeight="bold">{props.item.price}</Typography>
+                <Button className="CheckButton">
+                    Check it out!
+                </Button>
+            </Box>
+        </Paper>
     );
 }
