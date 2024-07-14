@@ -46,17 +46,17 @@ export default function Home() {
     ];
 
     return (
-        <Box sx={{ width: '100vw', overflowX: 'hidden' }}>
+        <Box sx={{ width: '100vw', overflowX: 'hidden', backgroundColor: '#f0f3f5' }}>
             <Box sx={{
                 width: '100%',
                 backgroundColor: 'black',
-                height: { xs: '300px', sm: '400px', md: '500px' },
+                height: { xs: '250px', sm: '350px', md: '450px' },
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
                 padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
             }}>
-                <Typography component="h1" variant="h5" color="white" align="center">
+                <Typography component="h1" variant="h5" color="#f0f3f5" align="center">
                     Welcome to Collectup
                 </Typography>
             </Box>
@@ -67,7 +67,7 @@ export default function Home() {
                 alignItems: 'center',
                 padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
             }}>
-                <Typography variant="h4" component="h1" gutterBottom align="center">
+                <Typography variant="h4" component="h1" gutterBottom align="center" color="#34495e">
                     Suggestions
                 </Typography>
                 <Box sx={{ width: '100%', maxWidth: '1200px' }}>
@@ -78,18 +78,26 @@ export default function Home() {
             </Box>
         </Box>
     );
-
 }
 
 function Item(props) {
     return (
-        <Paper>
+        <Paper sx={{ backgroundColor: '#ffffff' }}>
             <img src={props.item.image} alt={props.item.title} className="w-full h-48 object-cover"/>
             <Box p={2}>
-                <Typography variant="h6">{props.item.title}</Typography>
-                <Typography variant="body2">{props.item.description}</Typography>
-                <Typography variant="subtitle1" fontWeight="bold">{props.item.price}</Typography>
-                <Button className="CheckButton">
+                <Typography variant="h6" color="#34495e">{props.item.title}</Typography>
+                <Typography variant="body2" color="#95a5a6">{props.item.description}</Typography>
+                <Typography variant="subtitle1" fontWeight="bold" color="#34495e">{props.item.price}</Typography>
+                <Button 
+                    className="CheckButton"
+                    sx={{
+                        backgroundColor: '#e67e22',
+                        color: '#ffffff',
+                        '&:hover': {
+                            backgroundColor: '#d35400',
+                        },
+                    }}
+                >
                     Check it out!
                 </Button>
             </Box>

@@ -11,9 +11,9 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  backgroundColor: alpha('#f0f3f5', 0.15),
   '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
+    backgroundColor: alpha('#f0f3f5', 0.25),
   },
   marginRight: theme.spacing(2),
   marginLeft: 0,
@@ -86,10 +86,10 @@ export default function NavBar() {
   }
 
   return (
-    <AppBar position="fixed">
+    <AppBar position="fixed" sx={{ backgroundColor: '#34495e' }}>
       <Toolbar>
         <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <Typography variant="h6" component="div" sx={{ display: 'flex', alignItems: 'center', width: '75px' }}>
+          <Typography variant="h6" component="div" sx={{ display: 'flex', alignItems: 'center', width: '75px', color: '#f0f3f5' }}>
             LOGO
           </Typography>
         </Link>
@@ -100,10 +100,11 @@ export default function NavBar() {
               <StyledInputBase
                 placeholder="Search…"
                 inputProps={{ 'aria-label': 'search' }}
+                sx={{ color: '#f0f3f5' }}
               />
             </Search>
           </Collapse>
-          <IconButton color="inherit" onClick={handleSearchClick}>
+          <IconButton color="inherit" onClick={handleSearchClick} sx={{ color: '#f0f3f5' }}>
             <SearchIcon />
           </IconButton>
           <IconButton
@@ -112,7 +113,7 @@ export default function NavBar() {
             aria-controls="menu-appbar"
             aria-haspopup="true"
             onClick={handleMenu}
-            color="inherit"
+            sx={{ color: '#f0f3f5' }}
           >
             {user ? <AccountCircle /> : <MoreIcon />}
           </IconButton>

@@ -18,23 +18,22 @@ import backgroundImage from "../../helpers/photo-1620928572438-075c466c48da.avif
 import Alert from '@mui/material/Alert';
 import { create, index, updateById, deleteById, getById } from '../../helpers/userHelpers';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-const defaultTheme = createTheme({
+const theme = createTheme({
   palette: {
-
-  }
+    primary: {
+      main: '#3498db',
+    },
+    secondary: {
+      main: '#e67e22',
+    },
+    text: {
+      primary: '#34495e',
+      secondary: '#95a5a6',
+    },
+    background: {
+      default: '#f0f3f5',
+    },
+  },
 });
 
 export default function SignUp() {
@@ -150,12 +149,12 @@ export default function SignUp() {
                           </Grid>
                       </Grid>
                       <Button
-                          fullWidth
-                          variant="contained"
-                          onClick={handleNext}
-                          sx={{ mt: 3, mb: 2 }}
+                        fullWidth
+                        variant="contained"
+                        onClick={handleNext}
+                        sx={{ mt: 3, mb: 2, bgcolor: 'secondary.main', color: '#ffffff', '&:hover': { bgcolor: '#d35400' } }}
                       >
-                          Next
+                        Next
                       </Button>
                       <Box sx={{ display: 'flex', alignItems: 'center', mt: 3, mb: 2 }}>
                           <Box sx={{ flex: 1, height: 2, bgcolor: 'text.disabled' }} />
@@ -165,14 +164,15 @@ export default function SignUp() {
                           <Box sx={{ flex: 1, height: 2, bgcolor: 'text.disabled' }} />
                       </Box>
                       <Button
-                          fullWidth
-                          variant="outlined"
-                          startIcon={<GoogleIcon />}
-                          onClick={handleGoogleSignIn}
-                          sx={{ mb: 2 }}
+                        fullWidth
+                        variant="outlined"
+                        startIcon={<GoogleIcon />}
+                        onClick={handleGoogleSignIn}
+                        sx={{ mb: 2, color: 'secondary.main', borderColor: 'secondary.main' }}
                       >
-                          Sign in with Google
+                        Sign in with Google
                       </Button>
+
                   </>
               );
           case 2:
@@ -210,21 +210,21 @@ export default function SignUp() {
                           </Grid>
                       </Grid>
                       <Button
-                          fullWidth
-                          variant="contained"
-                          onClick={handleNextEmail}
-                          sx={{ mt: 3, mb: 2 }}
+                        fullWidth
+                        variant="contained"
+                        onClick={handleNextEmail}
+                        sx={{ mt: 3, mb: 2, bgcolor: 'secondary.main', color: '#ffffff', '&:hover': { bgcolor: '#d35400' } }}
                       >
-                          Next
+                        Next
                       </Button>
 
                       <Button
-                          fullWidth
-                          variant="outlined"
-                          onClick={handleBack}
-                          sx={{ mt: 1, mb: 2 }}
+                        fullWidth
+                        variant="outlined"
+                        onClick={handleBack}
+                        sx={{ mt: 1, mb: 2, color: 'primary.main', borderColor: 'primary.main' }}
                       >
-                          Back
+                        Back
                       </Button>
                   </>
               );
@@ -265,21 +265,20 @@ export default function SignUp() {
                           </Grid>
                       </Grid>
                       <Button
-                          fullWidth
-                          variant="outlined"
-                          onClick={handleBack}
-                          sx={{ mt: 1, mb: 2 }}
+                        fullWidth
+                        variant="outlined"
+                        onClick={handleBack}
+                        sx={{ mt: 1, mb: 2, color: 'primary.main', borderColor: 'primary.main' }}
                       >
-                          Back
+                        Back
                       </Button>
                       <Button
-                          type="submit"
-                          fullWidth
-                          variant="contained"
-                          onClick={handleSubmit}
-                          sx={{ mt: 3, mb: 2 }}
+                        fullWidth
+                        variant="contained"
+                        onClick={handleSubmit}
+                        sx={{ mt: 3, mb: 2, bgcolor: 'secondary.main', color: '#ffffff', '&:hover': { bgcolor: '#d35400' } }}
                       >
-                          Sign Up
+                        Sign Up
                       </Button>
                       
                   </>
@@ -290,48 +289,47 @@ export default function SignUp() {
   };
 
   return (
-      <Box sx={{
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-      }}>
-        <ThemeProvider theme={defaultTheme}>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <Box
-                    sx={{
-                        marginTop: 1,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        backgroundColor: 'rgba(255, 255, 255, 0.925)',
-                        padding: 3,
-                        borderRadius: 2,
-                    }}
-                >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Let's get your account set up!
-                    </Typography>
-                    <Box component="form" noValidate sx={{ mt: 3 }}>
-                        {renderStep()}
-                        <Grid container justifyContent="flex-end">
-                            <Grid item>
-                                <Link href="/login" variant="body2">
-                                    Already have an account? Sign in
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Box>
-                <Copyright sx={{ mt: 5 }} />
-            </Container>
-        </ThemeProvider>
-      </Box>
+    <Box sx={{
+      backgroundImage: `url(${backgroundImage})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+    }}>
+      <ThemeProvider theme={theme}>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <Box
+            sx={{
+              marginTop: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              backgroundColor: 'rgba(240, 243, 245, 0.925)',
+              padding: 3,
+              borderRadius: 2,
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5" color="text.primary">
+              Let's get your account set up!
+            </Typography>
+            <Box component="form" noValidate sx={{ mt: 3 }}>
+              {renderStep()}
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Link href="/login" variant="body2" color="text.primary">
+                    Already have an account? Sign in
+                  </Link>
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
+        </Container>
+      </ThemeProvider>
+    </Box>
   );
 }
