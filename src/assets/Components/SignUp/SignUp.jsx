@@ -167,10 +167,10 @@ export default function SignUp() {
                         fullWidth
                         variant="outlined"
                         startIcon={<GoogleIcon />}
+                        sx={{ mb: 2, color: 'secondary.main', '&:hover': { borderColor: 'secondary.main'} }}
                         onClick={handleGoogleSignIn}
-                        sx={{ mb: 2, color: 'secondary.main', borderColor: 'secondary.main' }}
                       >
-                        Sign in with Google
+                        Sign Up with Google
                       </Button>
 
                   </>
