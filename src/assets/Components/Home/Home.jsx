@@ -1,11 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useEffect } from 'react';
 import { Button, Typography, Box, Paper } from '@mui/material';
 import { AuthContext } from "../../helpers/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import Carousel from 'react-material-ui-carousel';
+import { useAuth } from '../../helpers/AuthContext';
 
 export default function Home() {
+        const { user } = useAuth();
+
+        useEffect(() => {
+            if (user) {
+                console.log('Current logged-in user:', user);
+            } else {
+                console.log('No user is currently logged in');
+            }
+        }, [user]);
+
         const listings = [
         {
             title: "Manga 1",
