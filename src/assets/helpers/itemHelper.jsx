@@ -22,9 +22,9 @@ export const getItemById = async (id) => {
   }
 };
 
-export const createItem = async (itemData) => {
+export const createItem = async (itemData, uid) => {
   try {
-    const response = await axios.post(`${API_URL}/${userId}`, itemData);
+    const response = await axios.post(`${API_URL}`,{ ...itemData, uid });
     return response.data;
   } catch (error) {
     console.error('Error creating item:', error);

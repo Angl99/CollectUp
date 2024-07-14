@@ -18,6 +18,15 @@ export const getById = async (id) => {
     }
 }
 
+// export const getUserByUid = async (uid) => {
+//     try {
+//         const response = await axios.get(`http://localhost:3000/users/${uid}`)
+//         return response.data;
+//     } catch (error) {
+//         console.error(error);
+//     }
+// }
+
 export const create = async (user) => {
     try {
         const response = await axios.post("http://localhost:3000/users", user);
