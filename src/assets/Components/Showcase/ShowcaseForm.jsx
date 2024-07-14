@@ -8,8 +8,8 @@ export default function ShowcaseForm() {
   const [itemCode, setItemCode] = useState("");
   const [itemType, setItemType] = useState("UPC");
 
-  console.log(user.uid);
-  
+  // console.log(user.uid);
+
   const handleInputChange = (e) => {
     setItemCode(e.target.value);
   };
