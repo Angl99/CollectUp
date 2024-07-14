@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchData } from '../../helpers/ShowcaseApi';
+import { createItem, searchItem } from '../../helpers/itemHelper';
 
 export default function ShowcaseForm() {
   const [itemCode, setItemCode] = useState('');
@@ -15,11 +16,14 @@ export default function ShowcaseForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const LookupCode = await fetchData(itemCode, itemType);
-      console.log("Api Requested Item:", LookupCode);
+      const externalData = await fetchData(itemCode, itemType);
+      console.log("Api Requested Item:", externalData);
+      await createItem(externalData.items[0]);
+      console.log("Item Created!");
     } catch (error) {
-      console.error('Error looking up item:', error);
+      console.error(`Error looking up item with code: ${itemCode}, item type: ${itemType},`, error);
     }
   };
 
