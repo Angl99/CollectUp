@@ -14,7 +14,7 @@ import { createTheme, rgbToHex, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../helpers/AuthContext";
-import backgroundImage from "../../helpers/photo-1620928572438-075c466c48da.avif";
+import backgroundImage from "../../assets/bgImage2.avif";
 import Alert from '@mui/material/Alert';
 import { create, index, updateById, deleteById, getById } from '../../helpers/userHelpers';
 

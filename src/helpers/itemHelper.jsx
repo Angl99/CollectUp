@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const API_URL = 'http://localhost:3000/items';
+// const LIVE_API_URL = 'https://collectup-backend.onrender.com/items';
 
 export const getAllItems = async () => {
   try {

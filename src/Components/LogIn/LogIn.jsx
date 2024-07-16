@@ -4,6 +4,8 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -13,12 +15,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../helpers/AuthContext";
-import backgroundImage from "../../helpers/83201898-bucharest-romania-may-06-2017-japanese-manga-comic-magazines-for-sale-in-local-bookstore.jpg";
-import GoogleIcon from '@mui/icons-material/Google';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { getAuth } from 'firebase/auth';
-
-const auth = getAuth();
+import backgroundImage from "../../assets/bgImage.jpg";
 
 const theme = createTheme({
   palette: {
@@ -51,17 +48,6 @@ export default function SignIn() {
         e.preventDefault();
         login(formData.email, formData.password);
         navigate("/");
-    };
-
-    const googleSignIn = async () => {
-      try {
-        const provider = new GoogleAuthProvider();
-        const result = await signInWithPopup(auth, provider);
-        console.log("Google sign-in successful");
-        navigate("/");
-      } catch (error) {
-        console.log('Google sign-in error:', error);
-      }
     };
 
   return (
@@ -126,25 +112,6 @@ export default function SignIn() {
               >
                 Sign In
               </Button>
-
-              <Box sx={{ display: 'flex', alignItems: 'center', mt: 3, mb: 2 }}>
-                <Box sx={{ flex: 1, height: 2, bgcolor: 'text.disabled' }} />
-                <Typography variant="body2" sx={{ px: 2 }}>
-                    OR
-                </Typography>
-                <Box sx={{ flex: 1, height: 2, bgcolor: 'text.disabled' }} />
-              </Box>
-
-              <Button
-                fullWidth
-                variant="outlined"
-                startIcon={<GoogleIcon />}
-                sx={{ mb: 2, color: 'secondary.main', '&:hover': { borderColor: 'secondary.main' } }}
-                onClick={googleSignIn}
-              >
-                Sign In with Google
-              </Button>
-
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2" color="text.primary">

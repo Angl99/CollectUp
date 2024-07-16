@@ -8,6 +8,7 @@ export default function ShowcaseForm() {
   const [itemCode, setItemCode] = useState("");
   const [itemType, setItemType] = useState("UPC");
 
+  // migration for 
   // console.log(user.uid);
 
   const handleInputChange = (e) => {
