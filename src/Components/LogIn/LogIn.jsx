@@ -13,7 +13,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../helpers/AuthContext";
-import backgroundImage from "../../helpers/83201898-bucharest-romania-may-06-2017-japanese-manga-comic-magazines-for-sale-in-local-bookstore.jpg";
+import backgroundImage from "../../assets/comicImg.avif";
 import GoogleIcon from '@mui/icons-material/Google';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { getAuth } from 'firebase/auth';
