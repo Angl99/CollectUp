@@ -7,6 +7,7 @@ import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { LockPersonSharp } from '@mui/icons-material';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import GoogleIcon from '@mui/icons-material/Google';
@@ -24,11 +25,13 @@ const theme = createTheme({
       main: '#3498db',
     },
     secondary: {
-      main: '#e67e22',
+      main: '#95a5a6',
+    },
+    accent: {
+      main: '#623c8c',
     },
     text: {
       primary: '#34495e',
-      secondary: '#95a5a6',
     },
     background: {
       default: '#f0f3f5',
@@ -152,7 +155,7 @@ export default function SignUp() {
                         fullWidth
                         variant="contained"
                         onClick={handleNext}
-                        sx={{ mt: 3, mb: 2, bgcolor: 'secondary.main', color: '#ffffff', '&:hover': { bgcolor: '#d35400' } }}
+                        sx={{ mt: 3, mb: 2, bgcolor: 'accent.main', color: '#ffffff', }}
                       >
                         Next
                       </Button>
@@ -167,7 +170,7 @@ export default function SignUp() {
                         fullWidth
                         variant="outlined"
                         startIcon={<GoogleIcon />}
-                        sx={{ mb: 2, color: 'secondary.main', '&:hover': { borderColor: 'secondary.main'} }}
+                        sx={{ mb: 2, color: 'accent.main', borderColor: 'accent.main' }}
                         onClick={handleGoogleSignIn}
                       >
                         Sign Up with Google
@@ -213,7 +216,7 @@ export default function SignUp() {
                         fullWidth
                         variant="contained"
                         onClick={handleNextEmail}
-                        sx={{ mt: 3, mb: 2, bgcolor: 'secondary.main', color: '#ffffff', '&:hover': { bgcolor: '#d35400' } }}
+                        sx={{ mt: 3, mb: 2, bgcolor: 'accent.main', color: '#ffffff'}}
                       >
                         Next
                       </Button>
@@ -222,7 +225,7 @@ export default function SignUp() {
                         fullWidth
                         variant="outlined"
                         onClick={handleBack}
-                        sx={{ mt: 1, mb: 2, color: 'primary.main', borderColor: 'primary.main' }}
+                        sx={{ mt: 1, mb: 2, color: 'accent.main', borderColor: 'accent.main' }}
                       >
                         Back
                       </Button>
@@ -268,7 +271,7 @@ export default function SignUp() {
                         fullWidth
                         variant="outlined"
                         onClick={handleBack}
-                        sx={{ mt: 1, mb: 2, color: 'primary.main', borderColor: 'primary.main' }}
+                        sx={{ mt: 1, mb: 2, color: 'accent.main', borderColor: 'accent.main' }}
                       >
                         Back
                       </Button>
@@ -276,7 +279,7 @@ export default function SignUp() {
                         fullWidth
                         variant="contained"
                         onClick={handleSubmit}
-                        sx={{ mt: 3, mb: 2, bgcolor: 'secondary.main', color: '#ffffff', '&:hover': { bgcolor: '#d35400' } }}
+                        sx={{ mt: 3, mb: 2, bgcolor: 'accent.main', color: '#ffffff', '&:hover': { bgcolor: '#d35400' } }}
                       >
                         Sign Up
                       </Button>
@@ -290,12 +293,12 @@ export default function SignUp() {
 
   return (
     <Box sx={{
-      backgroundImage: `url(${backgroundImage})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
+      background: `linear-gradient(135deg, #3498db 0%, #95a5a6 50%, #623c8c 100%)`,
       minHeight: '100vh',
+      minWidth: '100vw',
       display: 'flex',
       alignItems: 'center',
+      justifyContent: 'center',
     }}>
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
@@ -311,8 +314,8 @@ export default function SignUp() {
               borderRadius: 2,
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
+            <Avatar sx={{ m: 1, bgcolor: 'accent.main' }}>
+              <LockPersonSharp />
             </Avatar>
             <Typography component="h1" variant="h5" color="text.primary">
               Let's get your account set up!

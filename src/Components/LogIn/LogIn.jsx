@@ -8,6 +8,7 @@ import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import LoginSharpIcon from '@mui/icons-material/LoginSharp';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -26,11 +27,13 @@ const theme = createTheme({
       main: '#3498db',
     },
     secondary: {
-      main: '#e67e22',
+      main: '#95a5a6',
+    },
+    accent: {
+      main: '#623c8c',
     },
     text: {
       primary: '#34495e',
-      secondary: '#95a5a6',
     },
     background: {
       default: '#f0f3f5',
@@ -56,7 +59,7 @@ export default function SignIn() {
     const googleSignIn = async () => {
       try {
         const provider = new GoogleAuthProvider();
-        const result = await signInWithPopup(auth, provider);
+        await signInWithPopup(auth, provider);
         console.log("Google sign-in successful");
         navigate("/");
       } catch (error) {
@@ -66,19 +69,18 @@ export default function SignIn() {
 
   return (
     <Box sx={{
-      backgroundImage: `url(${backgroundImage})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
+      background: `linear-gradient(to bottom, #3498db 0%, #95a5a6 100%)`,
       minHeight: '100vh',
+      minWidth: '100vw',
       display: 'flex',
       alignItems: 'center',
+      justifyContent: 'center',
     }}>
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <Box
             sx={{
-              marginTop: 8,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -87,8 +89,8 @@ export default function SignIn() {
               borderRadius: 2,
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
+            <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+              <LoginSharpIcon />
             </Avatar>
             <Typography component="h1" variant="h5" color="text.primary">
               Sign in to your account
@@ -122,7 +124,7 @@ export default function SignIn() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2, bgcolor: 'secondary.main', '&:hover': { bgcolor: '#d35400' } }}
+                sx={{ mt: 3, mb: 2, bgcolor: 'primary.main', '&:hover': { bgcolor: '#d35400' } }}
               >
                 Sign In
               </Button>
@@ -139,7 +141,7 @@ export default function SignIn() {
                 fullWidth
                 variant="outlined"
                 startIcon={<GoogleIcon />}
-                sx={{ mb: 2, color: 'secondary.main', '&:hover': { borderColor: 'secondary.main' } }}
+                sx={{ mb: 2, color: 'primary.main', '&:hover': { borderColor: 'secondary.main' } }}
                 onClick={googleSignIn}
               >
                 Sign In with Google
