@@ -1,23 +1,15 @@
 import * as React from 'react';
 import { useState, useContext } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import LoginSharpIcon from '@mui/icons-material/LoginSharp';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
+import { Avatar, Button, CssBaseline, TextField, Link, Grid, Box, Typography, Container, Tabs, Tab, Alert } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../helpers/AuthContext";
-import backgroundImage from "../../assets/comicImg.avif";
 import GoogleIcon from '@mui/icons-material/Google';
+import LoginSharpIcon from '@mui/icons-material/LoginSharp';
+import LockPersonSharp from '@mui/icons-material/LockPersonSharp';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { getAuth } from 'firebase/auth';
+import { create } from '../../helpers/userHelpers';
 
 const auth = getAuth();
 
@@ -41,31 +33,273 @@ const theme = createTheme({
   },
 });
 
-export default function SignIn() {
-  const [formData, setFormData] = useState({
-        email: "",
-        password: "",
-    });
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
 
-    const { login } = useContext(AuthContext);
-    const navigate = useNavigate();
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`auth-tabpanel-${index}`}
+      aria-labelledby={`auth-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
+}
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        login(formData.email, formData.password);
-        navigate("/");
-    };
+export default function Register() {
+  const [tabValue, setTabValue] = useState(0);
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const [signupStep, setSignupStep] = useState(1);
+  const [showNameAlert, setShowNameAlert] = useState(false);
+  const [showEmailAlert, setShowEmailAlert] = useState(false);
+  const [showPasswordAlert, setShowPasswordAlert] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [confirmEmail, setConfirmEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-    const googleSignIn = async () => {
-      try {
-        const provider = new GoogleAuthProvider();
-        await signInWithPopup(auth, provider);
-        console.log("Google sign-in successful");
-        navigate("/");
-      } catch (error) {
-        console.log('Google sign-in error:', error);
-      }
-    };
+  const { login, signup, googleSignIn } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleTabChange = (event, newValue) => {
+    setTabValue(newValue);
+  };
+
+  const handleLoginChange = (event) => {
+    setLoginData({ ...loginData, [event.target.name]: event.target.value });
+  };
+
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    login(loginData.email, loginData.password);
+    navigate("/");
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+      console.log('Google sign-in successful');
+      navigate("/");
+    } catch (error) {
+      console.log('Google sign-in error:', error);
+    }
+  };
+
+  const handleNextEmail = () => { 
+    if (email !== confirmEmail) {
+      setShowEmailAlert(true);
+      return;
+    }
+    setShowEmailAlert(false);
+    setSignupStep(signupStep + 1);
+  };
+
+  const handleNext = () => {
+    if (!firstName.trim() || !lastName.trim()) {
+      setShowNameAlert(true);
+      return;
+    }
+    setShowNameAlert(false);
+    setSignupStep(signupStep + 1);
+  };
+
+  const handleBack = () => {
+    setSignupStep(signupStep - 1);
+  };
+
+  const handleSignupSubmit = async (e) => {
+    e.preventDefault();
+
+    if (password !== confirmPassword) {
+      setShowPasswordAlert(true);
+      return;
+    }
+
+    setShowPasswordAlert(false);
+
+    try {
+      await create({ firstName, lastName, email });
+      console.log("User added successfully");
+    } catch (error) {
+      console.log('Error adding user:', error);
+    }
+
+    try {
+      await signup(email, password);
+      console.log("Signup successful");
+      navigate("/");
+    } catch (error) {
+      console.log('Signup error:', error);
+    }
+  };
+
+  const renderSignupStep = () => {
+    switch(signupStep) {
+      case 1:
+        return (
+          <>
+            {showNameAlert && (
+              <Alert severity="error" onClose={() => setShowNameAlert(false)} sx={{ mb: 2 }}>
+                Please enter first and last name.
+              </Alert>
+            )}
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="given-name"
+                  name="firstName"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  autoFocus
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                  autoComplete="family-name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </Grid>
+            </Grid>
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={handleNext}
+              sx={{ mt: 3, mb: 2, bgcolor: 'primary.main', color: '#ffffff', }}
+            >
+              Next
+            </Button>
+          </>
+        );
+      case 2:
+        return (
+          <>
+            {showEmailAlert && (
+              <Alert severity="error" onClose={() => setShowEmailAlert(false)} sx={{ mb: 2 }}>
+                Please make sure emails match.
+              </Alert>
+            )}
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="confirmEmail"
+                  label="Confirm Email Address"
+                  name="confirmEmail"
+                  autoComplete="email"
+                  value={confirmEmail}
+                  onChange={(e) => setConfirmEmail(e.target.value)}
+                />
+              </Grid>
+            </Grid>
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={handleNextEmail}
+              sx={{ mt: 3, mb: 2, bgcolor: 'primary.main', color: '#ffffff'}}
+            >
+              Next
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={handleBack}
+              sx={{ mt: 1, mb: 2, color: 'primary.main', borderColor: 'primary.main' }}
+            >
+              Back
+            </Button>
+          </>
+        );
+      case 3:
+        return (
+          <>
+            {showPasswordAlert && (
+              <Alert severity="error" onClose={() => setShowPasswordAlert(false)} sx={{ mb: 2 }}>
+                Please make sure passwords match.
+              </Alert>
+            )}
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  type="password"
+                  id="confirmPassword"
+                  autoComplete="new-password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </Grid>
+            </Grid>
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={handleSignupSubmit}
+              sx={{ mt: 3, mb: 2, bgcolor: 'primary.main', color: '#ffffff' }}
+            >
+              Sign Up
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={handleBack}
+              sx={{ mt: 1, mb: 2, color: 'primary.main', borderColor: 'primary.main' }}
+            >
+              Back
+            </Button>
+          </>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <Box sx={{
@@ -90,76 +324,88 @@ export default function SignIn() {
             }}
           >
             <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-              <LoginSharpIcon />
+              {tabValue === 0 ? <LoginSharpIcon /> : <LockPersonSharp />}
             </Avatar>
             <Typography component="h1" variant="h5" color="text.primary">
-              Sign in to your account
+              {tabValue === 0 ? "Sign in to your account" : "Let's get your account set up!"}
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                value={formData.email}
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                value={formData.password}
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2, bgcolor: 'primary.main', '&:hover': { bgcolor: '#d35400' } }}
-              >
-                Sign In
-              </Button>
-
-              <Box sx={{ display: 'flex', alignItems: 'center', mt: 3, mb: 2 }}>
-                <Box sx={{ flex: 1, height: 2, bgcolor: 'text.disabled' }} />
-                <Typography variant="body2" sx={{ px: 2 }}>
+            <Tabs value={tabValue} onChange={handleTabChange} aria-label="auth tabs">
+              <Tab label="Login" />
+              <Tab label="Sign Up" />
+            </Tabs>
+            <TabPanel value={tabValue} index={0}>
+              <Box component="form" onSubmit={handleLoginSubmit} noValidate sx={{ mt: 1 }}>
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  autoFocus
+                  onChange={handleLoginChange}
+                  value={loginData.email}
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  onChange={handleLoginChange}
+                  value={loginData.password}
+                />
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2, bgcolor: 'primary.main'}}
+                >
+                  Sign In
+                </Button>
+                <Box sx={{ display: 'flex', alignItems: 'center', mt: 3, mb: 2 }}>
+                  <Box sx={{ flex: 1, height: 2, bgcolor: 'text.disabled' }} />
+                  <Typography variant="body2" sx={{ px: 2 }}>
                     OR
-                </Typography>
-                <Box sx={{ flex: 1, height: 2, bgcolor: 'text.disabled' }} />
+                  </Typography>
+                  <Box sx={{ flex: 1, height: 2, bgcolor: 'text.disabled' }} />
+                </Box>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  startIcon={<GoogleIcon />}
+                  sx={{ mb: 2, color: 'primary.main', '&:hover': { borderColor: 'secondary.main' } }}
+                  onClick={handleGoogleSignIn}
+                >
+                  Sign In with Google
+                </Button>
               </Box>
-
-              <Button
-                fullWidth
-                variant="outlined"
-                startIcon={<GoogleIcon />}
-                sx={{ mb: 2, color: 'primary.main', '&:hover': { borderColor: 'secondary.main' } }}
-                onClick={googleSignIn}
-              >
-                Sign In with Google
-              </Button>
-
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2" color="text.primary">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="/signup" variant="body2" color="text.primary">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
-            </Box>
+            </TabPanel>
+            <TabPanel value={tabValue} index={1}>
+              <Box component="form" noValidate sx={{ mt: 3 }}>
+                {renderSignupStep()}
+                <Box sx={{ display: 'flex', alignItems: 'center', mt: 3, mb: 2 }}>
+                  <Box sx={{ flex: 1, height: 2, bgcolor: 'text.disabled' }} />
+                  <Typography variant="body2" sx={{ px: 2 }}>
+                    OR
+                  </Typography>
+                  <Box sx={{ flex: 1, height: 2, bgcolor: 'text.disabled' }} />
+                </Box>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  startIcon={<GoogleIcon />}
+                  sx={{ mb: 2, color: 'primary.main', borderColor: 'primary.main' }}
+                  onClick={handleGoogleSignIn}
+                >
+                  Sign Up with Google
+                </Button>
+              </Box>
+            </TabPanel>
           </Box>
         </Container>
       </ThemeProvider>

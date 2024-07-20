@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, Button, Box, Typography, Menu, MenuItem, IconButton, InputBase, Collapse } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
@@ -86,7 +86,7 @@ export default function NavBar() {
   }
 
   return (
-    <AppBar position="fixed" sx={{ backgroundColor: '#34495e' }}>
+    <AppBar position="fixed" overflow="" sx={{ backgroundColor: '#34495e' }}>
       <Toolbar>
         <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
           <Typography variant="h6" component="div" sx={{ display: 'flex', alignItems: 'center', width: '75px', color: '#f0f3f5' }}>
@@ -141,8 +141,7 @@ export default function NavBar() {
             ]
           ) : (
             [
-              <MenuItem key="signup" onClick={handleSignUp}>Sign Up</MenuItem>,
-              <MenuItem key="login" onClick={handleLogin}>Login</MenuItem>
+              <MenuItem key="login" onClick={handleLogin}>Register</MenuItem>
             ]
           )}
         </Menu>
