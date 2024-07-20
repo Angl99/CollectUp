@@ -96,6 +96,7 @@ export default function Home() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
+                marginTop: { xs: '75px', sm: '75px', md: '75px' },
             }}>
                 <Typography component="h1" variant="h5" color="#f0f3f5" align="center">
                     Auction Alley
