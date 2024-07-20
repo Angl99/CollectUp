@@ -303,12 +303,25 @@ export default function Register() {
 
   return (
     <Box sx={{
-      background: `linear-gradient(to bottom, #3498db 0%, #95a5a6 100%)`,
+      background: 'linear-gradient(-45deg, #3498db, #623c8c, #95a5a6, #34495e)',
+      backgroundSize: '400% 400%',
+      animation: 'gradient 10s ease infinite',
       minHeight: '100vh',
       minWidth: '100vw',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
+      '@keyframes gradient': {
+        '0%': {
+          backgroundPosition: '0% 50%',
+        },
+        '50%': {
+          backgroundPosition: '100% 50%',
+        },
+        '100%': {
+          backgroundPosition: '0% 50%',
+        },
+      },
     }}>
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
@@ -318,7 +331,7 @@ export default function Register() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              backgroundColor: 'rgba(240, 243, 245, 0.925)',
+              backgroundColor: 'rgba(240, 243, 245, 0.8)',
               padding: 3,
               borderRadius: 2,
             }}
