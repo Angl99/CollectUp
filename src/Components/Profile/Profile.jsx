@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Container, Grid, Card, CardContent, CardMedia, Button, Typography, Box, Avatar } from '@mui/material';
 import { useAuth } from '../../helpers/AuthContext';
+import { getById } from '../../helpers/userHelpers';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
@@ -22,7 +24,26 @@ const theme = createTheme({
 });
 
 export default function Profile() {
+  const { uid } = useParams();
   const { user } = useAuth();
+  const [profileUser, setProfileUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await getById(uid);
+        setProfileUser(userData);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUser();
+  }, [uid]);
+
+  if (!profileUser) {
+    return <div>Loading...</div>;
+  }
   
   return (
     <ThemeProvider theme={theme}>
@@ -46,7 +67,7 @@ export default function Profile() {
                   </Box>
                   <Box sx={{ ml: 24, mt: 'auto', mb: 2 }}>
                     <Typography variant="h5">
-                      {`${user.displayName}`}
+                      {`${profileUser.displayName}`}
                     </Typography>
                   </Box>
                 </Box>
@@ -54,7 +75,7 @@ export default function Profile() {
                 <CardContent>
                   <Typography variant="h6" gutterBottom color="text.primary">About</Typography>
                   <Box sx={{ backgroundColor: 'background.default', p: 2, mb: 3 }}>
-                    <Typography color="text.primary">Email: {`${user.email}`}</Typography>  
+                    <Typography color="text.primary">Email: {`${profileUser.email}`}</Typography>  
                     <Typography color="text.primary">Date of Birth:</Typography>
                     <Typography color="text.primary">Location:</Typography>
                   </Box>

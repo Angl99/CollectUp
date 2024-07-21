@@ -19,7 +19,7 @@ function App() {
             <Route path="/login" element={<LogIn />} />
             <Route path='/showcaseForm' element={<ShowcaseForm />} />
             <Route path='/user/:userId/showcases' element={<ShowcaseList />} />
-            <Route path='/profile' element={<Profile />} />
+            <Route path='/profile/:uid' element={<Profile />} />
           </Routes>
         </AuthProvider>
       </Router>
