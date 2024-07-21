@@ -11,7 +11,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import MenuIcon from '@mui/icons-material/Menu'; 
+import customMenuIcon from '../../assets/AA.png';
 
 const theme = createTheme({
   palette: {
@@ -36,14 +36,14 @@ const theme = createTheme({
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.background.default, 0.15),
+  backgroundColor: alpha(theme.palette.background.default, 1),
   '&:hover': {
-    backgroundColor: alpha(theme.palette.background.default, 0.25),
+    backgroundColor: alpha(theme.palette.background.default, 1),
   },
   marginRight: theme.spacing(2),
   marginLeft: 10,
   width: '100%',
-  border: '2px solid black',
+  border: '3px solid black',
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -57,7 +57,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
+  color: 'black',
   width: '100%',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
@@ -148,6 +148,12 @@ export default function NavBar() {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
+
   const handleScroll = () => {
     const currentScrollY = window.scrollY;
 
@@ -161,12 +167,6 @@ export default function NavBar() {
 
     setLastScrollY(currentScrollY);
   };
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -210,7 +210,7 @@ export default function NavBar() {
   { icon: <HomeIcon />, path: '/', bgColor: theme.palette.primary.main },
   { icon: <StoreIcon />, path: '/marketplace', bgColor: theme.palette.primary.main },
   { icon: <AddCircleIcon />, path: '/showcaseform', bgColor: theme.palette.primary.main },
-  { icon: <AccountCircleIcon />, path: '/profile', bgColor: theme.palette.primary.main },
+  { icon: <AccountCircleIcon />, path: '/profile/', bgColor: theme.palette.primary.main },
   ];
 
   const TopBar = (
@@ -219,15 +219,58 @@ export default function NavBar() {
         {user ? (
           <IconButton
             onClick={handleLogoClick}
-            sx={{ color: '#f0f3f5', mr: 2 }}
+            sx={{ 
+              color: 'black', 
+              mr: 2,
+              width: '64px',
+              height: '64px',
+              padding: 0,
+              overflow: 'hidden',
+            }}
           >
-            <MenuIcon />
-          </IconButton>
+          <Box
+            component="img"
+            src={customMenuIcon}
+            alt="Menu"
+            sx={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              transition: 'transform 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.1)',
+              },
+            }}
+          />
+        </IconButton>
         ) : (
           <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <Typography variant="h6" component="div" sx={{ display: 'flex', alignItems: 'center', width: '75px', color: '#f0f3f5' }}>
-              LOGO
-            </Typography>
+            <IconButton
+            onClick={handleLogoClick}
+            sx={{ 
+              color: 'black', 
+              mr: 2,
+              width: '64px',
+              height: '64px',
+              padding: 0,
+              overflow: 'hidden',
+            }}
+          >
+          <Box
+            component="img"
+            src={customMenuIcon}
+            alt="Menu"
+            sx={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              transition: 'transform 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.1)',
+              },
+            }}
+          />
+        </IconButton>
           </Link>
         )}
         <Search>
