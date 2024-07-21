@@ -210,7 +210,7 @@ export default function NavBar() {
   { icon: <HomeIcon />, path: '/', bgColor: theme.palette.primary.main },
   { icon: <StoreIcon />, path: '/marketplace', bgColor: theme.palette.primary.main },
   { icon: <AddCircleIcon />, path: '/showcaseform', bgColor: theme.palette.primary.main },
-  { icon: <AccountCircleIcon />, path: '/profile/', bgColor: theme.palette.primary.main },
+  { icon: <AccountCircleIcon />, path: `/profile/${user?.uid || ''}`, bgColor: theme.palette.primary.main },
   ];
 
   const TopBar = (
