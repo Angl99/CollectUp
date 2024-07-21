@@ -2,6 +2,8 @@ import React from 'react';
 import { Button, Typography, Box, Paper, Grid } from '@mui/material';
 import Carousel from 'react-material-ui-carousel';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import data from '../../mockData/data.json'
+import customBanner from '../../assets/AAfull.png';
 
 const theme = createTheme({
   palette: {
@@ -24,44 +26,13 @@ const theme = createTheme({
 });
 
 export default function Home() {
-    const listings = [
-        {
-            title: "Manga 1",
-            description: "Description",
-            price: "Price",
-            image: "https://via.placeholder.com/300x200"
-        },
-        {
-            title: "Manga 2",
-            description: "Description",
-            price: "Price",
-            image: "https://via.placeholder.com/300x200"
-        },
-        {
-            title: "Manga 3",
-            description: "Description",
-            price: "Price",
-            image: "https://via.placeholder.com/300x200"
-        },
-        {
-            title: "Manga 4",
-            description: "Description",
-            price: "Price",
-            image: "https://via.placeholder.com/300x200"
-        },
-        {
-            title: "Manga 5",
-            description: "Description",
-            price: "Price",
-            image: "https://via.placeholder.com/300x200"
-        },
-        {
-            title: "Manga 6",
-            description: "Description",
-            price: "Price",
-            image: "https://via.placeholder.com/300x200"
-        }
-    ];
+    const listings = data.slice(0, 3).map(item => ({
+        title: item.items[0].title,
+        description: item.items[0].description || "No description available",
+        price: item.items[0].offers[0].price,
+        image: item.items[0].images[0],
+        publisher: item.items[0].publisher || "Publisher not available"
+    }));
 
     const popularSeries = [
         {
@@ -90,6 +61,10 @@ export default function Home() {
         <Box sx={{ width: '100vw', overflowX: 'hidden', backgroundColor: '#f0f3f5' }}>
             <Box sx={{
                 width: '100%',
+                backgroundImage: `url(${customBanner})`,
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
                 backgroundColor: '#623c8c',
                 height: { xs: '250px', sm: '350px', md: '450px' },
                 display: 'flex',
@@ -98,9 +73,6 @@ export default function Home() {
                 padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
                 marginTop: { xs: '75px', sm: '75px', md: '75px' },
             }}>
-                <Typography component="h1" variant="h5" color="#f0f3f5" align="center">
-                    Auction Alley
-                </Typography>
             </Box>
 
             <Box sx={{
@@ -168,25 +140,43 @@ export default function Home() {
 
 function Item(props) {
     return (
-        <Paper sx={{ backgroundColor: '#ffffff' }}>
-            <img src={props.item.image} alt={props.item.title} className="w-full h-48 object-cover"/>
-            <Box p={2}>
-                <Typography variant="h6" color="#34495e">{props.item.title}</Typography>
-                <Typography variant="body2" color="#95a5a6">{props.item.description}</Typography>
-                <Typography variant="subtitle1" fontWeight="bold" color="#34495e">{props.item.price}</Typography>
-                <Button 
-                    className="CheckButton"
-                    sx={{
-                        backgroundColor: '#623c8c',
-                        color: '#ffffff',
+        <Paper sx={{ backgroundColor: '#ffffff', height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ height: '200px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+                <img 
+                    src={props.item.image} 
+                    alt={props.item.title} 
+                    style={{ 
+                        maxWidth: '100%', 
+                        maxHeight: '100%', 
+                        objectFit: 'contain',
+                        paddingTop: '10px'
                     }}
-                >
-                    Check it out!
-                </Button>
+                />
+            </Box>
+            <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div>
+                    <Typography variant="h6" color="#34495e">{props.item.title}</Typography>
+                    <Typography variant="subtitle2" color="#95a5a6" sx={{ mb: 1 }}>{props.item.publisher}</Typography>
+                    <Typography variant="body2" color="#95a5a6">{props.item.description}</Typography>
+                </div>
+                <div>
+                    <Typography variant="subtitle1" fontWeight="bold" color="#34495e" sx={{ mt: 1 }}>${props.item.price}</Typography>
+                    <Button 
+                        className="CheckButton"
+                        sx={{
+                            backgroundColor: '#623c8c',
+                            color: '#ffffff',
+                            mt: 1
+                        }}
+                    >
+                        Check it out
+                    </Button>
+                </div>
             </Box>
         </Paper>
     );
 }
+
 
 function PopularSeriesItem({ series }) {
     return (

@@ -6,6 +6,7 @@ import NavBar from './Components/NavBar/NavBar'
 import { AuthProvider } from './helpers/AuthContext'
 import ShowcaseForm from './Components/Showcase/ShowcaseForm'
 import ShowcaseList from './Components/Showcase/ShowcaseList'
+import Profile from './Components/Profile/Profile'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/login" element={<LogIn />} />
             <Route path='/showcaseForm' element={<ShowcaseForm />} />
             <Route path='/user/:userId/showcases' element={<ShowcaseList />} />
+            <Route path='/profile' element={<Profile />} />
           </Routes>
         </AuthProvider>
       </Router>
