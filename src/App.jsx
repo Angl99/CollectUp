@@ -7,7 +7,6 @@ import Profile from './Components/Profile/Profile'
 import { AuthProvider } from './helpers/AuthContext'
 import ShowcaseForm from './Components/Showcase/ShowcaseForm'
 import ShowcaseList from './Components/Showcase/ShowcaseList'
-import UserShowcases from './Components/Showcase/UserShowcases'
 
 function App() {
   return (
@@ -19,9 +18,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LogIn />} />
             <Route path='/showcaseForm' element={<ShowcaseForm />} />
-            <Route path='/showcaseList' element={<ShowcaseList />} />
+            <Route path='/user/:userId/showcases' element={<ShowcaseList />} />
             <Route path='/profile' element={<Profile />} />
-            <Route path='/user/:userId/showcases' element={<UserShowcases />} />
           </Routes>
         </AuthProvider>
       </Router>
