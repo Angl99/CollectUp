@@ -1,12 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
-import { AuthContext } from '../../helpers/AuthContext';
+import React, { useState, useEffect } from 'react';
 import { getById, updateById } from '../../helpers/userHelpers';
 import ShowcaseList from '../Showcase/ShowcaseList';
 
 const Profile = () => {
-    const { user } = useContext(AuthContext);
-    const { id } = useParams();
     const [profile, setProfile] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editedProfile, setEditedProfile] = useState({});
@@ -14,7 +10,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const profileData = await getById(id || user.uid);
+                const profileData = await getById(1); // Hardcoded ID for now
                 setProfile(profileData);
                 setEditedProfile(profileData);
             } catch (error) {
@@ -23,7 +19,7 @@ const Profile = () => {
         };
 
         fetchProfile();
-    }, [id, user]);
+    }, []);
 
     const handleEdit = () => {
         setIsEditing(true);
@@ -76,9 +72,7 @@ const Profile = () => {
                 <div>
                     <p>Name: {profile.name}</p>
                     <p>Email: {profile.email}</p>
-                    {user && user.uid === profile.id && (
-                        <button onClick={handleEdit}>Edit</button>
-                    )}
+                    <button onClick={handleEdit}>Edit</button>
                 </div>
             )}
             <ShowcaseList userId={profile.id} />
