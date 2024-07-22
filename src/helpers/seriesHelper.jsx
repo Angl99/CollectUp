@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getAllSeries = async () => {
+export const index = async () => {
     try {
         const response = await axios.get("http://localhost:3000/series");
         return response.data;
@@ -10,7 +10,7 @@ export const getAllSeries = async () => {
     }
 }
 
-export const getSeriesById = async (id) => {
+export const getById = async (id) => {
     try {
         const response = await axios.get(`http://localhost:3000/series/${id}`);
         return response.data;
@@ -20,7 +20,7 @@ export const getSeriesById = async (id) => {
     }
 }
 
-export const createSeries = async (seriesData) => {
+export const create = async (seriesData) => {
     try {
         const response = await axios.post("http://localhost:3000/series", seriesData);
         return response.data;
@@ -30,7 +30,7 @@ export const createSeries = async (seriesData) => {
     }
 }
 
-export const updateSeriesById = async (id, seriesData) => {
+export const updateById = async (id, seriesData) => {
     try {
         const response = await axios.put(`http://localhost:3000/series/${id}`, seriesData);
         return response.data;
@@ -40,7 +40,7 @@ export const updateSeriesById = async (id, seriesData) => {
     }
 }
 
-export const deleteSeriesById = async (id) => {
+export const deleteById = async (id) => {
     try {
         const response = await axios.delete(`http://localhost:3000/series/${id}`);
         return response.data;

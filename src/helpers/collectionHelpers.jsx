@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getAllCollections = async () => {
+export const index = async () => {
     try {
         const response = await axios.get("http://localhost:3000/collections");
         return response.data;
@@ -10,7 +10,7 @@ export const getAllCollections = async () => {
     }
 }
 
-export const getCollectionById = async (id) => {
+export const getById = async (id) => {
     try {
         const response = await axios.get(`http://localhost:3000/collections/${id}`);
         return response.data;
@@ -20,7 +20,7 @@ export const getCollectionById = async (id) => {
     }
 }
 
-export const createCollection = async (collectionData) => {
+export const create = async (collectionData) => {
     try {
         const response = await axios.post("http://localhost:3000/collections", collectionData);
         return response.data;
@@ -30,7 +30,7 @@ export const createCollection = async (collectionData) => {
     }
 }
 
-export const updateCollectionById = async (id, collectionData) => {
+export const update = async (id, collectionData) => {
     try {
         const response = await axios.put(`http://localhost:3000/collections/${id}`, collectionData);
         return response.data;
@@ -40,7 +40,7 @@ export const updateCollectionById = async (id, collectionData) => {
     }
 }
 
-export const deleteCollectionById = async (id) => {
+export const deleteById = async (id) => {
     try {
         const response = await axios.delete(`http://localhost:3000/collections/${id}`);
         return response.data;
@@ -50,7 +50,7 @@ export const deleteCollectionById = async (id) => {
     }
 }
 
-export const addItemToCollection = async (collectionId, itemId) => {
+export const addItem = async (collectionId, itemId) => {
     try {
         const response = await axios.post(`http://localhost:3000/collections/addItem`, { collectionId, itemId });
         return response.data;

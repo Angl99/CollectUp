@@ -12,15 +12,6 @@ export const getAllItems = async () => {
   }
 };
 
-export const getItemById = async (id) => {
-  try {
-    const response = await axios.get(`${API_URL}/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching item:', error);
-    throw error;
-  }
-};
 
 export const createItem = async (itemData, uid) => {
   try {
@@ -52,15 +43,4 @@ export const deleteItemById = async (id) => {
   }
 };
 
-export const searchItem = async (code, type) => {
-  try {
-    const response = await axios.get(`${API_URL}/search`, { params: { code, type } });
-    return response.data;
-  } catch (error) {
-    if (error.response && error.response.status === 404) {
-      return null;
-    }
-    console.error('Error searching for item:', error);
-    throw error;
-  }
-};
+
