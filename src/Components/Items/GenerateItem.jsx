@@ -48,6 +48,7 @@ export default function GenerateItem() {
             let product = await searchInternalProduct(itemCode);
             if (product) {
                 await createItem(user.uid, product);
+                console.log("existing prod: ", product);
                 setGeneratedItem(product);
             } else {
                 // If not found internally, search the external API
@@ -62,6 +63,7 @@ export default function GenerateItem() {
 
                         await createItem(user.uid, newProduct);
                         console.log("New item created!!");
+                        console.log("Newly created prod: ", newProduct);
                         setGeneratedItem(newProduct);
                     } catch (error) {
                         console.log("failed to create prod");
