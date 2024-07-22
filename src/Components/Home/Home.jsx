@@ -5,27 +5,29 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import data from '../../mockData/data.json'
 import customBanner from '../../assets/AAfull.png';
 
+// Define a custom theme for the Home component
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#3498db',
+      main: '#3498db', // Blue
     },
     secondary: {
-      main: '#95a5a6',
+      main: '#95a5a6', // Light gray
     },
     accent: {
-      main: '#623c8c',
+      main: '#623c8c', // Purple
     },
     text: {
-      primary: '#34495e',
+      primary: '#34495e', // Dark blue
     },
     background: {
-      default: '#f0f3f5',
+      default: '#f0f3f5', // Light blue-gray
     },
   },
 });
 
 export default function Home() {
+    // Create an array of listings from the first 3 items in the data
     const listings = data.slice(0, 3).map(item => ({
         title: item.items[0].title,
         description: item.items[0].description || "No description available",
@@ -34,6 +36,7 @@ export default function Home() {
         publisher: item.items[0].publisher || "Publisher not available"
     }));
 
+    // Define an array of popular series (placeholder data)
     const popularSeries = [
         {
             title: "Popular Series 1",
@@ -59,6 +62,7 @@ export default function Home() {
 
     return (
         <Box sx={{ width: '100vw', overflowX: 'hidden', backgroundColor: '#f0f3f5' }}>
+            {/* Custom banner section */}
             <Box sx={{
                 width: '100%',
                 backgroundImage: `url(${customBanner})`,
@@ -75,6 +79,7 @@ export default function Home() {
             }}>
             </Box>
 
+            {/* Suggestions section */}
             <Box sx={{
                 width: '100%',
                 display: 'flex',
@@ -86,12 +91,14 @@ export default function Home() {
                     Suggestions
                 </Typography>
                 <Box sx={{ width: '100%', maxWidth: '1200px' }}>
+                    {/* Carousel for suggested items */}
                     <Carousel indicators={false} navButtonsAlwaysVisible={false}>
                         {listings.map((item, i) => <Item key={i} item={item} />)}
                     </Carousel>
                 </Box>
             </Box>
 
+            {/* Popular Series section */}
             <Box sx={{
                 width: '100%',
                 display: 'flex',
@@ -104,6 +111,7 @@ export default function Home() {
                     Popular Series
                 </Typography>
                 <Box sx={{ width: '100%', maxWidth: '1200px' }}>
+                    {/* Carousel for popular series */}
                     <Carousel
                         indicators={true}
                         navButtonsAlwaysVisible={true}
@@ -138,9 +146,11 @@ export default function Home() {
     );
 }
 
+// Component for rendering individual items in the Suggestions carousel
 function Item(props) {
     return (
         <Paper sx={{ backgroundColor: '#ffffff', height: '100%', display: 'flex', flexDirection: 'column' }}>
+            {/* Image container */}
             <Box sx={{ height: '200px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
                 <img 
                     src={props.item.image} 
@@ -153,6 +163,7 @@ function Item(props) {
                     }}
                 />
             </Box>
+            {/* Content container */}
             <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div>
                     <Typography variant="h6" color="#34495e">{props.item.title}</Typography>
@@ -177,7 +188,7 @@ function Item(props) {
     );
 }
 
-
+// Component for rendering individual items in the Popular Series carousel
 function PopularSeriesItem({ series }) {
     return (
         <Paper elevation={3} sx={{ backgroundColor: '#ffffff', height: '100%' }}>
