@@ -109,7 +109,7 @@ export default function GenerateItem() {
             {isLoading ? (
                 <p className="text-gray-600 mb-4">Loading...</p>
             ) : generatedItem ? (
-                <ItemDisplay item={generatedItem} />
+                <ItemDisplay generatedItem={generatedItem} />
             ) : (
                 <p className="text-gray-600 mb-4">No item generated yet. Enter a code and click "Generate" to create an item.</p>
             )}
