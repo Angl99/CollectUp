@@ -35,6 +35,7 @@ export default function GenerateItem() {
         e.preventDefault();
         setIsLoading(true);
         setError(null);
+        setGeneratedItem(null);
 
         if (!user) {
             setError("You must be logged in to generate an item.");
@@ -47,27 +48,32 @@ export default function GenerateItem() {
             let product = await searchInternalProduct(itemCode);
             if (product) {
                 await createItem(user.uid, product);
-            }
+                setGeneratedItem(product);
+            } else {
+                // If not found internally, search the external API
+                const externalData = await searchExternalApi(itemCode);
+                if (externalData && externalData.items && externalData.items.length > 0) {
+                    product = externalData.items[0];
+                    // Create the item in our internal database
+                    try {
+                        const cleanedData = {upc:product.upc, isbn:product.isbn, ean:product.ean, data: product}
+                        const newProduct = await createProduct(cleanedData);
+                        console.log("New product created!!");
 
-        } catch (error) {
-            // If not found internally, search the external API
-            let product;
-            const externalData = await searchExternalApi(itemCode);
-            if (externalData && externalData.items && externalData.items.length > 0) {
-                product = externalData.items[0];
-                // Create the item in our internal database
-                try {
-                    const cleanedData = {upc:product.upc, isbn:product.isbn, ean:product.ean, data: product}
-                    const newProduct = await createProduct(cleanedData);
-                    console.log("New product created!!");
-
-                    await createItem(user.uid, newProduct);
-                    console.log("New item created!!");
-                } catch (error) {
-                    console.log("failed to create prod");
+                        await createItem(user.uid, newProduct);
+                        console.log("New item created!!");
+                        setGeneratedItem(newProduct);
+                    } catch (error) {
+                        console.log("failed to create prod");
+                        setError("Failed to create product");
+                    }
+                } else {
+                    setError("No product found for the given code");
                 }
-
             }
+        } catch (error) {
+            console.error("Error during item generation:", error);
+            setError("An error occurred while generating the item");
         } finally {
             setIsLoading(false);
         }
@@ -98,7 +104,13 @@ export default function GenerateItem() {
                 </button>
             </form>
             {error && <p className="text-red-500 mb-4">{error}</p>}
-            <ItemDisplay item={generatedItem} />
+            {isLoading ? (
+                <p className="text-gray-600 mb-4">Loading...</p>
+            ) : generatedItem ? (
+                <ItemDisplay item={generatedItem} />
+            ) : (
+                <p className="text-gray-600 mb-4">No item generated yet. Enter a code and click "Generate" to create an item.</p>
+            )}
         </div>
     )
 }
