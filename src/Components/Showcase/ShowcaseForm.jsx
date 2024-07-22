@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { fetchData } from "../../helpers/ShowcaseApi";
-import { createItem, searchItem } from "../../helpers/itemHelper";
+// import { fetchData } from "../../helpers/ItemApi";
+// import { createItem, searchItem } from "../../helpers/itemHelper";
 import { useAuth } from "../../helpers/AuthContext";
 import data from '../../mockData/data.json'
 import ShowcaseList from "./ShowcaseList";
@@ -71,10 +71,10 @@ export default function ShowcaseForm() {
         <button type="submit">Submit</button>
       </form>
       <br />
-      <h2>Item Details:</h2>
+      {/* <h2>Item Details:</h2>
       {
         JSON.stringify(items, null, 2)
-      }
+      } */}
       <hr />
       <ShowcaseList items={items} />
     </>

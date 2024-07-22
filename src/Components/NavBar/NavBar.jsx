@@ -227,7 +227,7 @@ export default function NavBar() {
   const menuItems = [
   { icon: <HomeIcon />, path: '/', bgColor: theme.palette.primary.main },
   { icon: <StoreIcon />, path: '/marketplace', bgColor: theme.palette.primary.main },
-  { icon: <AddCircleIcon />, path: '/showcaseform', bgColor: theme.palette.primary.main },
+  { icon: <AddCircleIcon />, path: '/genItem', bgColor: theme.palette.primary.main },
   { icon: <AccountCircleIcon />, path: `/profile`, bgColor: theme.palette.primary.main },
   ];
 
