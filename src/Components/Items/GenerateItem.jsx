@@ -1,17 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ItemDisplay from "./ItemDisplay"
 
 export default function GenerateItem() {
     const [itemCode, setItemCode] = useState("");
-    const [itemType, setItemType] = useState("UPC");
+    const [itemType, setItemType] = useState("");
 
     const handleInputChange = (e) => {
         setItemCode(e.target.value);
     };
 
-    const handleDropdownChange = (e) => {
-        setItemType(e.target.value);
-    };
+    useEffect(() => {
+        if (itemCode.length === 13) {
+            if (itemCode.startsWith('0')) {
+                setItemType("UPC-A (GTIN-12)");
+            } else {
+                setItemType("EAN-13 (GTIN-13)");
+            }
+        } else if (itemCode.length === 12) {
+            setItemType("UPC-A (GTIN-12)");
+        } else {
+            setItemType("");
+        }
+    }, [itemCode]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -30,20 +40,11 @@ export default function GenerateItem() {
                         name="item-code"
                         value={itemCode}
                         onChange={handleInputChange}
+                        placeholder="Enter UPC or EAN"
                     />
                 </label>
-                <label htmlFor="code-type">
-                    Code Type:
-                    <select
-                        name="code-type"
-                        value={itemType}
-                        onChange={handleDropdownChange}
-                    >
-                        <option value="UPC">UPC</option>
-                        <option value="ISBN">ISBN</option>
-                        <option value="EAN">EAN</option>
-                    </select>
-                </label>
+                <br />
+                {itemType && <p>Detected Code Type: {itemType}</p>}
                 <br />
                 <button type="submit">Generate</button>
             </form>
