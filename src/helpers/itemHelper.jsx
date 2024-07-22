@@ -1,10 +1,11 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/items';
+const INTERNAL_API_URL = 'http://localhost:3000/items';
+const EXTERNAL_API_URL = 'https://api.upcitemdb.com/prod/trial/lookup';
 
 export const getAllItems = async () => {
   try {
-    const response = await axios.get(API_URL);
+    const response = await axios.get(INTERNAL_API_URL);
     return response.data;
   } catch (error) {
     console.error('Error fetching items:', error);
@@ -14,7 +15,7 @@ export const getAllItems = async () => {
 
 export const createItem = async (uid, productEan) => {
   try {
-    const response = await axios.post(API_URL, { uid, productEan });
+    const response = await axios.post(INTERNAL_API_URL, { uid, productEan });
     return response.data;
   } catch (error) {
     console.error('Error creating item:', error);
@@ -24,7 +25,7 @@ export const createItem = async (uid, productEan) => {
 
 export const updateItemById = async (id, name, description) => {
   try {
-    const response = await axios.put(`${API_URL}/${id}`, { name, description });
+    const response = await axios.put(`${INTERNAL_API_URL}/${id}`, { name, description });
     return response.data;
   } catch (error) {
     console.error('Error updating item:', error);
@@ -34,7 +35,7 @@ export const updateItemById = async (id, name, description) => {
 
 export const deleteItemById = async (id) => {
   try {
-    const response = await axios.delete(`${API_URL}/${id}`);
+    const response = await axios.delete(`${INTERNAL_API_URL}/${id}`);
     return response.data;
   } catch (error) {
     console.error('Error deleting item:', error);
@@ -42,10 +43,9 @@ export const deleteItemById = async (id) => {
   }
 };
 
-// Note: These functions are not present in the provided controller, but you may want to keep them if they're used elsewhere
 export const getItemById = async (id) => {
   try {
-    const response = await axios.get(`${API_URL}/${id}`);
+    const response = await axios.get(`${INTERNAL_API_URL}/${id}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching item:', error);
@@ -53,15 +53,27 @@ export const getItemById = async (id) => {
   }
 };
 
-export const searchItem = async (code, type) => {
+export const searchInternalItem = async (code) => {
   try {
-    const response = await axios.get(`${API_URL}/search`, { params: { code, type } });
+    const response = await axios.get(`${INTERNAL_API_URL}/search`, { params: { code } });
     return response.data;
   } catch (error) {
     if (error.response && error.response.status === 404) {
       return null;
     }
     console.error('Error searching for item:', error);
+    throw error;
+  }
+};
+
+export const searchExternalItem = async (code) => {
+  try {
+    const response = await axios.get(EXTERNAL_API_URL, {
+      params: { upc: code }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching data from external API:', error);
     throw error;
   }
 };

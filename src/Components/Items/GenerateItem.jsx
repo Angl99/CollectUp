@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
 import ItemDisplay from "./ItemDisplay"
+import { searchInternalItem, searchExternalItem, createItem } from "../../helpers/itemHelper";
+import { useAuth } from "../../helpers/AuthContext";
 
 export default function GenerateItem() {
+    const { user } = useAuth();
     const [itemCode, setItemCode] = useState("");
     const [itemType, setItemType] = useState("");
     const [generatedItem, setGeneratedItem] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     const handleInputChange = (e) => {
         setItemCode(e.target.value);
@@ -26,18 +31,32 @@ export default function GenerateItem() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Here you would typically call a function to process the item
-        // For now, we'll create a mock item
-        const mockItem = {
-            title: "Item",
-            category: "Electronics",
-            ean: itemCode,
-            brand: "Brand Name",
-            description: "This is a generated item based on the entered code.",
-            highest_recorded_price: 99.99,
-            images: ["https://via.placeholder.com/300"]
-        };
-        setGeneratedItem(mockItem);
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            // First, search in the internal database
+            let item = await searchInternalItem(itemCode);
+
+            if (!item) {
+                // If not found internally, search the external API
+                const externalData = await searchExternalItem(itemCode);
+                if (externalData && externalData.items && externalData.items.length > 0) {
+                    item = externalData.items[0];
+                    // Create the item in our internal database
+                    await createItem(user.uid, item.ean);
+                } else {
+                    throw new Error("Item not found in external API");
+                }
+            }
+
+            setGeneratedItem(item);
+        } catch (error) {
+            console.error("Error generating item:", error);
+            setError("Failed to generate item. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -56,10 +75,15 @@ export default function GenerateItem() {
                     />
                 </label>
                 {itemType && <p className="mt-2 text-sm text-gray-600">Detected Code Type: {itemType}</p>}
-                <button type="submit" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                    Generate
+                <button 
+                    type="submit" 
+                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                    disabled={isLoading}
+                >
+                    {isLoading ? "Generating..." : "Generate"}
                 </button>
             </form>
+            {error && <p className="text-red-500 mb-4">{error}</p>}
             <ItemDisplay item={generatedItem} />
         </div>
     )
