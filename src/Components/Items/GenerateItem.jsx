@@ -34,6 +34,12 @@ export default function GenerateItem() {
         setIsLoading(true);
         setError(null);
 
+        if (!user) {
+            setError("You must be logged in to generate an item.");
+            setIsLoading(false);
+            return;
+        }
+
         try {
             // First, search in the internal database
             let item = await searchInternalItem(itemCode);
