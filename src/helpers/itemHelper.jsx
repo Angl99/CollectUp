@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const INTERNAL_API_URL = 'http://localhost:3000/items';
 const EXTERNAL_API_URL = 'https://api.upcitemdb.com/prod/trial/lookup';
+const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
 
 export const getAllItems = async () => {
   try {
@@ -53,22 +54,9 @@ export const getItemById = async (id) => {
   }
 };
 
-export const searchInternalItem = async (code) => {
+export const searchExternalApi = async (code) => {
   try {
-    const response = await axios.get(`${INTERNAL_API_URL}/search`, { params: { code } });
-    return response.data;
-  } catch (error) {
-    if (error.response && error.response.status === 404) {
-      return null;
-    }
-    console.error('Error searching for item:', error);
-    throw error;
-  }
-};
-
-export const searchExternalItem = async (code) => {
-  try {
-    const response = await axios.get(EXTERNAL_API_URL, {
+    const response = await axios.get(`${CORS_PROXY}${EXTERNAL_API_URL}`, {
       params: { upc: code }
     });
     return response.data;

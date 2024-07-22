@@ -42,11 +42,14 @@ export default function GenerateItem() {
             setIsLoading(false);
             return;
         }
+        // upload an image
+        // condition of item
+        // user description
 
         try {
             // First, search in the internal database
             let product = await searchInternalProduct(itemCode);
-            if (product) {
+            if (product.ean) {
                 await createItem(user.uid, product);
                 console.log("existing prod: ", product);
                 setGeneratedItem(product);

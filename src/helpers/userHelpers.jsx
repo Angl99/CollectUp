@@ -40,6 +40,17 @@ export const updateById = async (id, userData) => {
     }
 }   
 
+export const getByFirebaseId = async (uid) => {
+    try {
+        const response = await axios.put(`http://localhost:3000/users/firebase/${uid}`);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+
 export const deleteById = async (id) => {
     try {
         const response = await axios.delete(`http://localhost:3000/users/${id}`);

@@ -9,7 +9,7 @@ import LoginSharpIcon from '@mui/icons-material/LoginSharp';
 import LockPersonSharp from '@mui/icons-material/LockPersonSharp';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { getAuth } from 'firebase/auth';
-import { create } from '../../helpers/userHelpers';
+import { create, getByFirebaseId } from '../../helpers/userHelpers';
 
 const auth = getAuth();
 
@@ -413,7 +413,7 @@ export default function Register() {
                   variant="outlined"
                   startIcon={<GoogleIcon />}
                   sx={{ mb: 2, color: 'primary.main', borderColor: 'primary.main' }}
-                  onClick={handleGoogleSignIn}
+                  onClick={googleSignIn}
                 >
                   Sign Up with Google
                 </Button>
