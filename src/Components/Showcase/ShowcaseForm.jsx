@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { fetchData } from "../../helpers/ItemApi";
-import { createItem, searchItem } from "../../helpers/itemHelper";
+// import { fetchData } from "../../helpers/ItemApi";
+// import { createItem, searchItem } from "../../helpers/itemHelper";
 import { useAuth } from "../../helpers/AuthContext";
 import data from '../../mockData/data.json'
 import ShowcaseList from "./ShowcaseList";
