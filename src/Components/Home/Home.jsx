@@ -27,7 +27,7 @@ const theme = createTheme({
 });
 
 export default function Home() {
-    // Create an array of listings from the first 3 items in the data
+    // Create an array of listings from items in the data
     const listings = data.slice(0, 3).map(item => ({
         title: item.items[0].title,
         description: item.items[0].description || "No description available",
@@ -36,7 +36,6 @@ export default function Home() {
         publisher: item.items[0].publisher || "Publisher not available"
     }));
 
-    // Define an array of popular series (placeholder data)
     const popularSeries = [
         {
             title: "Popular Series 1",

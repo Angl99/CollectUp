@@ -1,4 +1,3 @@
-// Import necessary dependencies and components
 import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, IconButton, InputBase, Box, Menu, MenuItem, Slide, Typography } from '@mui/material';
@@ -15,7 +14,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import customMenuIcon from '../../assets/AA.png';
 
 // Create a custom theme for the NavBar
-
 const theme = createTheme({
   palette: {
     primary: {

@@ -1,4 +1,3 @@
-// Import necessary dependencies and components
 import * as React from 'react';
 import { useState, useContext } from 'react';
 import { Avatar, Button, CssBaseline, TextField, Link, Grid, Box, Typography, Container, Tabs, Tab, Alert } from '@mui/material';
