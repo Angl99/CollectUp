@@ -1,3 +1,4 @@
+// Import necessary dependencies and components
 import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, IconButton, InputBase, Box, Menu, MenuItem, Slide, Typography } from '@mui/material';
@@ -12,6 +13,8 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import customMenuIcon from '../../assets/AA.png';
+
+// Create a custom theme for the NavBar
 
 const theme = createTheme({
   palette: {
@@ -33,6 +36,7 @@ const theme = createTheme({
   },
 });
 
+// Styled component for the search bar
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -46,6 +50,7 @@ const Search = styled('div')(({ theme }) => ({
   border: '3px solid black',
 }));
 
+// Styled component for the search icon wrapper
 const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),
   height: '100%',
@@ -56,6 +61,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   justifyContent: 'center',
 }));
 
+// Styled component for the input base of the search bar
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'black',
   width: '100%',
@@ -67,6 +73,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+// Styled component for the animated bottom navigation
 const AnimatedBottomNav = styled('div')(({ theme }) => ({
   position: 'fixed',
   bottom: 0,
@@ -84,6 +91,7 @@ const AnimatedBottomNav = styled('div')(({ theme }) => ({
   },
 }));
 
+// Styled component for each menu item in the bottom navigation
 const AnimatedMenuItem = styled('button')(({ theme, active, bgColorItem }) => ({
   all: 'unset',
   flexGrow: 1,
@@ -110,6 +118,7 @@ const AnimatedMenuItem = styled('button')(({ theme, active, bgColorItem }) => ({
   },
 }));
 
+// Styled component for the icon in each menu item
 const AnimatedIcon = styled('svg')(({ theme, active }) => ({
   width: '2.6em',
   height: '2.6em',
@@ -125,6 +134,7 @@ const AnimatedIcon = styled('svg')(({ theme, active }) => ({
   },
 }));
 
+// Styled component for the border of the active menu item
 const MenuBorder = styled('div')(({ theme, activeIndex }) => ({
   left: 0,
   bottom: '99%',
@@ -139,8 +149,11 @@ const MenuBorder = styled('div')(({ theme, activeIndex }) => ({
 }));
 
 export default function NavBar() {
+  // Get user and logout function from AuthContext
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  
+  // State variables for menu controls and navigation bar visibility
   const [anchorEl, setAnchorEl] = useState(null);
   const [logoAnchorEl, setLogoAnchorEl] = useState(null);
   const [showTopBar, setShowTopBar] = useState(true);
@@ -148,12 +161,14 @@ export default function NavBar() {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // Effect to handle scroll events
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
+  // Function to handle scroll behavior
   const handleScroll = () => {
     const currentScrollY = window.scrollY;
 
@@ -168,6 +183,7 @@ export default function NavBar() {
     setLastScrollY(currentScrollY);
   };
 
+  // Functions to handle menu interactions
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -186,6 +202,7 @@ export default function NavBar() {
     setLogoAnchorEl(null);
   };
 
+  // Function to handle user logout
   const handleLogout = async () => {
     try {
       await logout();
@@ -196,16 +213,19 @@ export default function NavBar() {
     handleClose();
   };
 
+  // Function to handle navigation
   const handleNavigation = (path) => {
     navigate(path);
     handleClose();
   };
 
+  // Function to handle bottom navigation item clicks
   const handleItemClick = (index, path) => {
     setActiveIndex(index);
     navigate(path);
   };
 
+  // Define menu items for the bottom navigation
   const menuItems = [
   { icon: <HomeIcon />, path: '/', bgColor: theme.palette.primary.main },
   { icon: <StoreIcon />, path: '/marketplace', bgColor: theme.palette.primary.main },
@@ -213,10 +233,12 @@ export default function NavBar() {
   { icon: <AccountCircleIcon />, path: `/profile`, bgColor: theme.palette.primary.main },
   ];
 
+  // Define the top navigation bar
   const TopBar = (
     <AppBar position="fixed" sx={{ top: 0, bottom: 'auto', backgroundColor: alpha(theme.palette.primary.main, 0.9) }}>
       <Toolbar>
         {user ? (
+          // Logo button for logged-in users
           <IconButton
             onClick={handleLogoClick}
             sx={{ 
@@ -244,6 +266,7 @@ export default function NavBar() {
           />
         </IconButton>
         ) : (
+          // Logo button for non-logged-in users
           <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
             <IconButton
             onClick={handleLogoClick}
@@ -273,6 +296,7 @@ export default function NavBar() {
         </IconButton>
           </Link>
         )}
+        {/* Search bar */}
         <Search>
           <SearchIconWrapper>
             <SearchIcon />
@@ -282,6 +306,7 @@ export default function NavBar() {
             inputProps={{ 'aria-label': 'search' }}
           />
         </Search>
+        {/* More options menu for non-logged-in users */}
         {!user && (
           <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
             <IconButton
@@ -300,6 +325,7 @@ export default function NavBar() {
     </AppBar>
   );
 
+  // Define the bottom navigation bar
   const BottomBar = (
     <AnimatedBottomNav>
       {menuItems.map((item, index) => (
@@ -329,6 +355,7 @@ export default function NavBar() {
 
   return (
     <ThemeProvider theme={theme}>
+      {/* Render top bar with slide animation for logged-in users */}
       {user ? (
         <Slide appear={false} direction="down" in={showTopBar}>
           {TopBar}
@@ -336,6 +363,7 @@ export default function NavBar() {
       ) : (
         TopBar
       )}
+      {/* Logo menu for logged-in users */}
       <Menu
         anchorEl={logoAnchorEl}
         open={Boolean(logoAnchorEl)}
@@ -344,6 +372,7 @@ export default function NavBar() {
         <MenuItem onClick={() => { handleLogout(); handleLogoMenuClose(); }}>Logout</MenuItem>
       </Menu>
 
+      {/* More options menu for non-logged-in users */}
       <Menu
         id="menu-appbar"
         anchorEl={anchorEl}
@@ -364,6 +393,7 @@ export default function NavBar() {
         ]}
       </Menu>
 
+      {/* Render bottom bar with slide animation for logged-in users */}
       {user && (
         <Slide appear={false} direction="up" in={showBottomBar}>
           {BottomBar}
