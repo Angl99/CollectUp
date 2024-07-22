@@ -1,3 +1,4 @@
+// Import necessary dependencies and components
 import * as React from 'react';
 import { useState, useContext } from 'react';
 import { Avatar, Button, CssBaseline, TextField, Link, Grid, Box, Typography, Container, Tabs, Tab, Alert } from '@mui/material';
@@ -11,8 +12,10 @@ import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { getAuth } from 'firebase/auth';
 import { create } from '../../helpers/userHelpers';
 
+// Get Firebase auth instance
 const auth = getAuth();
 
+// Create a custom theme for the component
 const theme = createTheme({
   palette: {
     primary: {
@@ -33,6 +36,7 @@ const theme = createTheme({
   },
 });
 
+// TabPanel component for handling tab content
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -53,7 +57,9 @@ function TabPanel(props) {
   );
 }
 
+// Main component for handling user registration and login
 export default function Register() {
+  // State variables for managing form data and UI
   const [tabValue, setTabValue] = useState(0);
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [signupStep, setSignupStep] = useState(1);
@@ -67,23 +73,28 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  // Get authentication functions from context
   const { login, signup, googleSignIn } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  // Handle tab change between login and signup
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
 
+  // Handle changes in login form fields
   const handleLoginChange = (event) => {
     setLoginData({ ...loginData, [event.target.name]: event.target.value });
   };
 
+  // Handle login form submission
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     login(loginData.email, loginData.password);
     navigate("/");
   };
 
+  // Handle Google Sign-In
   const handleGoogleSignIn = async () => {
     try {
       const provider = new GoogleAuthProvider();
@@ -95,6 +106,7 @@ export default function Register() {
     }
   };
 
+  // Handle next step in email confirmation during signup
   const handleNextEmail = () => { 
     if (email !== confirmEmail) {
       setShowEmailAlert(true);
@@ -104,6 +116,7 @@ export default function Register() {
     setSignupStep(signupStep + 1);
   };
 
+  // Handle next step in name input during signup
   const handleNext = () => {
     if (!firstName.trim() || !lastName.trim()) {
       setShowNameAlert(true);
@@ -113,10 +126,12 @@ export default function Register() {
     setSignupStep(signupStep + 1);
   };
 
+  // Handle going back a step in signup process
   const handleBack = () => {
     setSignupStep(signupStep - 1);
   };
 
+  // Handle signup form submission
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
 
@@ -143,6 +158,7 @@ export default function Register() {
     }
   };
 
+  // Render different steps of the signup process
   const renderSignupStep = () => {
     switch(signupStep) {
       case 1:
@@ -301,6 +317,7 @@ export default function Register() {
     }
   };
 
+  // Render the main component
   return (
     <Box sx={{
       background: 'linear-gradient(-45deg, #3498db, #623c8c, #95a5a6, #34495e)',
@@ -336,16 +353,20 @@ export default function Register() {
               borderRadius: 2,
             }}
           >
+            {/* Avatar icon */}
             <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
               {tabValue === 0 ? <LoginSharpIcon /> : <LockPersonSharp />}
             </Avatar>
+            {/* Title */}
             <Typography component="h1" variant="h5" color="text.primary">
-              {tabValue === 0 ? "Sign in to your account" : "Let's get your account set up!"}
+              {tabValue ===  0 ? "Sign in to your account" : "Let's get your account set up!"}
             </Typography>
+            {/* Tabs for switching between Login and Sign Up */}
             <Tabs value={tabValue} onChange={handleTabChange} aria-label="auth tabs">
               <Tab label="Login" />
               <Tab label="Sign Up" />
             </Tabs>
+            {/* Login form */}
             <TabPanel value={tabValue} index={0}>
               <Box component="form" onSubmit={handleLoginSubmit} noValidate sx={{ mt: 1 }}>
                 <TextField
@@ -380,6 +401,7 @@ export default function Register() {
                 >
                   Sign In
                 </Button>
+                {/* Divider */}
                 <Box sx={{ display: 'flex', alignItems: 'center', mt: 3, mb: 2 }}>
                   <Box sx={{ flex: 1, height: 2, bgcolor: 'text.disabled' }} />
                   <Typography variant="body2" sx={{ px: 2 }}>
@@ -387,6 +409,7 @@ export default function Register() {
                   </Typography>
                   <Box sx={{ flex: 1, height: 2, bgcolor: 'text.disabled' }} />
                 </Box>
+                {/* Google Sign In button */}
                 <Button
                   fullWidth
                   variant="outlined"
@@ -398,9 +421,11 @@ export default function Register() {
                 </Button>
               </Box>
             </TabPanel>
+            {/* Sign Up form */}
             <TabPanel value={tabValue} index={1}>
               <Box component="form" noValidate sx={{ mt: 3 }}>
                 {renderSignupStep()}
+                {/* Divider */}
                 <Box sx={{ display: 'flex', alignItems: 'center', mt: 3, mb: 2 }}>
                   <Box sx={{ flex: 1, height: 2, bgcolor: 'text.disabled' }} />
                   <Typography variant="body2" sx={{ px: 2 }}>
@@ -408,6 +433,7 @@ export default function Register() {
                   </Typography>
                   <Box sx={{ flex: 1, height: 2, bgcolor: 'text.disabled' }} />
                 </Box>
+                {/* Google Sign Up button */}
                 <Button
                   fullWidth
                   variant="outlined"
