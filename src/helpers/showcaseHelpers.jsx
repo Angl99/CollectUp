@@ -44,7 +44,7 @@ export const updateShowcaseById = async (id, updateData) => {
 
 export const addItemsToShowcase = async (id, items) => {
     try {
-        const response = await axios.put(`${API_URL}/${id}/items`, { items });
+        const response = await axios.post(`${API_URL}/${id}/items`, { items });
         return response.data;
     } catch (error) {
         console.error("Error adding items to showcase:", error);

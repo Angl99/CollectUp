@@ -28,12 +28,20 @@ export default function ShowcaseDisplay() {
           setShowcaseId(showcase.id);
 
           if (location.state?.items) {
+            // Prepare items for adding to showcase
+            const itemsToAdd = location.state.items.map(item => ({
+              productEan: item.data.ean,
+              condition: item.condition,
+              userDescription: item.userDescription,
+              imgUrl: item.imgUrl
+            }));
             // Add new items to the showcase
-            await addItemsToShowcase(showcase.id, location.state.items);
+            await addItemsToShowcase(showcase.id, itemsToAdd);
           }
 
-          // Set all items in the showcase
-          setItems(showcase.items || []);
+          // Fetch updated showcase items
+          const updatedShowcase = await getShowcaseById(showcase.id);
+          setItems(updatedShowcase.items || []);
           setIsLoading(false);
         } catch (err) {
           console.error("Error loading or creating showcase:", err);
