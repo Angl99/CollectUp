@@ -4,8 +4,6 @@ import Home from './Components/Home/Home'
 import LogIn from './Components/LogIn/LogIn'
 import NavBar from './Components/NavBar/NavBar'
 import { AuthProvider } from './helpers/AuthContext'
-import ShowcaseForm from './Components/Showcase/ShowcaseForm'
-import ShowcaseList from './Components/Showcase/ShowcaseList'
 import Profile from './Components/Profile/Profile'
 import GenerateItem from './Components/Items/GenerateItem'
 import BarcodeScanner from './Components/BarcodeScanner/BarcodeScanner'
@@ -20,8 +18,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LogIn />} />
-            <Route path='/showcaseForm' element={<ShowcaseForm />} />
-            <Route path='/user/:userId/showcases' element={<ShowcaseList />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/genItem' element={<GenerateItem />} />
             <Route path='/scan' element={<BarcodeScanner />} />
