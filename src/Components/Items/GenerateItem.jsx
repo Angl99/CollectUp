@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ItemDisplay from "./ItemDisplay"
+import ShowcaseDisplay from "../Showcase/ShowcaseDisplay";
 import { searchExternalApi, createItem } from "../../helpers/itemHelper";
 import { useAuth } from "../../helpers/AuthContext";
 import productHelper from "../../helpers/productHelpers";
@@ -9,9 +10,10 @@ export default function GenerateItem() {
     const { user } = useAuth();
     const [itemCode, setItemCode] = useState("");
     const [itemType, setItemType] = useState("");
-    const [generatedItem, setGeneratedItem] = useState(null);
+    const [generatedItems, setGeneratedItems] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [showShowcase, setShowShowcase] = useState(false);
 
     const handleInputChange = (e) => {
         setItemCode(e.target.value);
@@ -35,7 +37,6 @@ export default function GenerateItem() {
         e.preventDefault();
         setIsLoading(true);
         setError(null);
-        setGeneratedItem(null);
 
         if (!user) {
             setError("You must be logged in to generate an item.");
@@ -49,7 +50,7 @@ export default function GenerateItem() {
             if (product.ean) {
                 await createItem(user.uid, product);
                 console.log("existing prod: ", product);
-                setGeneratedItem(product);
+                setGeneratedItems(prevItems => [...prevItems, product]);
             } else {
                 // If not found internally, search the external API
                 const externalData = await searchExternalApi(itemCode);
@@ -64,7 +65,7 @@ export default function GenerateItem() {
                         await createItem(user.uid, newProduct);
                         console.log("New item created!!");
                         console.log("Newly created prod: ", newProduct);
-                        setGeneratedItem(newProduct);
+                        setGeneratedItems(prevItems => [...prevItems, newProduct]);
                     } catch (error) {
                         console.log("failed to create prod");
                         setError("Failed to create product");
@@ -78,7 +79,12 @@ export default function GenerateItem() {
             setError("An error occurred while generating the item");
         } finally {
             setIsLoading(false);
+            setItemCode("");
         }
+    };
+
+    const handleShowcaseSubmit = () => {
+        setShowShowcase(true);
     };
 
     return (
@@ -108,11 +114,25 @@ export default function GenerateItem() {
             {error && <p className="text-red-500 mb-4">{error}</p>}
             {isLoading ? (
                 <p className="text-gray-600 mb-4">Loading...</p>
-            ) : generatedItem ? (
-                <ItemDisplay generatedItem={generatedItem} />
+            ) : generatedItems.length > 0 ? (
+                <>
+                    <div className="mb-4">
+                        <h2 className="text-2xl font-bold mb-2 text-gray-800">Generated Items:</h2>
+                        {generatedItems.map((item, index) => (
+                            <ItemDisplay key={index} generatedItem={item} />
+                        ))}
+                    </div>
+                    <button 
+                        onClick={handleShowcaseSubmit}
+                        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                    >
+                        Submit to Showcase
+                    </button>
+                </>
             ) : (
-                <p className="text-gray-600 mb-4">No item generated yet. Enter a code and click "Generate" to create an item.</p>
+                <p className="text-gray-600 mb-4">No items generated yet. Enter a code and click "Generate" to create an item.</p>
             )}
+            {showShowcase && <ShowcaseDisplay items={generatedItems} />}
         </div>
     )
 }
