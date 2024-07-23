@@ -4,6 +4,7 @@ import ItemDisplay from "./ItemDisplay"
 import { searchExternalApi, createItem } from "../../helpers/itemHelper";
 import { useAuth } from "../../helpers/AuthContext";
 import productHelper from "../../helpers/productHelpers";
+import { getShowcaseById, createShowcase, addItemsToShowcase } from "../../helpers/showcaseHelpers";
 
 export default function GenerateItem() {
     const { getProductByCode, createProduct } = productHelper;
@@ -132,8 +133,39 @@ export default function GenerateItem() {
         }
     };
 
-    const handleShowcaseSubmit = () => {
-        navigate('/showcase-display', { state: { items: generatedItems } });
+    const handleShowcaseSubmit = async () => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            if (!user) {
+                throw new Error("You must be logged in to add items to the showcase.");
+            }
+            
+            // Get or create the user's showcase
+            let showcase = await getShowcaseById(user.uid);
+            if (!showcase) {
+                showcase = await createShowcase({ name: "My Showcase", userId: user.uid });
+            }
+            
+            // Prepare items for adding to showcase
+            const itemsToAdd = generatedItems.map(item => ({
+                productEan: item.data.ean,
+                condition: item.condition,
+                userDescription: item.userDescription,
+                imgUrl: item.imgUrl
+            }));
+            
+            // Add items to the showcase
+            await addItemsToShowcase(showcase.id, itemsToAdd);
+            
+            // Navigate to the showcase display
+            navigate('/showcase-display');
+        } catch (error) {
+            console.error("Error adding items to showcase:", error);
+            setError("Failed to add items to showcase. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
