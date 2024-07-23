@@ -11,12 +11,39 @@ export default function GenerateItem() {
     const { user } = useAuth();
     const [itemCode, setItemCode] = useState("");
     const [itemType, setItemType] = useState("");
+    const [condition, setCondition] = useState("");
+    const [userDescription, setUserDescription] = useState("");
+    const [imgUrl, setImgUrl] = useState("");
     const [generatedItems, setGeneratedItems] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const handleInputChange = (e) => {
-        setItemCode(e.target.value);
+        const { name, value } = e.target;
+        switch(name) {
+            case "item-code":
+                setItemCode(value);
+                break;
+            case "condition":
+                setCondition(value);
+                break;
+            case "user-description":
+                setUserDescription(value);
+                break;
+            default:
+                break;
+        }
+    };
+
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImgUrl(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     useEffect(() => {
@@ -48,9 +75,14 @@ export default function GenerateItem() {
             // First, search in the internal database
             let product = await searchInternalProduct(itemCode);
             if (product.ean) {
-                await createItem(user.uid, product);
-                console.log("existing prod: ", product);
-                setGeneratedItems(prevItems => [...prevItems, product]);
+                const newItem = await createItem(user.uid, {
+                    ...product,
+                    condition,
+                    userDescription,
+                    imgUrl
+                });
+                console.log("existing prod: ", newItem);
+                setGeneratedItems(prevItems => [...prevItems, newItem]);
             } else {
                 // If not found internally, search the external API
                 const externalData = await searchExternalApi(itemCode);
@@ -58,14 +90,22 @@ export default function GenerateItem() {
                     product = externalData.items[0];
                     // Create the item in our internal database
                     try {
-                        const cleanedData = {upc:product.upc, isbn:product.isbn, ean:product.ean, data: product}
+                        const cleanedData = {
+                            upc: product.upc,
+                            isbn: product.isbn,
+                            ean: product.ean,
+                            data: product,
+                            condition,
+                            userDescription,
+                            imgUrl
+                        }
                         const newProduct = await createProduct(cleanedData);
                         console.log("New product created!!");
 
-                        await createItem(user.uid, newProduct);
+                        const newItem = await createItem(user.uid, newProduct);
                         console.log("New item created!!");
-                        console.log("Newly created prod: ", newProduct);
-                        setGeneratedItems(prevItems => [...prevItems, newProduct]);
+                        console.log("Newly created prod: ", newItem);
+                        setGeneratedItems(prevItems => [...prevItems, newItem]);
                     } catch (error) {
                         console.log("failed to create prod");
                         setError("Failed to create product");
@@ -80,6 +120,9 @@ export default function GenerateItem() {
         } finally {
             setIsLoading(false);
             setItemCode("");
+            setCondition("");
+            setUserDescription("");
+            setImgUrl("");
         }
     };
 
@@ -103,6 +146,45 @@ export default function GenerateItem() {
                     />
                 </label>
                 {itemType && <p className="mt-2 text-sm text-gray-600">Detected Code Type: {itemType}</p>}
+                
+                <label htmlFor="condition" className="block mt-4 mb-2 text-lg font-medium text-gray-700">
+                    Condition:
+                    <input
+                        type="text"
+                        name="condition"
+                        value={condition}
+                        onChange={handleInputChange}
+                        placeholder="Enter Condition"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    />
+                </label>
+
+                <label htmlFor="user-description" className="block mt-4 mb-2 text-lg font-medium text-gray-700">
+                    Description:
+                    <textarea
+                        name="user-description"
+                        value={userDescription}
+                        onChange={handleInputChange}
+                        placeholder="Enter Description"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        rows="3"
+                    ></textarea>
+                </label>
+
+                <label htmlFor="image-upload" className="block mt-4 mb-2 text-lg font-medium text-gray-700">
+                    Upload Image:
+                    <input
+                        type="file"
+                        id="image-upload"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="mt-1 block w-full"
+                    />
+                </label>
+                {imgUrl && (
+                    <img src={imgUrl} alt="Uploaded" className="mt-2 max-w-xs rounded-md shadow-sm" />
+                )}
+
                 <button 
                     type="submit" 
                     className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
