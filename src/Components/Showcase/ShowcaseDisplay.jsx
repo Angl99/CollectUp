@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ShowcaseItem from "./ShowcaseItem";
 import { useAuth } from "../../helpers/AuthContext";
-import { getById, create, addItemToShowcase } from "../../helpers/showcaseHelpers";
+import { getById, create, addItemsToShowcase } from "../../helpers/showcaseHelpers";
 
 export default function ShowcaseDisplay() {
   const location = useLocation();
@@ -29,7 +29,7 @@ export default function ShowcaseDisplay() {
 
           if (location.state?.items) {
             // Add new items to the showcase
-            await addItemToShowcase(showcase.id, location.state.items);
+            await addItemsToShowcase(showcase.id, location.state.items);
           }
 
           // Set all items in the showcase
