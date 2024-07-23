@@ -18,6 +18,10 @@ export default function GenerateItem() {
         setItemCode(e.target.value);
     };
 
+    const handleBarcodeDetected = (barcode) => {
+        setItemCode(barcode);
+    };
+
     useEffect(() => {
         if (itemCode.length === 13) {
             if (itemCode.startsWith('0')) {
@@ -109,6 +113,7 @@ export default function GenerateItem() {
                     {isLoading ? "Generating..." : "Generate"}
                 </button>
             </form>
+            <BarcodeScanner onBarcodeDetected={handleBarcodeDetected} />
             {error && <p className="text-red-500 mb-4">{error}</p>}
             {isLoading ? (
                 <p className="text-gray-600 mb-4">Loading...</p>
