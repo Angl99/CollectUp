@@ -9,6 +9,7 @@ import ShowcaseList from './Components/Showcase/ShowcaseList'
 import Profile from './Components/Profile/Profile'
 import GenerateItem from './Components/Items/GenerateItem'
 import BarcodeScanner from './Components/BarcodeScanner/BarcodeScanner'
+import ShowcaseDisplay from './Components/Showcase/ShowcaseDisplay'
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path='/profile' element={<Profile />} />
             <Route path='/genItem' element={<GenerateItem />} />
             <Route path='/scan' element={<BarcodeScanner />} />
+            <Route path='/showcase-display' element={<ShowcaseDisplay />} />
           </Routes>
         </AuthProvider>
       </Router>

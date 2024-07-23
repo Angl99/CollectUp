@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ItemDisplay from "./ItemDisplay"
-import ShowcaseDisplay from "../Showcase/ShowcaseDisplay";
 import { searchExternalApi, createItem } from "../../helpers/itemHelper";
 import { useAuth } from "../../helpers/AuthContext";
 import productHelper from "../../helpers/productHelpers";
 const { getProductByEan: searchInternalProduct, createProduct } = productHelper;
 
 export default function GenerateItem() {
+    const navigate = useNavigate();
     const { user } = useAuth();
     const [itemCode, setItemCode] = useState("");
     const [itemType, setItemType] = useState("");
     const [generatedItems, setGeneratedItems] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [showShowcase, setShowShowcase] = useState(false);
 
     const handleInputChange = (e) => {
         setItemCode(e.target.value);
@@ -84,7 +84,7 @@ export default function GenerateItem() {
     };
 
     const handleShowcaseSubmit = () => {
-        setShowShowcase(true);
+        navigate('/showcase-display', { state: { items: generatedItems } });
     };
 
     return (
@@ -132,7 +132,6 @@ export default function GenerateItem() {
             ) : (
                 <p className="text-gray-600 mb-4">No items generated yet. Enter a code and click "Generate" to create an item.</p>
             )}
-            {showShowcase && <ShowcaseDisplay items={generatedItems} />}
         </div>
     )
 }

@@ -1,7 +1,10 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import ShowcaseItem from "./ShowcaseItem";
 
-export default function ShowcaseDisplay({ items }) {
+export default function ShowcaseDisplay() {
+  const location = useLocation();
+  const items = location.state?.items || [];
   return (
     <div className="max-w-6xl mx-auto p-6">
       <h2 className="text-2xl font-bold mb-4 text-gray-800">Your Showcase</h2>
