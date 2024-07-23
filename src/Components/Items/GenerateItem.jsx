@@ -4,7 +4,7 @@ import ItemDisplay from "./ItemDisplay"
 import { searchExternalApi, createItem } from "../../helpers/itemHelper";
 import { useAuth } from "../../helpers/AuthContext";
 import productHelper from "../../helpers/productHelpers";
-import { getShowcaseById, createShowcase, addItemsToShowcase } from "../../helpers/showcaseHelpers";
+import { getShowcaseById, createShowcase, addItemsToShowcase, addItemToFirstShowcase } from "../../helpers/showcaseHelpers";
 
 export default function GenerateItem() {
     const { getProductByCode, createProduct } = productHelper;
@@ -112,6 +112,15 @@ export default function GenerateItem() {
                         newItem.imgUrl = imgUrl;
                         console.log("New item created!!");
                         console.log("Newly created prod: ", newItem);
+                        
+                        // Add the new item to the first showcase
+                        await addItemToFirstShowcase(user.uid, {
+                            productEan: newItem.data.ean,
+                            condition: newItem.condition,
+                            userDescription: newItem.userDescription,
+                            imgUrl: newItem.imgUrl
+                        });
+                        
                         setGeneratedItems(prevItems => [...prevItems, newItem]);
                     } catch (error) {
                         console.log("failed to create prod");

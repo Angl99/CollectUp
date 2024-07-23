@@ -71,3 +71,28 @@ export const removeItemsFromShowcase = async (id, items) => {
         throw error;
     }
 }
+
+export const getShowcasesByUserUid = async (uid) => {
+    try {
+        const response = await axios.get(`${API_URL}/user/${uid}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching showcases for user:", error);
+        throw error;
+    }
+}
+
+export const addItemToFirstShowcase = async (uid, item) => {
+    try {
+        const showcases = await getShowcasesByUserUid(uid);
+        if (showcases.length === 0) {
+            throw new Error("User has no showcases");
+        }
+        const firstShowcase = showcases[0];
+        await addItemsToShowcase(firstShowcase.id, [item]);
+        return firstShowcase;
+    } catch (error) {
+        console.error("Error adding item to first showcase:", error);
+        throw error;
+    }
+}
