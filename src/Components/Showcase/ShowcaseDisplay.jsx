@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ShowcaseItem from "./ShowcaseItem";
 import { useAuth } from "../../helpers/AuthContext";
-import { create, addItemToShowcase } from "../../helpers/showcaseHelpers";
+import { getById, create, addItemToShowcase } from "../../helpers/showcaseHelpers";
 
 export default function ShowcaseDisplay() {
   const location = useLocation();
@@ -14,31 +14,39 @@ export default function ShowcaseDisplay() {
   const [showcaseId, setShowcaseId] = useState(null);
 
   useEffect(() => {
-    const saveItemsToShowcase = async () => {
-      if (user && location.state?.items) {
+    const loadOrCreateShowcase = async () => {
+      if (user) {
         try {
           setIsLoading(true);
-          // Create a new showcase
-          const showcase = await create("My Showcase", user.uid);
+          let showcase = await getById(user.uid);
+          
+          if (!showcase) {
+            // If the user doesn't have a showcase, create one
+            showcase = await create("My Showcase", user.uid);
+          }
+          
           setShowcaseId(showcase.id);
 
-          // Add items to the showcase
-          await addItemToShowcase(showcase.id, location.state.items);
+          if (location.state?.items) {
+            // Add new items to the showcase
+            await addItemToShowcase(showcase.id, location.state.items);
+          }
 
-          setItems(location.state.items);
+          // Set all items in the showcase
+          setItems(showcase.items || []);
           setIsLoading(false);
         } catch (err) {
-          console.error("Error saving items to showcase:", err);
-          setError("Failed to save items to showcase. Please try again.");
+          console.error("Error loading or creating showcase:", err);
+          setError("Failed to load or create showcase. Please try again.");
           setIsLoading(false);
         }
       } else {
-        setError("No items found or user not logged in.");
+        setError("User not logged in.");
         setIsLoading(false);
       }
     };
 
-    saveItemsToShowcase();
+    loadOrCreateShowcase();
   }, [user, location.state]);
 
   if (isLoading) {
