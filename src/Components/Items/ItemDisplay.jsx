@@ -3,7 +3,7 @@ import React from "react";
 export default function ItemDisplay({ generatedItem }) {
   if (!generatedItem) return <div className="text-center text-gray-500 text-xl mt-8">No item generated yet!</div>;
 
-  const { title, category, ean, brand, description, images } = generatedItem.data.data.data;
+  const { title, category, ean, brand, description, images, publisher } = generatedItem.data.data.data;
   const { condition, userDescription, imgUrl } = generatedItem;
   const imageUrl = imgUrl || (images && images.length > 0 ? images[0] : null);
   const highest_recorded_price = generatedItem.highest_recorded_price || generatedItem.data?.data?.data?.highest_recorded_price;
@@ -27,7 +27,7 @@ export default function ItemDisplay({ generatedItem }) {
           <div className="space-y-3">
             <p className="text-lg"><span className="font-semibold text-gray-700">Category:</span> {category || 'N/A'}</p>
             <p className="text-lg"><span className="font-semibold text-gray-700">Code:</span> {ean || 'N/A'}</p>
-            <p className="text-lg"><span className="font-semibold text-gray-700">Brand:</span> {brand || 'N/A'}</p>
+            <p className="text-lg"><span className="font-semibold text-gray-700">Brand:</span> {brand || publisher || 'N/A'}</p>
             <p className="text-lg"><span className="font-semibold text-gray-700">Price:</span> {highest_recorded_price ? `$${highest_recorded_price}` : 'N/A'}</p>
             <p className="text-lg"><span className="font-semibold text-gray-700">Condition:</span> {condition || 'N/A'}</p>
           </div>
