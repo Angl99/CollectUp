@@ -14,6 +14,7 @@ export const getAllItems = async () => {
   }
 };
 
+
 export const createItem = async (uid, productEan) => {
   try {
     const response = await axios.post(INTERNAL_API_URL, { uid, productEan });
@@ -23,6 +24,7 @@ export const createItem = async (uid, productEan) => {
     throw error;
   }
 };
+
 
 export const updateItemById = async (id, name, description) => {
   try {
@@ -65,3 +67,4 @@ export const searchExternalApi = async (code) => {
     throw error;
   }
 };
+
