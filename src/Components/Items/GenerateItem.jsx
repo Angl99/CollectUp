@@ -4,9 +4,9 @@ import ItemDisplay from "./ItemDisplay"
 import { searchExternalApi, createItem } from "../../helpers/itemHelper";
 import { useAuth } from "../../helpers/AuthContext";
 import productHelper from "../../helpers/productHelpers";
-const { getProductByCode: searchInternalProduct, createProduct } = productHelper;
 
 export default function GenerateItem() {
+    const { getProductByCode, createProduct } = productHelper;
     const navigate = useNavigate();
     const { user } = useAuth();
     const [itemCode, setItemCode] = useState("");
@@ -73,8 +73,8 @@ export default function GenerateItem() {
       
         try {
             // First, search in the internal database
-            let product = await searchInternalProduct(itemCode);
-            if (product.ean) {
+            let product = await getProductByCode(itemCode);
+            if (product) {
                 const newItem = await createItem(
                     user.uid, 
                     product.ean, 
@@ -82,7 +82,11 @@ export default function GenerateItem() {
                     condition, 
                     userDescription
                 );
-                console.log("existing prod: ", newItem);    
+                newItem.data = product;
+                newItem.condition = condition;
+                newItem.userDescription = userDescription;
+                newItem.imgUrl = imgUrl;
+                console.log("Existing product: ", newItem);    
                 setGeneratedItems(prevItems => [...prevItems, newItem]);
             } else {
                 // If not found internally, search the external API
