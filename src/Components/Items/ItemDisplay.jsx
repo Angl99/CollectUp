@@ -3,7 +3,7 @@ import React from "react";
 export default function ItemDisplay({ generatedItem }) {
   if (!generatedItem) return <div className="text-center text-gray-500 text-xl mt-8">No item generated yet!</div>;
 
-  const { title, category, ean, brand, description, images } = generatedItem.data;
+  const { title, category, ean, brand, description, images } = generatedItem.data.data.data;
   const { condition, userDescription, imgUrl } = generatedItem;
   const imageUrl = imgUrl || (images && images.length > 0 ? images[0] : null);
   const highest_recorded_price = generatedItem.highest_recorded_price || generatedItem.data?.highest_recorded_price;
