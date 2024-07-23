@@ -4,7 +4,6 @@ import { searchExternalApi, createItem } from "../../helpers/itemHelper";
 import { useAuth } from "../../helpers/AuthContext";
 import productHelper from "../../helpers/productHelpers";
 const { getProductByEan: searchInternalProduct, createProduct } = productHelper;
-import BarcodeScanner from "../BarcodeScanner/BarcodeScanner";
 
 export default function GenerateItem() {
     const { user } = useAuth();
@@ -16,10 +15,6 @@ export default function GenerateItem() {
 
     const handleInputChange = (e) => {
         setItemCode(e.target.value);
-    };
-
-    const handleBarcodeDetected = (barcode) => {
-        setItemCode(barcode);
     };
 
     useEffect(() => {
@@ -110,7 +105,6 @@ export default function GenerateItem() {
                     {isLoading ? "Generating..." : "Generate"}
                 </button>
             </form>
-            <BarcodeScanner onBarcodeDetected={handleBarcodeDetected} />
             {error && <p className="text-red-500 mb-4">{error}</p>}
             {isLoading ? (
                 <p className="text-gray-600 mb-4">Loading...</p>
