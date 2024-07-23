@@ -4,6 +4,7 @@ import { searchExternalApi, createItem } from "../../helpers/itemHelper";
 import { useAuth } from "../../helpers/AuthContext";
 import productHelper from "../../helpers/productHelpers";
 const { getProductByEan: searchInternalProduct, createProduct } = productHelper;
+import BarcodeScanner from "../BarcodeScanner/BarcodeScanner";
 
 export default function GenerateItem() {
     const { user } = useAuth();
