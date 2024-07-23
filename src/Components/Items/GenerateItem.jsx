@@ -75,8 +75,13 @@ export default function GenerateItem() {
             // First, search in the internal database
             let product = await searchInternalProduct(itemCode);
             if (product.ean) {
-                const newItem = await createItem(user.uid, product.ean, imgUrl, condition, userDescription);
-                console.log("existing prod: ", newItem);
+                const newItem = await createItem(user.uid, 
+                    product.ean, 
+                    imgUrl, 
+                    condition, 
+                    userDescription
+                );
+                console.log("existing prod: ", newItem);    
                 setGeneratedItems(prevItems => [...prevItems, newItem]);
             } else {
                 // If not found internally, search the external API
