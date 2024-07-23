@@ -1,22 +1,45 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ShowcaseItem from "./ShowcaseItem";
+import { useAuth } from "../../helpers/AuthContext";
+import { create, addItemToShowcase } from "../../helpers/showcaseHelpers";
 
 export default function ShowcaseDisplay() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showcaseId, setShowcaseId] = useState(null);
 
   useEffect(() => {
-    if (location.state?.items) {
-      setItems(location.state.items);
-      setIsLoading(false);
-    } else {
-      setError("No items found in the showcase.");
-      setIsLoading(false);
-    }
-  }, [location.state]);
+    const saveItemsToShowcase = async () => {
+      if (user && location.state?.items) {
+        try {
+          setIsLoading(true);
+          // Create a new showcase
+          const showcase = await create("My Showcase", user.uid);
+          setShowcaseId(showcase.id);
+
+          // Add items to the showcase
+          await addItemToShowcase(showcase.id, location.state.items);
+
+          setItems(location.state.items);
+          setIsLoading(false);
+        } catch (err) {
+          console.error("Error saving items to showcase:", err);
+          setError("Failed to save items to showcase. Please try again.");
+          setIsLoading(false);
+        }
+      } else {
+        setError("No items found or user not logged in.");
+        setIsLoading(false);
+      }
+    };
+
+    saveItemsToShowcase();
+  }, [user, location.state]);
 
   if (isLoading) {
     return <div className="text-center mt-8">Loading...</div>;
@@ -38,6 +61,12 @@ export default function ShowcaseDisplay() {
           ))}
         </div>
       )}
+      <button
+        onClick={() => navigate('/')}
+        className="mt-8 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+      >
+        Back to Home
+      </button>
     </div>
   );
 }
