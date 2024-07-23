@@ -12,9 +12,9 @@ export const getAllShowcases = async () => {
     }
 }
 
-export const createShowcase = async (showcaseData) => {
+export const createShowcase = async (name, uid) => {
     try {
-        const response = await axios.post(API_URL, showcaseData);
+        const response = await axios.post(API_URL, { name, uid });
         return response.data;
     } catch (error) {
         console.error("Error creating showcase:", error);
@@ -32,9 +32,9 @@ export const getShowcaseById = async (id) => {
     }
 }
 
-export const updateShowcaseById = async (id, updateData) => {
+export const updateShowcaseById = async (id, name) => {
     try {
-        const response = await axios.put(`${API_URL}/${id}`, updateData);
+        const response = await axios.put(`${API_URL}/${id}`, { name });
         return response.data;
     } catch (error) {
         console.error("Error updating showcase:", error);
@@ -44,7 +44,7 @@ export const updateShowcaseById = async (id, updateData) => {
 
 export const addItemsToShowcase = async (id, items) => {
     try {
-        const response = await axios.post(`${API_URL}/${id}/items`, { items });
+        const response = await axios.post(`${API_URL}/${id}/items`, items);
         return response.data;
     } catch (error) {
         console.error("Error adding items to showcase:", error);
@@ -64,7 +64,7 @@ export const deleteShowcaseById = async (id) => {
 
 export const removeItemsFromShowcase = async (id, items) => {
     try {
-        const response = await axios.delete(`${API_URL}/${id}/items`, { data: { items } });
+        const response = await axios.delete(`${API_URL}/${id}/items`, { data: items });
         return response.data;
     } catch (error) {
         console.error("Error removing items from showcase:", error);
