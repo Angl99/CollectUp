@@ -100,6 +100,10 @@ export default function GenerateItem() {
                         console.log("New product created!!");
 
                         const newItem = await createItem(user.uid, newProduct.ean, imgUrl, condition, userDescription);
+                        newItem.data = newProduct;
+                        newItem.condition = condition;
+                        newItem.userDescription = userDescription;
+                        newItem.imgUrl = imgUrl;
                         console.log("New item created!!");
                         console.log("Newly created prod: ", newItem);
                         setGeneratedItems(prevItems => [...prevItems, newItem]);
@@ -202,7 +206,13 @@ export default function GenerateItem() {
                     <div className="mb-4">
                         <h2 className="text-2xl font-bold mb-2 text-gray-800">Generated Items:</h2>
                         {generatedItems.map((item, index) => (
-                            <ItemDisplay key={index} generatedItem={item} />
+                            <ItemDisplay key={index} generatedItem={{
+                                data: item,
+                                condition: item.condition,
+                                userDescription: item.userDescription,
+                                imgUrl: item.imgUrl,
+                                highest_recorded_price: item.highest_recorded_price
+                            }} />
                         ))}
                     </div>
                     <button 
