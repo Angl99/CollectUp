@@ -75,12 +75,7 @@ export default function GenerateItem() {
             // First, search in the internal database
             let product = await searchInternalProduct(itemCode);
             if (product.ean) {
-                const newItem = await createItem(user.uid, {
-                    ...product,
-                    condition,
-                    userDescription,
-                    imgUrl
-                });
+                const newItem = await createItem(user.uid, product.ean, imgUrl, condition, userDescription);
                 console.log("existing prod: ", newItem);
                 setGeneratedItems(prevItems => [...prevItems, newItem]);
             } else {
@@ -88,21 +83,18 @@ export default function GenerateItem() {
                 const externalData = await searchExternalApi(itemCode);
                 if (externalData && externalData.items && externalData.items.length > 0) {
                     product = externalData.items[0];
-                    // Create the item in our internal database
+                    // Create the product in our internal database
                     try {
                         const cleanedData = {
                             upc: product.upc,
                             isbn: product.isbn,
                             ean: product.ean,
                             data: product,
-                            condition,
-                            userDescription,
-                            imgUrl
                         }
                         const newProduct = await createProduct(cleanedData);
                         console.log("New product created!!");
 
-                        const newItem = await createItem(user.uid, newProduct);
+                        const newItem = await createItem(user.uid, newProduct.ean, imgUrl, condition, userDescription);
                         console.log("New item created!!");
                         console.log("Newly created prod: ", newItem);
                         setGeneratedItems(prevItems => [...prevItems, newItem]);
@@ -149,14 +141,18 @@ export default function GenerateItem() {
                 
                 <label htmlFor="condition" className="block mt-4 mb-2 text-lg font-medium text-gray-700">
                     Condition:
-                    <input
-                        type="text"
+                    <select
                         name="condition"
                         value={condition}
                         onChange={handleInputChange}
-                        placeholder="Enter Condition"
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                    />
+                    >
+                        <option value="">Select Condition</option>
+                        <option value="New">New</option>
+                        <option value="New-BoxOpen">New-BoxOpen</option>
+                        <option value="Good">Good</option>
+                        <option value="Acceptable">Acceptable</option>
+                    </select>
                 </label>
 
                 <label htmlFor="user-description" className="block mt-4 mb-2 text-lg font-medium text-gray-700">
