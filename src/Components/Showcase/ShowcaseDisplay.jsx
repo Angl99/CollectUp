@@ -1,6 +1,5 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import ShowcaseItem from "./ShowcaseItem";
 
 export default function ShowcaseDisplay() {
   const location = useLocation();
