@@ -47,10 +47,7 @@ export default function GenerateItem() {
             setIsLoading(false);
             return;
         }
-        // upload an image
-        // condition of item
-        // user description
-
+      
         try {
             // First, search in the internal database
             let product = await searchInternalProduct(itemCode);
@@ -91,7 +88,7 @@ export default function GenerateItem() {
 
     return (
         <div className="max-w-4xl mx-auto p-6">
-            <h1 className="text-3xl font-bold mb-6 text-gray-800">Generate Item</h1>
+            <h1 className="text-3xl font-bold mb-6 text-gray-800">Build Your Showcase</h1>
             <form onSubmit={handleSubmit} className="mb-8">
                 <label htmlFor="item-code" className="block mb-2 text-lg font-medium text-gray-700">
                     Item Code:
