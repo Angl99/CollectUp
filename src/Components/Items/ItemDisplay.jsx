@@ -8,6 +8,8 @@ export default function ItemDisplay({ generatedItem }) {
   const imageUrl = imgUrl || (images && images.length > 0 ? images[0] : null);
   const highest_recorded_price = generatedItem.highest_recorded_price || generatedItem.data?.highest_recorded_price;
 
+  const displayDescription = userDescription || description || 'No description available';
+
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -30,12 +32,8 @@ export default function ItemDisplay({ generatedItem }) {
             <p className="text-lg"><span className="font-semibold text-gray-700">Condition:</span> {condition || 'N/A'}</p>
           </div>
           <div className="mt-6">
-            <h2 className="text-xl font-semibold mb-2 text-gray-800">Product Description</h2>
-            <p className="text-gray-600">{description || 'No description available'}</p>
-          </div>
-          <div className="mt-6">
-            <h2 className="text-xl font-semibold mb-2 text-gray-800">User Description</h2>
-            <p className="text-gray-600">{userDescription || 'No user description available'}</p>
+            <h2 className="text-xl font-semibold mb-2 text-gray-800">Description</h2>
+            <p className="text-gray-600">{displayDescription}</p>
           </div>
         </div>
       </div>
