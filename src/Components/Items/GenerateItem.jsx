@@ -4,7 +4,7 @@ import ItemDisplay from "./ItemDisplay"
 import { searchExternalApi, createItem } from "../../helpers/itemHelper";
 import { useAuth } from "../../helpers/AuthContext";
 import productHelper from "../../helpers/productHelpers";
-const { getProductByEan: searchInternalProduct, createProduct } = productHelper;
+const { getProductByCode: searchInternalProduct, createProduct } = productHelper;
 
 export default function GenerateItem() {
     const navigate = useNavigate();
@@ -75,7 +75,8 @@ export default function GenerateItem() {
             // First, search in the internal database
             let product = await searchInternalProduct(itemCode);
             if (product.ean) {
-                const newItem = await createItem(user.uid, 
+                const newItem = await createItem(
+                    user.uid, 
                     product.ean, 
                     imgUrl, 
                     condition, 
