@@ -1,10 +1,12 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/items';
+const INTERNAL_API_URL = 'http://localhost:3000/items';
+const EXTERNAL_API_URL = 'https://api.upcitemdb.com/prod/trial/lookup';
+const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
 
 export const getAllItems = async () => {
   try {
-    const response = await axios.get(API_URL);
+    const response = await axios.get(INTERNAL_API_URL);
     return response.data;
   } catch (error) {
     console.error('Error fetching items:', error);
@@ -13,9 +15,9 @@ export const getAllItems = async () => {
 };
 
 
-export const createItem = async (itemData, uid) => {
+export const createItem = async (uid, productEan) => {
   try {
-    const response = await axios.post(`${API_URL}`,{ ...itemData, uid });
+    const response = await axios.post(INTERNAL_API_URL, { uid, productEan });
     return response.data;
   } catch (error) {
     console.error('Error creating item:', error);
@@ -23,9 +25,10 @@ export const createItem = async (itemData, uid) => {
   }
 };
 
-export const updateItemById = async (id, itemData) => {
+
+export const updateItemById = async (id, name, description) => {
   try {
-    const response = await axios.put(`${API_URL}/${id}`, itemData);
+    const response = await axios.put(`${INTERNAL_API_URL}/${id}`, { name, description });
     return response.data;
   } catch (error) {
     console.error('Error updating item:', error);
@@ -35,7 +38,7 @@ export const updateItemById = async (id, itemData) => {
 
 export const deleteItemById = async (id) => {
   try {
-    const response = await axios.delete(`${API_URL}/${id}`);
+    const response = await axios.delete(`${INTERNAL_API_URL}/${id}`);
     return response.data;
   } catch (error) {
     console.error('Error deleting item:', error);
@@ -43,4 +46,25 @@ export const deleteItemById = async (id) => {
   }
 };
 
+export const getItemById = async (id) => {
+  try {
+    const response = await axios.get(`${INTERNAL_API_URL}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching item:', error);
+    throw error;
+  }
+};
+
+export const searchExternalApi = async (code) => {
+  try {
+    const response = await axios.get(`${CORS_PROXY}${EXTERNAL_API_URL}`, {
+      params: { upc: code }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching data from external API:', error);
+    throw error;
+  }
+};
 
