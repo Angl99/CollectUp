@@ -25,10 +25,10 @@ const productHelper = {
     }
   },
 
-  // Get a specific product by EAN
-  getProductByEan: async (ean) => {
+  // Get a specific product by code
+  getProductByCode: async (code) => {
     try {
-      const response = await axios.get(`${API_URL}/${ean}`);
+      const response = await axios.get(`${API_URL}/${code}`);
       return response.data;
     } catch (error) {
       console.error('Error fetching product:', error);

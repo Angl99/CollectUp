@@ -3,11 +3,13 @@ import React from "react";
 export default function ItemDisplay({ generatedItem }) {
   if (!generatedItem) return <div className="text-center text-gray-500 text-xl mt-8">No item generated yet!</div>;
 
-  const { title, category, ean, brand, description, images } = generatedItem.data;
-  // console.log(generatedItem.data);
-  const imageUrl = images && images.length > 0 ? images[0] : null;
-  const highest_recorded_price = generatedItem.highest_recorded_price || generatedItem.data?.highest_recorded_price;
+  const { title, category, ean, brand, description, images, publisher } = generatedItem.data.data.data;
+  const { condition, userDescription, imgUrl } = generatedItem;
+  const imageUrl = imgUrl || (images && images.length > 0 ? images[0] : null);
+  const highest_recorded_price = generatedItem.highest_recorded_price || generatedItem.data?.data?.highest_recorded_price;
 
+  const displayDescription = userDescription || description || 'No description available';
+  
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -25,12 +27,13 @@ export default function ItemDisplay({ generatedItem }) {
           <div className="space-y-3">
             <p className="text-lg"><span className="font-semibold text-gray-700">Category:</span> {category || 'N/A'}</p>
             <p className="text-lg"><span className="font-semibold text-gray-700">Code:</span> {ean || 'N/A'}</p>
-            <p className="text-lg"><span className="font-semibold text-gray-700">Brand:</span> {brand || 'N/A'}</p>
+            <p className="text-lg"><span className="font-semibold text-gray-700">Brand:</span> {brand || publisher || 'N/A'}</p>
             <p className="text-lg"><span className="font-semibold text-gray-700">Price:</span> {highest_recorded_price ? `$${highest_recorded_price}` : 'N/A'}</p>
+            <p className="text-lg"><span className="font-semibold text-gray-700">Condition:</span> {condition || 'N/A'}</p>
           </div>
           <div className="mt-6">
             <h2 className="text-xl font-semibold mb-2 text-gray-800">Description</h2>
-            <p className="text-gray-600">{description || 'No description available'}</p>
+            <p className="text-gray-600">{displayDescription}</p>
           </div>
         </div>
       </div>

@@ -1,30 +1,28 @@
 import React from "react";
 
 export default function ShowcaseItem({ item }) {
-  if (!item) return <div className="text-center text-gray-500 text-xl mt-8">No items currently in showcase!</div>;
-
-  const {title, category, ean, brand, description, highest_recorded_price} = item;
-  const imageUrl = item.images[0];
+  const { title, category, ean, brand, images } = item.product.data;
+  // console.log("prod data: ", item.product.data);
+  const imageUrl = images && images.length > 0 ? images[0] : null;
+  const highest_recorded_price = item.highest_recorded_price || item.data?.highest_recorded_price;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="flex justify-center items-center">
-          <img src={imageUrl} alt={title} className="max-w-full h-auto rounded-lg shadow-md" />
-        </div>
-        <div>
-          <h1 className="text-3xl font-bold mb-4 text-gray-800">{title}</h1>
-          <div className="space-y-3">
-            <p className="text-lg"><span className="font-semibold text-gray-700">Category:</span> {category}</p>
-            <p className="text-lg"><span className="font-semibold text-gray-700">Code:</span> {ean}</p>
-            <p className="text-lg"><span className="font-semibold text-gray-700">Brand:</span> {brand}</p>
-            <p className="text-lg"><span className="font-semibold text-gray-700">Price:</span> ${highest_recorded_price}</p>
+    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="h-48 overflow-hidden">
+        {imageUrl ? (
+          <img src={imageUrl} alt={title} className="w-full h-full object-cover" />
+        ) : (
+          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+            <span className="text-gray-500">No image available</span>
           </div>
-          <div className="mt-6">
-            <h2 className="text-xl font-semibold mb-2 text-gray-800">Description</h2>
-            <p className="text-gray-600">{description}</p>
-          </div>
-        </div>
+        )}
+      </div>
+      <div className="p-4">
+        <h3 className="text-xl font-semibold mb-2 text-gray-800">{title}</h3>
+        <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Category:</span> {category || 'N/A'}</p>
+        <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Code:</span> {ean || 'N/A'}</p>
+        <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Brand:</span> {brand || 'N/A'}</p>
+        <p className="text-sm text-gray-600"><span className="font-medium">Price:</span> {highest_recorded_price ? `$${highest_recorded_price}` : 'N/A'}</p>
       </div>
     </div>
   );
