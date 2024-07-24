@@ -1,7 +1,8 @@
 import React from "react";
 
 export default function ShowcaseItem({ item }) {
-  const { title, category, ean, brand, images } = item.data;
+  const { title, category, ean, brand, images } = item.product.data;
+  // console.log("prod data: ", item.product.data);
   const imageUrl = images && images.length > 0 ? images[0] : null;
   const highest_recorded_price = item.highest_recorded_price || item.data?.highest_recorded_price;
 

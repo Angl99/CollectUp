@@ -1,33 +1,59 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ShowcaseItem from "./ShowcaseItem";
 import { useAuth } from "../../helpers/AuthContext";
-import { getShowcasesByUserUid } from "../../helpers/showcaseHelpers";
+import { getShowcaseById, createShowcase, addItemsToShowcase, getShowcasesByUserUid } from "../../helpers/showcaseHelpers";
 
-export default function ShowcaseDisplay() {
+ function ShowcaseDisplay() {
+  const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [showcase, setShowcase] = useState(null);
+  const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showcaseId, setShowcaseId] = useState(null);
 
   useEffect(() => {
-    const loadShowcase = async () => {
+    const loadOrCreateShowcase = async () => {
       if (user) {
         try {
           setIsLoading(true);
-          const showcases = await getShowcasesByUserUid(user.uid);
-          
-          if (showcases.length > 0) {
-            setShowcase(showcases[0]);
-          } else {
-            setError("No showcase found for this user.");
+          let showcase;
+          try {
+            showcase = await getShowcasesByUserUid(user.uid);
+          } catch (error) {
+
           }
           
+          
+          if (!showcase || showcase.length === 0) {
+            // If the user doesn't have a showcase, create one
+            showcase = await createShowcase({ name: "My Showcase", userId: user.uid });
+          } else {
+            showcase = showcase[0];
+          }
+          
+          setShowcaseId(showcase.id);
+
+          if (location.state?.items) {
+            // Prepare items for adding to showcase
+            const itemsToAdd = location.state.items.map(item => ({
+              productEan: item.data.ean,
+              condition: item.condition,
+              userDescription: item.userDescription,
+              imgUrl: item.imgUrl
+            }));
+            // Add new items to the showcase
+            await addItemsToShowcase(showcase.id, itemsToAdd);
+          }
+
+          // Fetch updated showcase items
+          const updatedShowcase = await getShowcaseById(showcase.id);
+          setItems(updatedShowcase.items || []);
           setIsLoading(false);
         } catch (err) {
-          console.error("Error loading showcase:", err);
-          setError("Failed to load showcase. Please try again.");
+          console.error("Error loading or creating showcase:", err);
+          setError("Failed to load or create showcase. Please try again.");
           setIsLoading(false);
         }
       } else {
@@ -36,8 +62,8 @@ export default function ShowcaseDisplay() {
       }
     };
 
-    loadShowcase();
-  }, [user]);
+    loadOrCreateShowcase();
+  }, [user, location.state]);
 
   if (isLoading) {
     return <div className="text-center mt-8">Loading...</div>;
@@ -46,18 +72,18 @@ export default function ShowcaseDisplay() {
   if (error) {
     return <div className="text-center mt-8 text-red-500">{error}</div>;
   }
-
+  console.log(items);
   return (
     <div className="max-w-6xl mx-auto p-6">
       <h2 className="text-3xl font-bold mb-6 text-gray-800">Your Showcase</h2>
-      {showcase && showcase.items && showcase.items.length > 0 ? (
+      {items.length === 0 ? (
+        <p className="text-gray-600 text-lg">No items in the showcase yet.</p>
+      ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {showcase.items.map((item, index) => (
+          {items.map((item, index) => (
             <ShowcaseItem key={index} item={item} />
           ))}
         </div>
-      ) : (
-        <p className="text-gray-600 text-lg">No items in the showcase yet.</p>
       )}
       <button
         onClick={() => navigate('/')}
@@ -68,3 +94,5 @@ export default function ShowcaseDisplay() {
     </div>
   );
 }
+
+export default ShowcaseDisplay;

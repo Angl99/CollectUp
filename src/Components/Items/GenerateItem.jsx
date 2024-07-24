@@ -74,7 +74,12 @@ export default function GenerateItem() {
       
         try {
             // First, search in the internal database
-            let product = await getProductByCode(itemCode);
+            let product;
+            try {
+                product  = await getProductByCode(itemCode);
+            } catch (error) {
+                console.log("error");
+            }
             if (product) {
                 const newItem = await createItem(
                     user.uid, 
@@ -162,7 +167,9 @@ export default function GenerateItem() {
                 productEan: item.data.ean,
                 condition: item.condition,
                 userDescription: item.userDescription,
-                imgUrl: item.imgUrl
+                imgUrl: item.imgUrl,
+                type: "Item",
+                id: item.id
             }));
             
             // Add items to the showcase
