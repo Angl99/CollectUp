@@ -175,7 +175,7 @@ export default function NavBar() {
       setShowTopBar(true);
     } else {
       setShowBottomBar(true);
-      setShowTopBar(false);
+      setShowTopBar(true);
     }
 
     setLastScrollY(currentScrollY);

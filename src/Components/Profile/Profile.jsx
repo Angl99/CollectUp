@@ -29,7 +29,7 @@ export default function Profile() {
   return (
     <ThemeProvider theme={theme}>
       {/* Main container for the profile page */}
-      <Box sx={{ backgroundColor: 'background.default', minHeight: '100vh', py: 5 }}>
+      <Box sx={{ backgroundColor: 'background.default', minHeight: '100vh', py: 9 }}>
         <Container>
           <Grid container justifyContent="center">
             <Grid item xs={12} lg={9} xl={7}>
