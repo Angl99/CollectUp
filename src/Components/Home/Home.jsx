@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Typography, Box, Paper, Grid } from '@mui/material';
+import { Button, Typography, Box, Paper, Grid, Stack } from '@mui/material';
 import Carousel from 'react-material-ui-carousel';
+import { Explore, AddBox, AccountBalanceWallet } from '@mui/icons-material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import data from '../../mockData/data.json'
 import customBanner from '../../assets/AAfull.png';
@@ -60,88 +61,160 @@ export default function Home() {
     ];
 
     return (
-        <Box sx={{ width: '100vw', overflowX: 'hidden', backgroundColor: '#f0f3f5' }}>
-            {/* Custom banner section */}
-            <Box sx={{
-                width: '100%',
-                backgroundImage: `url(${customBanner})`,
-                backgroundSize: 'contain',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                backgroundColor: '#623c8c',
-                height: { xs: '250px', sm: '350px', md: '450px' },
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
-                marginTop: { xs: '75px', sm: '75px', md: '75px' },
-            }}>
-            </Box>
+        <ThemeProvider theme={theme}>
+            <Box sx={{ width: '100vw', overflowX: 'hidden', backgroundColor: '#f0f3f5' }}>
+                {/* Custom banner section */}
+                {/* <Box sx={{
+                    width: '100%',
+                    backgroundImage: `url(${customBanner})`,
+                    backgroundSize: 'contain',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundColor: '#623c8c',
+                    height: { xs: '250px', sm: '350px', md: '450px' },
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
+                    marginTop: { xs: '75px', sm: '75px', md: '75px' },
+                }}>
+                </Box> */}
 
-            {/* Suggestions section */}
-            <Box sx={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
-            }}>
-                <Typography variant="h4" component="h1" gutterBottom align="center" color="#34495e">
-                    Suggestions
-                </Typography>
-                <Box sx={{ width: '100%', maxWidth: '1200px' }}>
-                    {/* Carousel for suggested items */}
-                    <Carousel indicators={false} navButtonsAlwaysVisible={false}>
-                        {listings.map((item, i) => <Item key={i} item={item} />)}
-                    </Carousel>
+                {/* New Brief Introduction section */}
+                <Box sx={{
+                    my: 12,
+                    p: 8,
+                    background: (theme) => `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.accent.main} 90%)`,
+                    color: 'white',
+                    borderRadius: 2,
+                    maxWidth: '4xl',
+                    mx: 'auto'
+                }}>
+                    <Typography variant="h2" sx={{ mb: 4 }}>
+                        Discover Anime & Manga Collectibles
+                    </Typography>
+                    <Typography variant="body1" sx={{ mb: 4 }}>
+                        Welcome to Auction Alley, where anime enthusiasts and manga collectors unite. 
+                        Explore, buy, and sell extraordinary items from your favorite series and artists.
+                    </Typography>
+                    <Box component="ul" sx={{ listStyleType: 'disc', pl: 4 }}>
+                        <li>Rare manga volumes and special editions</li>
+                        <li>Authentic collectibles</li>
+                        <li>Connect with fellow otaku and collectors</li>
+                    </Box>
                 </Box>
-            </Box>
 
-            {/* Popular Series section */}
-            <Box sx={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
-                backgroundColor: '#ffffff',
-            }}>
-                <Typography variant="h4" component="h2" gutterBottom align="center" color="#34495e">
-                    Popular Series
-                </Typography>
-                <Box sx={{ width: '100%', maxWidth: '1200px' }}>
-                    {/* Carousel for popular series */}
-                    <Carousel
-                        indicators={true}
-                        navButtonsAlwaysVisible={true}
-                        animation="slide"
-                        autoPlay={false}
-                        cycleNavigation={true}
-                        navButtonsProps={{
-                            style: {
-                                backgroundColor: '#3498db',
-                                borderRadius: 0
-                            }
-                        }}
-                        indicatorIconButtonProps={{
-                            style: {
-                                padding: '5px',
-                                color: '#95a5a6'
-                            }
-                        }}
-                        activeIndicatorIconButtonProps={{
-                            style: {
-                                backgroundColor: '#3498db'
-                            }
-                        }}
+                {/* New Call-to-Action Buttons section */}
+                <Stack direction="row" spacing={2} sx={{ my: 8, justifyContent: 'center' }}>
+                    <Button 
+                        variant="contained" 
+                        color="primary" 
+                        startIcon={<Explore />}
                     >
-                        {popularSeries.map((series, index) => (
-                            <PopularSeriesItem key={index} series={series} />
+                        Explore Collection
+                    </Button>
+                    <Button 
+                        variant="contained" 
+                        color="secondary" 
+                        startIcon={<AddBox />}
+                    >
+                        List Your Item
+                    </Button>
+                </Stack>
+
+                {/* New Categories section */}
+                <Box sx={{ my: 8, mx: 'auto', maxWidth: '4xl' }}>
+                    <Typography variant="h4" sx={{ mb: 4, textAlign: 'center' }}>Categories</Typography>
+                    <Grid container spacing={3}>
+                        {[
+                            { name: 'Manga', icon: '📚' },
+                            { name: 'Anime Art', icon: '🎨' },
+                            { name: 'Figurines', icon: '🗿' },
+                            { name: 'Merchandise', icon: '👕' },
+                        ].map((category) => (
+                            <Grid item xs={6} sm={3} key={category.name}>
+                                <Button 
+                                    variant="outlined" 
+                                    sx={{ width: '100%', height: '6rem', fontSize: '1.125rem' }}
+                                    startIcon={<span style={{ fontSize: '1.5rem' }}>{category.icon}</span>}
+                                >
+                                    {category.name}
+                                </Button>
+                            </Grid>
                         ))}
-                    </Carousel>
+                    </Grid>
+                    <Box sx={{ textAlign: 'center', mt: 4 }}>
+                        <Button variant="contained" color="primary">
+                            View All Categories
+                        </Button>
+                    </Box>
+                </Box>
+
+                {/* Suggestions section */}
+                <Box sx={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
+                }}>
+                    <Typography variant="h4" component="h1" gutterBottom align="center" color="#34495e">
+                        Suggestions
+                    </Typography>
+                    <Box sx={{ width: '100%', maxWidth: '1200px' }}>
+                        {/* Carousel for suggested items */}
+                        <Carousel indicators={false} navButtonsAlwaysVisible={false}>
+                            {listings.map((item, i) => <Item key={i} item={item} />)}
+                        </Carousel>
+                    </Box>
+                </Box>
+
+                {/* Popular Series section */}
+                <Box sx={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
+                    backgroundColor: '#ffffff',
+                }}>
+                    <Typography variant="h4" component="h2" gutterBottom align="center" color="#34495e">
+                        Popular Series
+                    </Typography>
+                    <Box sx={{ width: '100%', maxWidth: '1200px' }}>
+                        {/* Carousel for popular series */}
+                        <Carousel
+                            indicators={true}
+                            navButtonsAlwaysVisible={true}
+                            animation="slide"
+                            autoPlay={false}
+                            cycleNavigation={true}
+                            navButtonsProps={{
+                                style: {
+                                    backgroundColor: '#3498db',
+                                    borderRadius: 0
+                                }
+                            }}
+                            indicatorIconButtonProps={{
+                                style: {
+                                    padding: '5px',
+                                    color: '#95a5a6'
+                                }
+                            }}
+                            activeIndicatorIconButtonProps={{
+                                style: {
+                                    backgroundColor: '#3498db'
+                                }
+                            }}
+                        >
+                            {popularSeries.map((series, index) => (
+                                <PopularSeriesItem key={index} series={series} />
+                            ))}
+                        </Carousel>
+                    </Box>
                 </Box>
             </Box>
-        </Box>
+        </ThemeProvider>
     );
 }
 

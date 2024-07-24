@@ -6,6 +6,7 @@ import NavBar from './Components/NavBar/NavBar'
 import { AuthProvider } from './helpers/AuthContext'
 import Profile from './Components/Profile/Profile'
 import GenerateItem from './Components/Items/GenerateItem'
+import Marketplace from './Components/Marketplace/Marketplace'
 import BarcodeScanner from './Components/BarcodeScanner/BarcodeScanner'
 import ShowcaseDisplay from './Components/Showcase/ShowcaseDisplay'
 
@@ -20,6 +21,7 @@ function App() {
             <Route path="/login" element={<LogIn />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/genItem' element={<GenerateItem />} />
+            <Route path='/marketplace' element={<Marketplace />} />
             <Route path='/scan' element={<BarcodeScanner />} />
             <Route path='/showcase-display' element={<ShowcaseDisplay />} />
           </Routes>
