@@ -1,10 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import ItemDisplay from "./ItemDisplay"
+import { TextField, Button, Container, Box, Typography, Grid, Avatar, CssBaseline, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import ItemDisplay from "./ItemDisplay";
 import { searchExternalApi, createItem } from "../../helpers/itemHelper";
 import { useAuth } from "../../helpers/AuthContext";
 import productHelper from "../../helpers/productHelpers";
-import {createShowcase, addItemsToShowcase, addItemsToFirstShowcase, getShowcasesByUserUid } from "../../helpers/showcaseHelpers";
+import { addItemsToFirstShowcase } from "../../helpers/showcaseHelpers";
+
+
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#3498db',
+        },
+        secondary: {
+            main: '#95a5a6',
+        },
+        accent: {
+            main: '#623c8c',
+        },
+        text: {
+            primary: '#34495e',
+        },
+        background: {
+            default: '#f0f3f5',
+        },
+    },
+});
 
 export default function GenerateItem() {
     const { getProductByCode, createProduct } = productHelper;
@@ -186,99 +210,156 @@ export default function GenerateItem() {
     };
 
     return (
-        <div className="max-w-4xl mx-auto p-6">
-            <h1 className="text-3xl font-bold mb-6 text-gray-800">Build Your Showcase</h1>
-            <form onSubmit={handleSubmit} className="mb-8">
-                <label htmlFor="item-code" className="block mb-2 text-lg font-medium text-gray-700">
-                    Item Code:
-                    <input
-                        type="text"
-                        name="item-code"
-                        value={itemCode}
-                        onChange={handleInputChange}
-                        placeholder="Enter Code"
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                    />
-                </label>
-                {itemType && <p className="mt-2 text-sm text-gray-600">Detected Code Type: {itemType}</p>}
-                
-                <label htmlFor="condition" className="block mt-4 mb-2 text-lg font-medium text-gray-700">
-                    Condition:
-                    <select
-                        name="condition"
-                        value={condition}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+        <Box sx={{
+            background: 'linear-gradient(-45deg, #3498db, #623c8c, #95a5a6, #34495e)',
+            backgroundSize: '400% 400%',
+            animation: 'gradient 10s ease infinite',
+            minHeight: '100vh',
+            minWidth: '100vw',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            '@keyframes gradient': {
+                '0%': {
+                    backgroundPosition: '0% 50%',
+                },
+                '50%': {
+                    backgroundPosition: '100% 50%',
+                },
+                '100%': {
+                    backgroundPosition: '0% 50%',
+                },
+            },
+        }}>
+            <ThemeProvider theme={theme}>
+                <Container component="main" maxWidth="sm">
+                    <CssBaseline />
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            backgroundColor: 'rgba(240, 243, 245, 0.8)',
+                            padding: 3,
+                            borderRadius: 2,
+                        }}
                     >
-                        <option value="">Select Condition</option>
-                        <option value="New">New</option>
-                        <option value="New-BoxOpen">New-BoxOpen</option>
-                        <option value="Good">Good</option>
-                        <option value="Acceptable">Acceptable</option>
-                    </select>
-                </label>
-
-                <label htmlFor="user-description" className="block mt-4 mb-2 text-lg font-medium text-gray-700">
-                    Description:
-                    <textarea
-                        name="user-description"
-                        value={userDescription}
-                        onChange={handleInputChange}
-                        placeholder="Enter Description"
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                        rows="3"
-                    ></textarea>
-                </label>
-
-                <label htmlFor="image-upload" className="block mt-4 mb-2 text-lg font-medium text-gray-700">
-                    Upload Image:
-                    <input
-                        type="file"
-                        id="image-upload"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        className="mt-1 block w-full"
-                    />
-                </label>
-                {imgUrl && (
-                    <img src={imgUrl} alt="Uploaded" className="mt-2 max-w-xs rounded-md shadow-sm" />
-                )}
-
-                <button 
-                    type="submit" 
-                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                    disabled={isLoading}
-                >
-                    {isLoading ? "Generating..." : "Generate"}
-                </button>
-            </form>
-            {error && <p className="text-red-500 mb-4">{error}</p>}
-            {isLoading ? (
-                <p className="text-gray-600 mb-4">Loading...</p>
-            ) : generatedItems.length > 0 ? (
-                <>
-                    <div className="mb-4">
-                        <h2 className="text-2xl font-bold mb-2 text-gray-800">Generated Items:</h2>
-                        {generatedItems.map((item, index) => (
-                            <ItemDisplay key={index} generatedItem={{
-                                data: item,
-                                condition: item.condition,
-                                userDescription: item.userDescription,
-                                imgUrl: item.imgUrl,
-                                highest_recorded_price: item.highest_recorded_price
-                            }} />
-                        ))}
-                    </div>
-                    <button 
-                        onClick={handleShowcaseSubmit}
-                        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-                    >
-                        Submit to Showcase
-                    </button>
-                </>
-            ) : (
-                <p className="text-gray-600 mb-4">No items generated yet. Enter a code and click "Generate" to create an item.</p>
-            )}
-        </div>
-    )
+                        <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+                            <AddCircleOutlineIcon />
+                        </Avatar>
+                        <Typography component="h1" variant="h5" color="text.primary">
+                            Build Your Showcase
+                        </Typography>
+                        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        id="item-code"
+                                        label="Item Code"
+                                        name="item-code"
+                                        value={itemCode}
+                                        onChange={handleInputChange}
+                                        placeholder="Enter Code"
+                                    />
+                                    {itemType && <Typography variant="caption" display="block" gutterBottom>Detected Code Type: {itemType}</Typography>}
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="condition-label">Condition</InputLabel>
+                                        <Select
+                                            labelId="condition-label"
+                                            id="condition"
+                                            name="condition"
+                                            value={condition}
+                                            onChange={handleInputChange}
+                                            label="Condition"
+                                        >
+                                            <MenuItem value="">Select Condition</MenuItem>
+                                            <MenuItem value="New">New</MenuItem>
+                                            <MenuItem value="New-BoxOpen">New-Box Open</MenuItem>
+                                            <MenuItem value="Good">Good</MenuItem>
+                                            <MenuItem value="Acceptable">Acceptable</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        id="user-description"
+                                        label="Description"
+                                        name="user-description"
+                                        value={userDescription}
+                                        onChange={handleInputChange}
+                                        placeholder="Enter Description"
+                                        multiline
+                                        rows={3}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <input
+                                        accept="image/*"
+                                        style={{ display: 'none' }}
+                                        id="image-upload"
+                                        type="file"
+                                        onChange={handleImageUpload}
+                                    />
+                                    <label htmlFor="image-upload">
+                                        <Button variant="outlined" component="span" fullWidth>
+                                            Upload Image
+                                        </Button>
+                                    </label>
+                                    {imgUrl && (
+                                        <Box mt={2} display="flex" justifyContent="center">
+                                            <img src={imgUrl} alt="Uploaded" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+                                        </Box>
+                                    )}
+                                </Grid>
+                            </Grid>
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2, bgcolor: 'primary.main' }}
+                                disabled={isLoading}
+                            >
+                                {isLoading ? "Generating..." : "Generate"}
+                            </Button>
+                        </Box>
+                        {error && <Typography color="error">{error}</Typography>}
+                        {isLoading ? (
+                            <Typography>Loading...</Typography>
+                        ) : generatedItems.length > 0 ? (
+                            <>
+                                <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>Generated Items:</Typography>
+                                {generatedItems.map((item, index) => (
+                                    <ItemDisplay key={index} generatedItem={{
+                                        data: item,
+                                        condition: item.condition,
+                                        userDescription: item.userDescription,
+                                        imgUrl: item.imgUrl,
+                                        highest_recorded_price: item.highest_recorded_price
+                                    }} />
+                                ))}
+                                <Button
+                                    onClick={handleShowcaseSubmit}
+                                    fullWidth
+                                    variant="contained"
+                                    sx={{ mt: 3, mb: 2, bgcolor: 'secondary.main' }}
+                                >
+                                    Submit to Showcase
+                                </Button>
+                            </>
+                        ) : (
+                            <Typography sx={{ mt: 2 }}>
+                                No items generated yet.
+                                <br />
+                                Enter a code and click "Generate" to create an item.
+                                </Typography>
+                        )}
+                    </Box>
+                </Container>
+            </ThemeProvider>
+        </Box>
+    );
 }

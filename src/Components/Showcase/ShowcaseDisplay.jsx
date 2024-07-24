@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Box, Typography, Button, Grid, CircularProgress, Container, Paper } from "@mui/material";
 import ShowcaseItem from "./ShowcaseItem";
 import { useAuth } from "../../helpers/AuthContext";
 import { getShowcaseById, createShowcase, addItemsToShowcase, getShowcasesByUserUid } from "../../helpers/showcaseHelpers";
@@ -66,32 +67,61 @@ import { getShowcaseById, createShowcase, addItemsToShowcase, getShowcasesByUser
   }, [user, location.state]);
 
   if (isLoading) {
-    return <div className="text-center mt-8">Loading...</div>;
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (error) {
-    return <div className="text-center mt-8 text-red-500">{error}</div>;
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
+        <Typography color="error">{error}</Typography>
+      </Box>
+    );
   }
-  console.log(items);
+
+  // console.log(items);
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <h2 className="text-3xl font-bold mb-6 text-gray-800">Your Showcase</h2>
-      {items.length === 0 ? (
-        <p className="text-gray-600 text-lg">No items in the showcase yet.</p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {items.map((item, index) => (
-            <ShowcaseItem key={index} item={item} />
-          ))}
-        </div>
-      )}
-      <button
-        onClick={() => navigate('/')}
-        className="mt-8 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-      >
-        Back to Home
-      </button>
-    </div>
+    <Container maxWidth="lg">
+      <Box my={4}>
+        <Typography variant="h3" component="h1" gutterBottom>
+          Your Showcase
+        </Typography>
+        {items.length === 0 ? (
+          <Typography variant="body1" color="textSecondary">
+            No items in the showcase yet.
+          </Typography>
+        ) : (
+          <Grid container spacing={3}>
+            {items.map((item, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <Paper elevation={3}>
+                  <ShowcaseItem item={item} />
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        )}
+        <Box mt={4} display="flex" justifyContent="space-between">
+          <Button 
+            variant="contained" 
+            color="secondary" 
+            onClick={() => navigate('/genItem')}
+          >
+            Add Item
+          </Button>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={() => navigate('/')}
+          >
+            Back to Home
+          </Button>
+        </Box>
+      </Box>
+    </Container>
   );
 }
 

@@ -9,7 +9,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import StoreIcon from '@mui/icons-material/Store';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import ShowcaseIcon from '@mui/icons-material/Collections';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import customMenuIcon from '../../assets/AA.png';
 
@@ -45,7 +45,6 @@ const Search = styled('div')(({ theme }) => ({
   marginRight: theme.spacing(2),
   marginLeft: 10,
   width: '100%',
-  border: '3px solid black',
 }));
 
 // Styled component for the search icon wrapper
@@ -227,7 +226,7 @@ export default function NavBar() {
   const menuItems = [
   { icon: <HomeIcon />, path: '/', bgColor: theme.palette.primary.main },
   { icon: <StoreIcon />, path: '/marketplace', bgColor: theme.palette.primary.main },
-  { icon: <AddCircleIcon />, path: '/genItem', bgColor: theme.palette.primary.main },
+  { icon: <ShowcaseIcon />, path: '/showcase-display', bgColor: theme.palette.primary.main },
   { icon: <AccountCircleIcon />, path: `/profile`, bgColor: theme.palette.primary.main },
   ];
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 import { Button, Typography, Box, Paper, Grid, Stack } from '@mui/material';
 import Carousel from 'react-material-ui-carousel';
 import { Explore, AddBox, AccountBalanceWallet } from '@mui/icons-material';
@@ -60,6 +61,12 @@ export default function Home() {
         }
     ];
 
+    const navigate = useNavigate();
+
+    const handleExploreClick = () => {
+        navigate('/marketplace');
+    };
+
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ width: '100vw', overflowX: 'hidden', backgroundColor: '#f0f3f5' }}>
@@ -80,9 +87,9 @@ export default function Home() {
                 }}>
                 </Box> */}
 
-                {/* New Brief Introduction section */}
+                {/* Brief Introduction section */}
                 <Box sx={{
-                    my: 12,
+                    my: 9,
                     p: 8,
                     background: (theme) => `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.accent.main} 90%)`,
                     color: 'white',
@@ -102,27 +109,19 @@ export default function Home() {
                         <li>Authentic collectibles</li>
                         <li>Connect with fellow otaku and collectors</li>
                     </Box>
-                </Box>
 
-                {/* New Call-to-Action Buttons section */}
-                <Stack direction="row" spacing={2} sx={{ my: 8, justifyContent: 'center' }}>
                     <Button 
                         variant="contained" 
                         color="primary" 
                         startIcon={<Explore />}
+                        sx={{ mt: 3 }}
+                        onClick={handleExploreClick}
                     >
-                        Explore Collection
+                        Explore Marketplace
                     </Button>
-                    <Button 
-                        variant="contained" 
-                        color="secondary" 
-                        startIcon={<AddBox />}
-                    >
-                        List Your Item
-                    </Button>
-                </Stack>
+                </Box>
 
-                {/* New Categories section */}
+                {/* Categories section */}
                 <Box sx={{ my: 8, mx: 'auto', maxWidth: '4xl' }}>
                     <Typography variant="h4" sx={{ mb: 4, textAlign: 'center' }}>Categories</Typography>
                     <Grid container spacing={3}>
@@ -143,11 +142,6 @@ export default function Home() {
                             </Grid>
                         ))}
                     </Grid>
-                    <Box sx={{ textAlign: 'center', mt: 4 }}>
-                        <Button variant="contained" color="primary">
-                            View All Categories
-                        </Button>
-                    </Box>
                 </Box>
 
                 {/* Suggestions section */}

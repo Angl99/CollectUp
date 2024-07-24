@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 
-export function BarcodeScanner() {
+export default function BarcodeScanner() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [scannedBarcode, setScannedBarcode] = useState(null);
@@ -80,11 +80,3 @@ export function BarcodeScanner() {
     </div>
   );
 };
-
-export default function Scanner() {
-  return (
-    <div>
-      <BarcodeScanner />
-    </div>
-  );
-}
