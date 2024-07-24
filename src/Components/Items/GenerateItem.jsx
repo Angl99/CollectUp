@@ -21,18 +21,29 @@ export default function GenerateItem() {
         }
       
         try {
-            // ... (keep the existing logic for searching and creating products)
+            const product = await searchExternalApi(itemCode);
+            if (!product) {
+                throw new Error("Product not found");
+            }
 
-            // Create a new item object
-            const newItem = {
-                productEan: product.ean,
+            const newProduct = await productHelper.createProduct(product);
+            if (!newProduct) {
+                throw new Error("Failed to create product");
+            }
+
+            const newItem = await createItem({
+                productEan: newProduct.ean,
                 condition,
                 userDescription,
                 imgUrl
-            };
+            });
+
+            if (!newItem) {
+                throw new Error("Failed to create item");
+            }
 
             // Add the new item to generatedItems state
-            setGeneratedItems(prevItems => [...prevItems, newItem]);
+            setGeneratedItems(prevItems => [...prevItems, { ...newItem, data: { data: newProduct } }]);
 
         } catch (error) {
             console.error("Error during item generation:", error);
