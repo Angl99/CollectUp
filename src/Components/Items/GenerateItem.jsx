@@ -4,7 +4,7 @@ import ItemDisplay from "./ItemDisplay"
 import { searchExternalApi, createItem } from "../../helpers/itemHelper";
 import { useAuth } from "../../helpers/AuthContext";
 import productHelper from "../../helpers/productHelpers";
-import { getShowcaseById, createShowcase, addItemsToShowcase, addItemToFirstShowcase } from "../../helpers/showcaseHelpers";
+import {createShowcase, addItemsToShowcase, addItemsToFirstShowcase, getShowcasesByUserUid } from "../../helpers/showcaseHelpers";
 
 export default function GenerateItem() {
     const { getProductByCode, createProduct } = productHelper;
@@ -114,7 +114,8 @@ export default function GenerateItem() {
                         console.log("Newly created prod: ", newItem);
                         
                         // Add the new item to the first showcase
-                        await addItemToFirstShowcase(user.uid, {
+                        await addItemsToFirstShowcase(
+                            user.uid, {
                             productEan: newItem.data.ean,
                             condition: newItem.condition,
                             userDescription: newItem.userDescription,
@@ -150,11 +151,11 @@ export default function GenerateItem() {
                 throw new Error("You must be logged in to add items to the showcase.");
             }
             
-            // Get or create the user's showcase
-            let showcase = await getShowcaseById(user.uid);
-            if (!showcase) {
-                showcase = await createShowcase({ name: "My Showcase", userId: user.uid });
-            }
+            // // Get or create the user's showcase
+            // let showcase = await getShowcasesByUserUid(user.uid);
+            // if (!showcase) {
+            //     showcase = await createShowcase({ name: "My Showcase", uid: user.uid });
+            // }
             
             // Prepare items for adding to showcase
             const itemsToAdd = generatedItems.map(item => ({
@@ -165,7 +166,7 @@ export default function GenerateItem() {
             }));
             
             // Add items to the showcase
-            await addItemsToShowcase(showcase.id, itemsToAdd);
+            await addItemsToFirstShowcase(user.uid, itemsToAdd);
             
             // Navigate to the showcase display
             navigate('/showcase-display');

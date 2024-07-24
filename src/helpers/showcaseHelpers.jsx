@@ -22,15 +22,15 @@ export const createShowcase = async (name, uid) => {
     }
 }
 
-export const getShowcaseById = async (id) => {
-    try {
-        const response = await axios.get(`${API_URL}/${id}`);
-        return response.data;
-    } catch (error) {
-        console.error("Error fetching showcase by ID:", error);
-        throw error;
-    }
-}
+// export const getShowcaseById = async (id) => {
+//     try {
+//         const response = await axios.get(`${API_URL}/${id}`);
+//         return response.data;
+//     } catch (error) {
+//         console.error("Error fetching showcase by ID:", error);
+//         throw error;
+//     }
+// }
 
 export const updateShowcaseById = async (id, name) => {
     try {
@@ -82,14 +82,14 @@ export const getShowcasesByUserUid = async (uid) => {
     }
 }
 
-export const addItemToFirstShowcase = async (uid, item) => {
+export const addItemsToFirstShowcase = async (uid, items) => {
     try {
         const showcases = await getShowcasesByUserUid(uid);
         if (showcases.length === 0) {
             throw new Error("User has no showcases");
         }
         const firstShowcase = showcases[0];
-        await addItemsToShowcase(firstShowcase.id, [item]);
+        await addItemsToShowcase(firstShowcase.id, items);
         return firstShowcase;
     } catch (error) {
         console.error("Error adding item to first showcase:", error);
