@@ -3,22 +3,13 @@ import React from "react";
 export default function ItemDisplay({ generatedItem }) {
   if (!generatedItem) return <div className="text-center text-gray-500 text-xl mt-8">No item generated yet!</div>;
 
-  const { title, category, ean, brand, description, images, publisher } = generatedItem.data.data;
+  const { title, category, ean, brand, description, images, publisher } = generatedItem.data.data.data;
   const { condition, userDescription, imgUrl } = generatedItem;
   const imageUrl = imgUrl || (images && images.length > 0 ? images[0] : null);
   const highest_recorded_price = generatedItem.highest_recorded_price || generatedItem.data?.data?.highest_recorded_price;
 
   const displayDescription = userDescription || description || 'No description available';
-
-  const itemForShowcase = {
-    type: 'Item',
-    id: generatedItem.id,
-    productEan: ean,
-    condition,
-    userDescription,
-    imgUrl
-  };
-
+  
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

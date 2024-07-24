@@ -4,39 +4,24 @@ import ItemDisplay from "./ItemDisplay"
 import { searchExternalApi, createItem } from "../../helpers/itemHelper";
 import { useAuth } from "../../helpers/AuthContext";
 import productHelper from "../../helpers/productHelpers";
-import { addItemsToFirstShowcase } from "../../helpers/showcaseHelpers";
+import {createShowcase, addItemsToShowcase, addItemsToFirstShowcase, getShowcasesByUserUid } from "../../helpers/showcaseHelpers";
 
 export default function GenerateItem() {
+    const { getProductByCode, createProduct } = productHelper;
+    const navigate = useNavigate();
+    const { user } = useAuth();
     const [itemCode, setItemCode] = useState("");
+    const [itemType, setItemType] = useState("");
     const [condition, setCondition] = useState("");
     const [userDescription, setUserDescription] = useState("");
     const [imgUrl, setImgUrl] = useState("");
     const [generatedItems, setGeneratedItems] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [itemType, setItemType] = useState("");
-    const { user } = useAuth();
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const detectItemType = () => {
-            if (itemCode.length === 13 && /^\d+$/.test(itemCode)) {
-                setItemType("EAN-13");
-            } else if (itemCode.length === 10 && /^[0-9X]+$/.test(itemCode)) {
-                setItemType("ISBN-10");
-            } else if (itemCode.length === 12 && /^\d+$/.test(itemCode)) {
-                setItemType("UPC");
-            } else {
-                setItemType("");
-            }
-        };
-
-        detectItemType();
-    }, [itemCode]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        switch (name) {
+        switch(name) {
             case "item-code":
                 setItemCode(value);
                 break;
@@ -62,6 +47,20 @@ export default function GenerateItem() {
         }
     };
 
+    useEffect(() => {
+        if (itemCode.length === 13) {
+            if (itemCode.startsWith('0')) {
+                setItemType("UPC-A (GTIN-12)");
+            } else {
+                setItemType("EAN-13 (ISBN/ GTIN-13)");
+            }
+        } else if (itemCode.length === 12) {
+            setItemType("UPC-A (GTIN-12)");
+        } else {
+            setItemType("");
+        }
+    }, [itemCode]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -74,30 +73,64 @@ export default function GenerateItem() {
         }
       
         try {
-            const product = await searchExternalApi(itemCode);
-            if (!product) {
-                throw new Error("Product not found");
+            // First, search in the internal database
+            let product = await getProductByCode(itemCode);
+            if (product) {
+                const newItem = await createItem(
+                    user.uid, 
+                    product.ean, 
+                    imgUrl, 
+                    condition, 
+                    userDescription
+                );
+                newItem.data = product;
+                newItem.condition = condition;
+                newItem.userDescription = userDescription;
+                newItem.imgUrl = imgUrl;
+                console.log("Existing product: ", newItem);    
+                setGeneratedItems(prevItems => [...prevItems, newItem]);
+            } else {
+                // If not found internally, search the external API
+                const externalData = await searchExternalApi(itemCode);
+                if (externalData && externalData.items && externalData.items.length > 0) {
+                    product = externalData.items[0];
+                    // Create the product in our internal database
+                    try {
+                        const cleanedData = {
+                            upc: product.upc,
+                            isbn: product.isbn,
+                            ean: product.ean,
+                            data: product,
+                        }
+                        const newProduct = await createProduct(cleanedData);
+                        console.log("New product created!!");
+
+                        const newItem = await createItem(user.uid, newProduct.ean, imgUrl, condition, userDescription);
+                        newItem.data = newProduct;
+                        newItem.condition = condition;
+                        newItem.userDescription = userDescription;
+                        newItem.imgUrl = imgUrl;
+                        console.log("New item created!!");
+                        console.log("Newly created prod: ", newItem);
+                        
+                        // Add the new item to the first showcase
+                        await addItemsToFirstShowcase(
+                            user.uid, {
+                            productEan: newItem.data.ean,
+                            condition: newItem.condition,
+                            userDescription: newItem.userDescription,
+                            imgUrl: newItem.imgUrl
+                        });
+                        
+                        setGeneratedItems(prevItems => [...prevItems, newItem]);
+                    } catch (error) {
+                        console.log("failed to create prod");
+                        setError("Failed to create product");
+                    }
+                } else {
+                    setError("No product found for the given code");
+                }
             }
-
-            const newProduct = await productHelper.createProduct(product);
-            if (!newProduct) {
-                throw new Error("Failed to create product");
-            }
-
-            const newItem = await createItem({
-                productEan: newProduct.ean,
-                condition,
-                userDescription,
-                imgUrl
-            });
-
-            if (!newItem) {
-                throw new Error("Failed to create item");
-            }
-
-            // Add the new item to generatedItems state
-            setGeneratedItems(prevItems => [...prevItems, { ...newItem, data: { data: newProduct } }]);
-
         } catch (error) {
             console.error("Error during item generation:", error);
             setError("An error occurred while generating the item");
@@ -118,8 +151,22 @@ export default function GenerateItem() {
                 throw new Error("You must be logged in to add items to the showcase.");
             }
             
-            // Add items to the first showcase (or create a new one if it doesn't exist)
-            await addItemsToFirstShowcase(user.uid, generatedItems);
+            // // Get or create the user's showcase
+            // let showcase = await getShowcasesByUserUid(user.uid);
+            // if (!showcase) {
+            //     showcase = await createShowcase({ name: "My Showcase", uid: user.uid });
+            // }
+            
+            // Prepare items for adding to showcase
+            const itemsToAdd = generatedItems.map(item => ({
+                productEan: item.data.ean,
+                condition: item.condition,
+                userDescription: item.userDescription,
+                imgUrl: item.imgUrl
+            }));
+            
+            // Add items to the showcase
+            await addItemsToFirstShowcase(user.uid, itemsToAdd);
             
             // Navigate to the showcase display
             navigate('/showcase-display');
