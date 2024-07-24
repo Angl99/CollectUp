@@ -12,9 +12,9 @@ export const getAllShowcases = async () => {
     }
 }
 
-export const createShowcase = async (name, uid) => {
+export const createShowcase = async (showcaseData) => {
     try {
-        const response = await axios.post(API_URL, { name, uid });
+        const response = await axios.post(API_URL, showcaseData);
         return response.data;
     } catch (error) {
         console.error("Error creating showcase:", error);
@@ -22,19 +22,19 @@ export const createShowcase = async (name, uid) => {
     }
 }
 
-// export const getShowcaseById = async (id) => {
-//     try {
-//         const response = await axios.get(`${API_URL}/${id}`);
-//         return response.data;
-//     } catch (error) {
-//         console.error("Error fetching showcase by ID:", error);
-//         throw error;
-//     }
-// }
-
-export const updateShowcaseById = async (id, name) => {
+export const getShowcaseById = async (id) => {
     try {
-        const response = await axios.put(`${API_URL}/${id}`, { name });
+        const response = await axios.get(`${API_URL}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching showcase by ID:", error);
+        throw error;
+    }
+}
+
+export const updateShowcaseById = async (id, updateData) => {
+    try {
+        const response = await axios.put(`${API_URL}/${id}`, updateData);
         return response.data;
     } catch (error) {
         console.error("Error updating showcase:", error);
@@ -44,7 +44,7 @@ export const updateShowcaseById = async (id, name) => {
 
 export const addItemsToShowcase = async (id, items) => {
     try {
-        const response = await axios.post(`${API_URL}/${id}/items`, items);
+        const response = await axios.post(`${API_URL}/${id}/items`, { items });
         return response.data;
     } catch (error) {
         console.error("Error adding items to showcase:", error);
@@ -64,7 +64,7 @@ export const deleteShowcaseById = async (id) => {
 
 export const removeItemsFromShowcase = async (id, items) => {
     try {
-        const response = await axios.delete(`${API_URL}/${id}/items`, { data: items });
+        const response = await axios.delete(`${API_URL}/${id}/items`, { data: { items } });
         return response.data;
     } catch (error) {
         console.error("Error removing items from showcase:", error);
@@ -72,9 +72,10 @@ export const removeItemsFromShowcase = async (id, items) => {
     }
 }
 
+// This function is not directly mapped to a backend route, but it's useful for our frontend logic
 export const getShowcasesByUserUid = async (uid) => {
     try {
-        const response = await axios.get(`${API_URL}/user/${uid}`);
+        const response = await axios.get(`${API_URL}?uid=${uid}`);
         return response.data;
     } catch (error) {
         console.error("Error fetching showcases for user:", error);
@@ -82,17 +83,20 @@ export const getShowcasesByUserUid = async (uid) => {
     }
 }
 
+// This function is not directly mapped to a backend route, but it's useful for our frontend logic
 export const addItemsToFirstShowcase = async (uid, items) => {
     try {
         const showcases = await getShowcasesByUserUid(uid);
         if (showcases.length === 0) {
-            throw new Error("User has no showcases");
+            const newShowcase = await createShowcase({ name: "My Showcase", uid });
+            await addItemsToShowcase(newShowcase.id, items);
+            return newShowcase;
         }
         const firstShowcase = showcases[0];
         await addItemsToShowcase(firstShowcase.id, items);
         return firstShowcase;
     } catch (error) {
-        console.error("Error adding item to first showcase:", error);
+        console.error("Error adding items to first showcase:", error);
         throw error;
     }
 }

@@ -1,51 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ShowcaseItem from "./ShowcaseItem";
 import { useAuth } from "../../helpers/AuthContext";
-import { getShowcaseById, createShowcase, addItemsToShowcase, getShowcasesByUserUid } from "../../helpers/showcaseHelpers";
+import { getShowcasesByUserUid } from "../../helpers/showcaseHelpers";
 
 export default function ShowcaseDisplay() {
-  const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [items, setItems] = useState([]);
+  const [showcase, setShowcase] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showcaseId, setShowcaseId] = useState(null);
 
   useEffect(() => {
-    const loadOrCreateShowcase = async () => {
+    const loadShowcase = async () => {
       if (user) {
         try {
           setIsLoading(true);
-          let showcase = await getShowcasesByUserUid(user.uid);
+          const showcases = await getShowcasesByUserUid(user.uid);
           
-          if (!showcase) {
-            // If the user doesn't have a showcase, create one
-            showcase = await createShowcase({ name: "My Showcase", userId: user.uid });
+          if (showcases.length > 0) {
+            setShowcase(showcases[0]);
+          } else {
+            setError("No showcase found for this user.");
           }
           
-          setShowcaseId(showcase.id);
-
-          if (location.state?.items) {
-            // Prepare items for adding to showcase
-            const itemsToAdd = location.state.items.map(item => ({
-              productEan: item.data.ean,
-              condition: item.condition,
-              userDescription: item.userDescription,
-              imgUrl: item.imgUrl
-            }));
-            // Add new items to the showcase
-            await addItemsToShowcase(showcase.id, itemsToAdd);
-          }
-
-          // Fetch updated showcase items
-          const updatedShowcase = await getShowcaseById(showcase.id);
-          setItems(updatedShowcase.items || []);
           setIsLoading(false);
         } catch (err) {
-          console.error("Error loading or creating showcase:", err);
-          setError("Failed to load or create showcase. Please try again.");
+          console.error("Error loading showcase:", err);
+          setError("Failed to load showcase. Please try again.");
           setIsLoading(false);
         }
       } else {
@@ -54,8 +36,8 @@ export default function ShowcaseDisplay() {
       }
     };
 
-    loadOrCreateShowcase();
-  }, [user, location.state]);
+    loadShowcase();
+  }, [user]);
 
   if (isLoading) {
     return <div className="text-center mt-8">Loading...</div>;
@@ -68,14 +50,14 @@ export default function ShowcaseDisplay() {
   return (
     <div className="max-w-6xl mx-auto p-6">
       <h2 className="text-3xl font-bold mb-6 text-gray-800">Your Showcase</h2>
-      {items.length === 0 ? (
-        <p className="text-gray-600 text-lg">No items in the showcase yet.</p>
-      ) : (
+      {showcase && showcase.items && showcase.items.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {items.map((item, index) => (
+          {showcase.items.map((item, index) => (
             <ShowcaseItem key={index} item={item} />
           ))}
         </div>
+      ) : (
+        <p className="text-gray-600 text-lg">No items in the showcase yet.</p>
       )}
       <button
         onClick={() => navigate('/')}
