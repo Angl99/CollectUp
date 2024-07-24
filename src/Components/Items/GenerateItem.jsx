@@ -7,7 +7,60 @@ import productHelper from "../../helpers/productHelpers";
 import { addItemsToFirstShowcase } from "../../helpers/showcaseHelpers";
 
 export default function GenerateItem() {
-    // ... (keep the existing state and other functions)
+    const [itemCode, setItemCode] = useState("");
+    const [condition, setCondition] = useState("");
+    const [userDescription, setUserDescription] = useState("");
+    const [imgUrl, setImgUrl] = useState("");
+    const [generatedItems, setGeneratedItems] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [itemType, setItemType] = useState("");
+    const { user } = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const detectItemType = () => {
+            if (itemCode.length === 13 && /^\d+$/.test(itemCode)) {
+                setItemType("EAN-13");
+            } else if (itemCode.length === 10 && /^[0-9X]+$/.test(itemCode)) {
+                setItemType("ISBN-10");
+            } else if (itemCode.length === 12 && /^\d+$/.test(itemCode)) {
+                setItemType("UPC");
+            } else {
+                setItemType("");
+            }
+        };
+
+        detectItemType();
+    }, [itemCode]);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        switch (name) {
+            case "item-code":
+                setItemCode(value);
+                break;
+            case "condition":
+                setCondition(value);
+                break;
+            case "user-description":
+                setUserDescription(value);
+                break;
+            default:
+                break;
+        }
+    };
+
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImgUrl(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -77,8 +130,6 @@ export default function GenerateItem() {
             setIsLoading(false);
         }
     };
-
-    // ... (keep the rest of the component unchanged)
 
     return (
         <div className="max-w-4xl mx-auto p-6">
