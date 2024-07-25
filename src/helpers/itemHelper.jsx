@@ -56,15 +56,16 @@ export const getItemById = async (id) => {
   }
 };
 
-export const searchExternalApi = async (code) => {
-  try {
-    const response = await axios.get(`${CORS_PROXY}${EXTERNAL_API_URL}`, {
-      params: { upc: code }
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching data from external API:', error);
-    throw error;
-  }
+
+export const searchExternalApi = async (code) => { 
+  try { 
+    const response = await axios.get(`${INTERNAL_API_URL}/search-external-api`, { 
+      params: { code }, 
+    }); 
+    return response.data; 
+  } catch (error) { 
+    console.error('Error fetching data from backend:', error); 
+    throw error; 
+  } 
 };
 

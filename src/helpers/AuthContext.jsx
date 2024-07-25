@@ -16,11 +16,10 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (email, password) => {
     try {
+      console.log('gets here');
       const userCredential = await doCreateUserWithEmailAndPassword(auth, email, password);
+      console.log('gets over here');
       setUser(userCredential.user);
-      const {displayName, email, uid} = userCredential.user
-      let [firstName, lastName] = displayName.split(" ");
-      await create({email, uid, firstName, lastName});
       return userCredential.user;
     } catch (error) {
       console.error('Error during sign-up:', error);
