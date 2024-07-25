@@ -121,6 +121,7 @@ export default function GenerateItem() {
             } else {
                 // If not found internally, search the external API
                 const externalData = await searchExternalApi(itemCode);
+                console.log(externalData);
                 if (externalData && externalData.items && externalData.items.length > 0) {
                     product = externalData.items[0];
                     // Create the product in our internal database
