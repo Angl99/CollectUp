@@ -4,6 +4,7 @@ import { Box, Typography, Button, Grid, CircularProgress, Container, Paper } fro
 import ShowcaseItem from "./ShowcaseItem";
 import { useAuth } from "../../helpers/AuthContext";
 import { getShowcaseById, createShowcase, addItemsToShowcase, getShowcasesByUserUid } from "../../helpers/showcaseHelpers";
+import copy from 'copy-to-clipboard';
 
  function ShowcaseDisplay() {
   const location = useLocation();
@@ -14,7 +15,7 @@ import { getShowcaseById, createShowcase, addItemsToShowcase, getShowcasesByUser
   const [error, setError] = useState(null);
   const [showcaseId, setShowcaseId] = useState(null);
   const {id} = useParams();
-  
+
   useEffect(() => {
     const loadOrCreateShowcase = async () => {
       if (user) {
@@ -70,6 +71,12 @@ import { getShowcaseById, createShowcase, addItemsToShowcase, getShowcasesByUser
     );
   }
 
+  const handleShare = () => {
+    const link = window.location.href;
+    copy(link);
+    console.log(link);
+  }
+
   // console.log(items);
   return (
     <Container maxWidth="lg">
@@ -77,6 +84,10 @@ import { getShowcaseById, createShowcase, addItemsToShowcase, getShowcasesByUser
         <Typography variant="h3" component="h1" gutterBottom>
           Your Showcase
         </Typography>
+        <Button onClick={handleShare}>
+          Share
+
+        </Button>
         {items.length === 0 ? (
           <Typography variant="body1" color="textSecondary">
             No items in the showcase yet.
