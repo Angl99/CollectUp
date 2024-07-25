@@ -1,9 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 
-export default function BarcodeScanner() {
+export default function BarcodeScanner({ setScannedBarcode }) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-  const [scannedBarcode, setScannedBarcode] = useState(null);
   const [isBarcodeDetectorSupported, setIsBarcodeDetectorSupported] = useState(true);
 
   useEffect(() => {
@@ -64,7 +63,7 @@ export default function BarcodeScanner() {
       setIsBarcodeDetectorSupported(false);
       console.error('Barcode Detector is not supported in this browser');
     }
-  }, []);
+  }, [setScannedBarcode]);
 
   return (
     <div>
@@ -72,7 +71,6 @@ export default function BarcodeScanner() {
         <>
           <video ref={videoRef} autoPlay playsInline style={{ display: 'none' }} />
           <canvas ref={canvasRef} width="300" height="200" />
-          {scannedBarcode && <p>Scanned Barcode: {scannedBarcode}</p>}
         </>
       ) : (
         <p>Barcode Detector is not supported in this browser.</p>

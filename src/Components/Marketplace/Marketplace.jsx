@@ -1,21 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Card, 
-  CardContent, 
-  CardMedia, 
-  Typography, 
-  Grid, 
-  Button,
-  TextField,
-  SwipeableDrawer,
-  FormControl,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  Slider
-} from '@mui/material';
+import { Card, CardContent, CardMedia, Typography, Grid, Button, TextField, SwipeableDrawer, FormControl, FormControlLabel, Radio, RadioGroup, Slider } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 
+// Component for individual marketplace items
 const MarketplaceItem = ({ item, onAddToCart }) => (
   <Card className="h-full flex flex-col">
     <CardMedia
@@ -51,6 +38,7 @@ const MarketplaceItem = ({ item, onAddToCart }) => (
   </Card>
 );
 
+// Main Marketplace component
 const Marketplace = () => {
   const [items, setItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -63,7 +51,6 @@ const Marketplace = () => {
   const [tempFilters, setTempFilters] = useState({...filters});
 
   useEffect(() => {
-    // Fetch items from your API or database
     setItems([
         { id: 1, name: 'Item 1', description: 'Description 1', image: 'https://via.placeholder.com/150', category: 'figurines', price: 500, condition: 'new' },
         { id: 2, name: 'Item 2', description: 'Description 2', image: 'https://via.placeholder.com/150', category: 'books', price: 50, condition: 'used' },
@@ -73,10 +60,6 @@ const Marketplace = () => {
         { id: 6, name: 'Item 6', description: 'Description 6', image: 'https://via.placeholder.com/150', category: 'books', price: 100, condition: 'used' },
     ]);
   }, []);
-
-  const handleTrade = (item) => {
-    console.log('Trading item:', item);
-  };
 
   const toggleDrawer = (open) => (event) => {
     if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -132,7 +115,7 @@ const Marketplace = () => {
       <Grid container spacing={4}>
         {filteredItems.map(item => (
           <Grid item xs={12} sm={6} key={item.id}>
-            <MarketplaceItem item={item} onTrade={handleTrade} />
+            <MarketplaceItem item={item} />
           </Grid>
         ))}
       </Grid>

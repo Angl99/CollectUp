@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button, Container, Box, Typography, Grid, Avatar, CssBaseline, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { TextField, Button, Container, Box, Typography, Grid, Avatar, CssBaseline, Select, MenuItem, FormControl, InputLabel, Modal } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ItemDisplay from "./ItemDisplay";
@@ -8,6 +8,7 @@ import { searchExternalApi, createItem } from "../../helpers/itemHelper";
 import { useAuth } from "../../helpers/AuthContext";
 import productHelper from "../../helpers/productHelpers";
 import { addItemsToFirstShowcase } from "../../helpers/showcaseHelpers";
+import BarcodeScanner from "../BarcodeScanner/BarcodeScanner";
 
 
 const theme = createTheme({
@@ -42,6 +43,17 @@ export default function GenerateItem() {
     const [generatedItems, setGeneratedItems] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [scannedBarcode, setScannedBarcode] = useState(null);
+    const handleOpenModal = () => setIsModalOpen(true);
+    const handleCloseModal = () => setIsModalOpen(false);
+
+    useEffect(() => {
+        if (scannedBarcode) {
+            setItemCode(scannedBarcode);
+            handleCloseModal();
+        }
+    }, [scannedBarcode]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -254,15 +266,21 @@ export default function GenerateItem() {
                         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        id="item-code"
-                                        label="Item Code"
-                                        name="item-code"
-                                        value={itemCode}
-                                        onChange={handleInputChange}
-                                        placeholder="Enter Code"
-                                    />
+                                    <Box display="flex" alignItems="center">
+                                        <TextField
+                                            fullWidth
+                                            id="item-code"
+                                            label="Item Code"
+                                            name="item-code"
+                                            value={itemCode}
+                                            onChange={handleInputChange}
+                                            placeholder="Enter Code"
+                                        />
+                                        <Typography variant="body1" sx={{ mx: 1 }}>or</Typography>
+                                        <Button variant="contained" onClick={handleOpenModal}>
+                                            Scan Code
+                                        </Button>
+                                    </Box>
                                     {itemType && <Typography variant="caption" display="block" gutterBottom>Detected Code Type: {itemType}</Typography>}
                                 </Grid>
                                 <Grid item xs={12}>
@@ -360,6 +378,30 @@ export default function GenerateItem() {
                         )}
                     </Box>
                 </Container>
+                <Modal
+                open={isModalOpen}
+                onClose={handleCloseModal}
+                aria-labelledby="barcode-scanner-modal"
+                aria-describedby="modal-to-scan-barcode"
+            >
+                <Box sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 400,
+                    bgcolor: 'background.paper',
+                    border: '2px solid #000',
+                    boxShadow: 24,
+                    p: 4,
+                }}>
+                    <Typography id="barcode-scanner-modal" variant="h6" component="h2">
+                        Scan Barcode
+                    </Typography>
+                    <BarcodeScanner setScannedBarcode={setScannedBarcode} />
+                    <Button onClick={handleCloseModal}>Close</Button>
+                </Box>
+            </Modal>
             </ThemeProvider>
         </Box>
     );
