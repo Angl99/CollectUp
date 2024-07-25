@@ -142,18 +142,12 @@ export default function Register() {
     setShowPasswordAlert(false);
 
     try {
-      await create({ firstName, lastName, email });
+      const { uid } = await signup(email, password);
+      await create({email, uid, firstName, lastName});
+      navigate("/");
       console.log("User added successfully");
     } catch (error) {
       console.log('Error adding user:', error);
-    }
-
-    try {
-      await signup(email, password);
-      console.log("Signup successful");
-      navigate("/");
-    } catch (error) {
-      console.log('Signup error:', error);
     }
   };
 
