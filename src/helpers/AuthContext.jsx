@@ -3,6 +3,7 @@ import { auth } from "../Components/firebase/firebaseConfig";
 import { doCreateUserWithEmailAndPassword, doSignInWithEmailAndPassword, doSignOut } from "../Components/firebase/auth";
 import { onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { create } from "../helpers/userHelpers";
+import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
@@ -13,6 +14,8 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); 
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   const signup = async (email, password) => {
     try {
@@ -43,6 +46,7 @@ export const AuthProvider = ({ children }) => {
       try {
         await create({ firstName, lastName, email, uid });
         console.log("User added successfully");
+        navigate("/");
       } catch (error) {
         console.log('Error adding user:', error);
       }
