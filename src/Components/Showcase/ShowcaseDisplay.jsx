@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Box, Typography, Button, Grid, CircularProgress, Container, Paper } from "@mui/material";
 import ShowcaseItem from "./ShowcaseItem";
 import { useAuth } from "../../helpers/AuthContext";
@@ -13,26 +13,14 @@ import { getShowcaseById, createShowcase, addItemsToShowcase, getShowcasesByUser
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showcaseId, setShowcaseId] = useState(null);
-
+  const {id} = useParams();
+  
   useEffect(() => {
     const loadOrCreateShowcase = async () => {
       if (user) {
         try {
           setIsLoading(true);
-          let showcase;
-          try {
-            showcase = await getShowcasesByUserUid(user.uid);
-          } catch (error) {
-
-          }
-          
-          
-          if (!showcase || showcase.length === 0) {
-            // If the user doesn't have a showcase, create one
-            showcase = await createShowcase({ name: "My Showcase", userId: user.uid });
-          } else {
-            showcase = showcase[0];
-          }
+          const showcase = await getShowcaseById(id);
           
           setShowcaseId(showcase.id);
 

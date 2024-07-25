@@ -7,7 +7,7 @@ import ItemDisplay from "./ItemDisplay";
 import { searchExternalApi, createItem } from "../../helpers/itemHelper";
 import { useAuth } from "../../helpers/AuthContext";
 import productHelper from "../../helpers/productHelpers";
-import { addItemsToFirstShowcase } from "../../helpers/showcaseHelpers";
+import { addItemsToFirstShowcase, getShowcasesByUserUid } from "../../helpers/showcaseHelpers";
 import BarcodeScanner from "../BarcodeScanner/BarcodeScanner";
 
 
@@ -193,12 +193,6 @@ export default function GenerateItem() {
                 throw new Error("You must be logged in to add items to the showcase.");
             }
             
-            // // Get or create the user's showcase
-            // let showcase = await getShowcasesByUserUid(user.uid);
-            // if (!showcase) {
-            //     showcase = await createShowcase({ name: "My Showcase", uid: user.uid });
-            // }
-            
             // Prepare items for adding to showcase
             const itemsToAdd = generatedItems.map(item => ({
                 productEan: item.data.ean,
@@ -211,9 +205,10 @@ export default function GenerateItem() {
             
             // Add items to the showcase
             await addItemsToFirstShowcase(user.uid, itemsToAdd);
+            const showcases = await getShowcasesByUserUid(user.uid);
             
             // Navigate to the showcase display
-            navigate('/showcase-display');
+            navigate(`/showcases/${showcases[0].id}`);
         } catch (error) {
             console.error("Error adding items to showcase:", error);
             setError("Failed to add items to showcase. Please try again.");

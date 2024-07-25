@@ -23,7 +23,7 @@ function App() {
             <Route path='/genItem' element={<GenerateItem />} />
             <Route path='/marketplace' element={<Marketplace />} />
             <Route path='/scan' element={<BarcodeScanner />} />
-            <Route path='/showcase-display' element={<ShowcaseDisplay />} />
+            <Route path='/showcases/:id' element={<ShowcaseDisplay />} />
           </Routes>
         </AuthProvider>
       </Router>

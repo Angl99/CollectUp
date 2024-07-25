@@ -1,8 +1,6 @@
 import axios from 'axios';
 
 const INTERNAL_API_URL = 'http://localhost:3000/items';
-const EXTERNAL_API_URL = 'https://api.upcitemdb.com/prod/trial/lookup';
-const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
 
 export const getAllItems = async () => {
   try {

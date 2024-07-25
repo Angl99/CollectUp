@@ -12,6 +12,9 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import ShowcaseIcon from '@mui/icons-material/Collections';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import customMenuIcon from '../../assets/AA.png';
+import { getShowcasesByUserUid } from '../../helpers/showcaseHelpers';
+
+
 
 // Create a custom theme for the NavBar
 const theme = createTheme({
@@ -157,6 +160,7 @@ export default function NavBar() {
   const [showBottomBar, setShowBottomBar] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [showcaseId, setShowcaseId] = useState(null);
 
   // Effect to handle scroll events
   useEffect(() => {
@@ -222,11 +226,19 @@ export default function NavBar() {
     navigate(path);
   };
 
+  useEffect(() => {
+    const getShowcaseId = async () => {
+      const showcases = await getShowcasesByUserUid(user.uid);
+      setShowcaseId(showcases[0].id);
+    }
+    getShowcaseId();
+  }, [])
+
   // Define menu items for the bottom navigation
   const menuItems = [
   { icon: <HomeIcon />, path: '/', bgColor: theme.palette.primary.main },
   { icon: <StoreIcon />, path: '/marketplace', bgColor: theme.palette.primary.main },
-  { icon: <ShowcaseIcon />, path: '/showcase-display', bgColor: theme.palette.primary.main },
+  { icon: <ShowcaseIcon />, path: `/showcases/${showcaseId}`, bgColor: theme.palette.primary.main },
   { icon: <AccountCircleIcon />, path: `/profile`, bgColor: theme.palette.primary.main },
   ];
 
