@@ -228,11 +228,13 @@ export default function NavBar() {
 
   useEffect(() => {
     const getShowcaseId = async () => {
-      const showcases = await getShowcasesByUserUid(user.uid);
-      setShowcaseId(showcases[0].id);
+      if (user) {
+        const showcases = await getShowcasesByUserUid(user.uid);
+        setShowcaseId(showcases[0].id);
+      }
     }
     getShowcaseId();
-  }, [])
+  }, [user])
 
   // Define menu items for the bottom navigation
   const menuItems = [
