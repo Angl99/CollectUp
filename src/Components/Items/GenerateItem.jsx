@@ -55,6 +55,20 @@ export default function GenerateItem() {
         }
     }, [scannedBarcode]);
 
+    useEffect(() => {
+        if (itemCode.length === 13) {
+            if (itemCode.startsWith('0')) {
+                setItemType("UPC-A (GTIN-12)");
+            } else {
+                setItemType("EAN-13 (ISBN/ GTIN-13)");
+            }
+        } else if (itemCode.length === 12) {
+            setItemType("UPC-A (GTIN-12)");
+        } else {
+            setItemType("");
+        }
+    }, [itemCode]);
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         switch(name) {
@@ -82,20 +96,6 @@ export default function GenerateItem() {
             reader.readAsDataURL(file);
         }
     };
-
-    useEffect(() => {
-        if (itemCode.length === 13) {
-            if (itemCode.startsWith('0')) {
-                setItemType("UPC-A (GTIN-12)");
-            } else {
-                setItemType("EAN-13 (ISBN/ GTIN-13)");
-            }
-        } else if (itemCode.length === 12) {
-            setItemType("UPC-A (GTIN-12)");
-        } else {
-            setItemType("");
-        }
-    }, [itemCode]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

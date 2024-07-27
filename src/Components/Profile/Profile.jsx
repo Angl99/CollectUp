@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Grid, Card, CardContent, CardMedia, Button, Typography, Box, Avatar } from '@mui/material';
+import { Container, Grid, Card, CardContent, CardMedia, Button, Typography, Box, Avatar, Modal, useMediaQuery } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { getById } from '../../helpers/userHelpers';
 import { useAuth } from '../../helpers/AuthContext';
+import ProfileForm from './ProfileForm';
 
 // Create a custom theme for the Profile component
 const theme = createTheme({
@@ -12,11 +13,13 @@ const theme = createTheme({
       main: '#3498db',
     },
     secondary: {
-      main: '#e67e22',
+      main: '#95a5a6',
+    },
+    accent: {
+      main: '#623c8c',
     },
     text: {
       primary: '#34495e',
-      secondary: '#95a5a6',
     },
     background: {
       default: '#f0f3f5',
@@ -26,8 +29,10 @@ const theme = createTheme({
 
 export default function Profile() {
   const [profileUser, setProfileUser] = useState(null);
+  const [open, setOpen] = useState(false);
   const { userId } = useParams();
   const { user } = useAuth();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     const fetchProfileUser = async () => {
@@ -42,70 +47,78 @@ export default function Profile() {
   }, []);
 
   const handleOpen = () => {
-    
+    setOpen(true);
+  };
+  
+  const handleClose = () => {
+    setOpen(false);
   }
   
   return (
     <ThemeProvider theme={theme}>
-      {/* Main container for the profile page */}
-      <Box sx={{ backgroundColor: 'background.default', minHeight: '100vh', py: 9 }}>
-        <Container>
+      <Box sx={{ backgroundColor: 'background.default', minHeight: '100vh', py: 9, }}>
+        <Container maxWidth="lg">
           <Grid container justifyContent="center">
-            <Grid item xs={12} lg={9} xl={7}>
+            <Grid item xs={12} md={10} lg={8}>
               <Card>
-                {/* Profile header with background color and avatar */}
                 <Box sx={{ 
                   backgroundColor: 'primary.main', 
-                  height: 200, 
+                  height: isMobile ? 250 : 200, 
                   position: 'relative',
                   display: 'flex',
-                  color: 'white'
+                  flexDirection: isMobile ? 'column' : 'row',
+                  alignItems: isMobile ? 'center' : 'flex-end',
+                  color: 'white',
+                  p: 2
                 }}>
-                  {/* Avatar */}
-                  <Box sx={{ position: 'absolute', bottom: 20, left: 24 }}>
-                    <Avatar
-                      src=""
-                      sx={{ width: 150, height: 150, border: '5px solid white' }}
-                    />
-                  </Box>
-                  {/* User's display name */}
-                  <Box sx={{ ml: 24, mt: 'auto', mb: 2 }}>
-                    <Typography variant="h5">
+                  <Avatar
+                    src=""
+                    sx={{ 
+                      width: isMobile ? 100 : 150, 
+                      height: isMobile ? 100 : 150, 
+                      border: '5px solid white',
+                      mb: isMobile ? 2 : 0
+                    }}
+                  />
+                  <Box sx={{ 
+                    ml: isMobile ? 0 : 3, 
+                    textAlign: isMobile ? 'center' : 'left',
+                    flexGrow: 1
+                  }}>
+                    <Typography variant={isMobile ? "h6" : "h5"}>
                       {`${profileUser?.first_name} ${profileUser?.last_name}`}
                     </Typography>
-                    <Button sx={{ backgroundColor: 'secondary.main', color: 'white'}} onClick={handleOpen}>
-                    <Typography variant="h5">Edit Profile</Typography>
-                  </Button>
+                    <Button 
+                      variant="contained"
+                      sx={{ backgroundColor: 'secondary.main', color: 'white', mt: 1 }} 
+                      onClick={handleOpen}
+                      size="small"
+                    >
+                      Edit Profile
+                    </Button>
                   </Box>
                 </Box>
 
                 <CardContent>
-                  {/* About section */}
-                  <Typography variant="h6" gutterBottom color="text.primary">About</Typography>
-                  <Box sx={{ backgroundColor: 'background.default', p: 2, mb: 3 }}>
-                    <Typography color="text.primary">Email: {`${profileUser?.email}`}</Typography>  
-                    <Typography color="text.primary">Location:</Typography>
-                  </Box>
-
-                  {/* Showcases section */}
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                  <Typography variant="h6">Showcases</Typography>
-                  {/* Commented out "Show all" link */}
-                  {/* <Typography color="text.secondary">Show all</Typography> */}
-                  </Box>
-                  
-                  {/* Grid of showcase images */}
-                  <Grid container spacing={2}>
-                    {[112, 107, 108, 114].map((num) => (
-                      <Grid item xs={6} key={num}>
-                        <CardMedia
-                          component="img"
-                          image={`https://via.placeholder.com/300x200`}
-                          alt={`Photo ${num}`}
-                          sx={{ borderRadius: 1 }}
-                        />
-                      </Grid>
-                    ))}
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} md={6}>
+                      <Typography variant="h6" gutterBottom color="text.primary">Bio</Typography>
+                      <Typography color="text.primary">{profileUser?.bio || 'No bio available.'}</Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Typography variant="h6" gutterBottom color="text.primary">About</Typography>
+                      <Box sx={{ backgroundColor: 'background.default', p: 2, borderRadius: 1 }}>
+                        <Typography color="text.primary">Email: {profileUser?.email}</Typography>
+                        <Typography color="text.primary">Full Address:</Typography>
+                        <Typography color="text.primary">
+                          {profileUser?.streetAddress1}
+                          {profileUser?.streetAddress2 && `, ${profileUser.streetAddress2}`}
+                          {profileUser?.city && `, ${profileUser.city}`}
+                          {profileUser?.state && `, ${profileUser.state}`}
+                          {profileUser?.zipCode && ` ${profileUser.zipCode}`}
+                        </Typography>
+                      </Box>
+                    </Grid>
                   </Grid>
                 </CardContent>
               </Card>
@@ -113,6 +126,9 @@ export default function Profile() {
           </Grid>
         </Container>
       </Box>
+      <Modal open={open} onClose={handleClose}>
+        <ProfileForm onClose={handleClose} user={profileUser} />
+      </Modal>
     </ThemeProvider>
   );
 }
