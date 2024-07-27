@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography, TextField, Button, Grid } from '@mui/material';
 import { updateById } from '../../helpers/userHelpers';
 
+// component for editing user profile
 export default function ProfileForm({ onClose, user }) {
+  // state to hold form data
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -15,6 +17,7 @@ export default function ProfileForm({ onClose, user }) {
     bio: '',
   });
 
+  // effect to populate form data when user prop changes
   useEffect(() => {
     if (user) {
       setFormData({
@@ -31,6 +34,7 @@ export default function ProfileForm({ onClose, user }) {
     }
   }, [user]);
 
+  // handle input changes
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData(prevData => ({
@@ -39,6 +43,7 @@ export default function ProfileForm({ onClose, user }) {
     }));
   };
 
+  // handle form submission
   const handleSubmit = (event) => {
     event.preventDefault();
     updateById(user.id, formData);
@@ -47,6 +52,7 @@ export default function ProfileForm({ onClose, user }) {
     window.location.reload();
   };
 
+  // styles for the modal
   const style = {
     position: 'absolute',
     top: '50%',
@@ -68,6 +74,7 @@ export default function ProfileForm({ onClose, user }) {
       </Typography>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
+          {/* first name input */}
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
@@ -77,6 +84,7 @@ export default function ProfileForm({ onClose, user }) {
               onChange={handleChange}
             />
           </Grid>
+          {/* last name input */}
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
@@ -86,6 +94,7 @@ export default function ProfileForm({ onClose, user }) {
               onChange={handleChange}
             />
           </Grid>
+          {/* email input */}
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -96,6 +105,7 @@ export default function ProfileForm({ onClose, user }) {
               onChange={handleChange}
             />
           </Grid>
+          {/* street address 1 input */}
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -105,6 +115,7 @@ export default function ProfileForm({ onClose, user }) {
               onChange={handleChange}
             />
           </Grid>
+          {/* street address 2 input */}
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -114,6 +125,7 @@ export default function ProfileForm({ onClose, user }) {
               onChange={handleChange}
             />
           </Grid>
+          {/* city input */}
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
@@ -123,6 +135,7 @@ export default function ProfileForm({ onClose, user }) {
               onChange={handleChange}
             />
           </Grid>
+          {/* state input */}
           <Grid item xs={12} sm={3}>
             <TextField
               fullWidth
@@ -132,6 +145,7 @@ export default function ProfileForm({ onClose, user }) {
               onChange={handleChange}
             />
           </Grid>
+          {/* zip code input */}
           <Grid item xs={12} sm={3}>
             <TextField
               fullWidth
@@ -141,6 +155,7 @@ export default function ProfileForm({ onClose, user }) {
               onChange={handleChange}
             />
           </Grid>
+          {/* bio input */}
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -152,6 +167,7 @@ export default function ProfileForm({ onClose, user }) {
               onChange={handleChange}
             />
           </Grid>
+          {/* form buttons */}
           <Grid item xs={12}>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
               <Button onClick={onClose}>Cancel</Button>
