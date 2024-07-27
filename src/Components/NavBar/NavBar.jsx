@@ -13,7 +13,7 @@ import ShowcaseIcon from '@mui/icons-material/Collections';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import customMenuIcon from '../../assets/AA.png';
 import { getShowcasesByUserUid } from '../../helpers/showcaseHelpers';
-
+import { getByFirebaseId } from '../../helpers/userHelpers';
 
 
 // Create a custom theme for the NavBar
@@ -161,6 +161,7 @@ export default function NavBar() {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const [showcaseId, setShowcaseId] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   // Effect to handle scroll events
   useEffect(() => {
@@ -168,6 +169,19 @@ export default function NavBar() {
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
+
+  // Effect to set the showcase ID based on the user
+  useEffect(() => {
+    const getShowcaseId = async () => {
+      if (user) {
+        const showcases = await getShowcasesByUserUid(user.uid);
+        setShowcaseId(showcases[0].id);
+        const currentUser = await getByFirebaseId(user.uid);
+        setUserId(currentUser.id);
+      }
+    }
+    getShowcaseId();
+  }, [user])
 
   // Function to handle scroll behavior
   const handleScroll = () => {
@@ -226,22 +240,12 @@ export default function NavBar() {
     navigate(path);
   };
 
-  useEffect(() => {
-    const getShowcaseId = async () => {
-      if (user) {
-        const showcases = await getShowcasesByUserUid(user.uid);
-        setShowcaseId(showcases[0].id);
-      }
-    }
-    getShowcaseId();
-  }, [user])
-
   // Define menu items for the bottom navigation
   const menuItems = [
   { icon: <HomeIcon />, path: '/', bgColor: theme.palette.primary.main },
   { icon: <StoreIcon />, path: '/marketplace', bgColor: theme.palette.primary.main },
   { icon: <ShowcaseIcon />, path: `/showcases/${showcaseId}`, bgColor: theme.palette.primary.main },
-  { icon: <AccountCircleIcon />, path: `/profile`, bgColor: theme.palette.primary.main },
+  { icon: <AccountCircleIcon />, path: `/profile/${userId}`, bgColor: theme.palette.primary.main },
   ];
 
   // Define the top navigation bar

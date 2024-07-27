@@ -42,7 +42,7 @@ export const updateById = async (id, userData) => {
 
 export const getByFirebaseId = async (uid) => {
     try {
-        const response = await axios.put(`http://localhost:3000/users/firebase/${uid}`);
+        const response = await axios.get(`http://localhost:3000/users/firebase/${uid}`);
         return response.data;
     } catch (error) {
         console.error(error);

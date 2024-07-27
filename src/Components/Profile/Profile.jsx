@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Container, Grid, Card, CardContent, CardMedia, Button, Typography, Box, Avatar } from '@mui/material';
-import { useAuth } from '../../helpers/AuthContext';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { getById } from '../../helpers/userHelpers';
+import { useAuth } from '../../helpers/AuthContext';
 
 // Create a custom theme for the Profile component
 const theme = createTheme({
@@ -23,8 +25,25 @@ const theme = createTheme({
 });
 
 export default function Profile() {
-  // Get the user object from the AuthContext
+  const [profileUser, setProfileUser] = useState(null);
+  const { userId } = useParams();
   const { user } = useAuth();
+
+  useEffect(() => {
+    const fetchProfileUser = async () => {
+      try {
+        const fetchedUser = await getById(userId);
+        setProfileUser(fetchedUser);
+      } catch (error) {
+        console.error('Error fetching profile user:', error);
+      }
+    };
+    fetchProfileUser();
+  }, []);
+
+  const handleOpen = () => {
+    
+  }
   
   return (
     <ThemeProvider theme={theme}>
@@ -52,8 +71,11 @@ export default function Profile() {
                   {/* User's display name */}
                   <Box sx={{ ml: 24, mt: 'auto', mb: 2 }}>
                     <Typography variant="h5">
-                      {`${user.displayName}`}
+                      {`${profileUser?.first_name} ${profileUser?.last_name}`}
                     </Typography>
+                    <Button sx={{ backgroundColor: 'secondary.main', color: 'white'}} onClick={handleOpen}>
+                    <Typography variant="h5">Edit Profile</Typography>
+                  </Button>
                   </Box>
                 </Box>
 
@@ -61,8 +83,7 @@ export default function Profile() {
                   {/* About section */}
                   <Typography variant="h6" gutterBottom color="text.primary">About</Typography>
                   <Box sx={{ backgroundColor: 'background.default', p: 2, mb: 3 }}>
-                    <Typography color="text.primary">Email: {`${user.email}`}</Typography>  
-                    <Typography color="text.primary">Date of Birth:</Typography>
+                    <Typography color="text.primary">Email: {`${profileUser?.email}`}</Typography>  
                     <Typography color="text.primary">Location:</Typography>
                   </Box>
 

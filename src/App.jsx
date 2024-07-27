@@ -19,7 +19,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LogIn />} />
-            <Route path='/profile' element={<Profile />} />
+            <Route path='/profile/:userId' element={<Profile />} />
             <Route path='/genItem' element={<GenerateItem />} />
             <Route path='/marketplace' element={<Marketplace />} />
             <Route path='/scan' element={<BarcodeScanner />} />
