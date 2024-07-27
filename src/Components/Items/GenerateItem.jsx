@@ -157,12 +157,12 @@ export default function GenerateItem() {
                         
                         // Add the new item to the first showcase
                         await addItemsToFirstShowcase(
-                            user.uid, {
+                            user.uid, [{
                             productEan: newItem.data.ean,
                             condition: newItem.condition,
                             userDescription: newItem.userDescription,
                             imgUrl: newItem.imgUrl
-                        });
+                        }]);
                         
                         setGeneratedItems(prevItems => [...prevItems, newItem]);
                     } catch (error) {
