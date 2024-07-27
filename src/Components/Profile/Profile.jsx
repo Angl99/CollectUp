@@ -33,6 +33,7 @@ export default function Profile() {
   const { userId } = useParams();
   const { user } = useAuth();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isProfileOwner = user && profileUser && user.uid === profileUser.uid;
 
   useEffect(() => {
     const fetchProfileUser = async () => {
@@ -85,17 +86,19 @@ export default function Profile() {
                     textAlign: isMobile ? 'center' : 'left',
                     flexGrow: 1
                   }}>
-                    <Typography variant={isMobile ? "h6" : "h5"}>
+                    <Typography variant={isMobile ? "h5" : "h4"}>
                       {`${profileUser?.first_name} ${profileUser?.last_name}`}
                     </Typography>
-                    <Button 
-                      variant="contained"
-                      sx={{ backgroundColor: 'secondary.main', color: 'white', mt: 1 }} 
-                      onClick={handleOpen}
-                      size="small"
-                    >
-                      Edit Profile
-                    </Button>
+                    {isProfileOwner && (
+                      <Button 
+                        variant="contained"
+                        sx={{ backgroundColor: 'secondary.main', color: 'white', mt: 1 }} 
+                        onClick={handleOpen}
+                        size="small"
+                      >
+                        Edit Profile
+                      </Button>
+                    )}
                   </Box>
                 </Box>
 
@@ -126,7 +129,7 @@ export default function Profile() {
           </Grid>
         </Container>
       </Box>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={open} onClose={handleClose} sx={{ marginBottom: 7 }} >
         <ProfileForm onClose={handleClose} user={profileUser} />
       </Modal>
     </ThemeProvider>
