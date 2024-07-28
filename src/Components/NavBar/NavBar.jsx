@@ -14,7 +14,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import customMenuIcon from '../../assets/AA.png';
 import { getShowcasesByUserUid } from '../../helpers/showcaseHelpers';
 import { getByFirebaseId } from '../../helpers/userHelpers';
-
+import AddIcon from '@mui/icons-material/Add';
 
 // Create a custom theme for the NavBar
 const theme = createTheme({
@@ -83,16 +83,16 @@ const AnimatedBottomNav = styled('div')(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  padding: '0.5em 2.85em',
+  padding: '0.5em 1.5em',
   fontSize: '1.5em',
   zIndex: 9999,
   '@media (max-width: 50em)': {
-    fontSize: '0.8em',
+    fontSize: '0.7em',
   },
 }));
 
 // Styled component for each menu item in the bottom navigation
-const AnimatedMenuItem = styled('button')(({ theme, active, bgColorItem }) => ({
+const AnimatedMenuItem = styled('button')(({ theme, active, bgColorItem, isPlus }) => ({
   all: 'unset',
   flexGrow: 1,
   zIndex: 100,
@@ -104,17 +104,17 @@ const AnimatedMenuItem = styled('button')(({ theme, active, bgColorItem }) => ({
   justifyContent: 'center',
   padding: '0.55em 0 0.85em',
   transition: 'transform 0.7s',
-  transform: active ? 'translate3d(0, -0.8em, 0)' : 'none',
+  transform: isPlus ? 'translate3d(0, -1.2em, 0)' : (active ? 'translate3d(0, -0.8em, 0)' : 'none'),
   '&::before': {
     content: '""',
     zIndex: -1,
-    width: '4.2em',
-    height: '4.2em',
+    width: isPlus ? '5em' : '4.2em',
+    height: isPlus ? '5em' : '4.2em',
     borderRadius: '50%',
     position: 'absolute',
-    transform: active ? 'scale(1)' : 'scale(0)',
+    transform: (active || isPlus) ? 'scale(1)' : 'scale(0)',
     transition: 'background-color 0.7s, transform 0.7s',
-    backgroundColor: active ? bgColorItem : 'transparent',
+    backgroundColor: isPlus ? theme.palette.primary.main : (active ? bgColorItem : 'transparent'),
   },
 }));
 
@@ -244,6 +244,7 @@ export default function NavBar() {
   const menuItems = [
   { icon: <HomeIcon />, path: '/', bgColor: theme.palette.primary.main },
   { icon: <StoreIcon />, path: '/marketplace', bgColor: theme.palette.primary.main },
+  { icon: <AddIcon />, path: '/genItem', bgColor: theme.palette.accent.main },
   { icon: <ShowcaseIcon />, path: `/showcases/${showcaseId}`, bgColor: theme.palette.primary.main },
   { icon: <AccountCircleIcon />, path: `/profile/${userId}`, bgColor: theme.palette.primary.main },
   ];
@@ -343,15 +344,16 @@ export default function NavBar() {
   // Define the bottom navigation bar
   const BottomBar = (
     <AnimatedBottomNav>
-      {menuItems.map((item, index) => (
-        <AnimatedMenuItem
-          key={index}
-          active={activeIndex === index}
-          bgColorItem={item.bgColor}
-          onClick={() => handleItemClick(index, item.path)}
-        >
-          <AnimatedIcon viewBox="0 0 24 24" active={activeIndex === index}>
-            {item.icon}
+    {menuItems.map((item, index) => (
+      <AnimatedMenuItem
+        key={index}
+        active={activeIndex === index}
+        bgColorItem={item.bgColor}
+        isPlus={index === 2} // Check if it's the plus button
+        onClick={() => handleItemClick(index, item.path)}
+      >
+        <AnimatedIcon viewBox="0 0 24 24" active={activeIndex === index}>
+          {item.icon}
           </AnimatedIcon>
         </AnimatedMenuItem>
       ))}
