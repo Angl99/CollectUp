@@ -62,15 +62,15 @@ export const deleteShowcaseById = async (id) => {
     }
 }
 
-export const removeItemsFromShowcase = async (id, items) => {
+export const removeItemsFromShowcase = async (showcaseId, itemId) => {
     try {
-        const response = await axios.delete(`${API_URL}/${id}/items`, { data: { items } });
+        const response = await axios.delete(`${API_URL}/${showcaseId}/items`, { data: { itemId } });
         return response.data;
     } catch (error) {
-        console.error("Error removing items from showcase:", error);
+        console.error("Error removing item from showcase:", error);
         throw error;
     }
-}
+};
 
 // This function is not directly mapped to a backend route, but it's useful for our frontend logic
 export const getShowcasesByUserUid = async (uid) => {

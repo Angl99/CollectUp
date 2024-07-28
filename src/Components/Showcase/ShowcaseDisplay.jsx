@@ -79,7 +79,7 @@ import copy from 'copy-to-clipboard';
 
   const handleDelete = async (itemId) => {
     try {
-      await removeItemsFromShowcase(showcaseId, itemId);
+      await removeItemsFromShowcase(showcaseId, [{ id: itemId, type: 'Item' }]);
       setItems(items.filter(item => item.id !== itemId));
     } catch (error) {
       console.error("Error deleting item:", error);
@@ -89,7 +89,8 @@ import copy from 'copy-to-clipboard';
 
   const handleUpdate = async (itemId, updatedData) => {
     try {
-      const updatedItem = await updateItemInShowcase(showcaseId, itemId, updatedData);
+      const updatedItem = await updateItemInShowcase(itemId, updatedData);
+      console.log("Updated item:", updatedItem);
       setItems(items.map(item => item.id === itemId ? updatedItem : item));
     } catch (error) {
       console.error("Error updating item:", error);
@@ -98,7 +99,7 @@ import copy from 'copy-to-clipboard';
   };
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 10, mb: 4 }}>
+    <Container maxWidth="lg" sx={{ mt: 12, mb: 4 }}>
       <Box my={4}>
         <Typography variant="h3" component="h1" gutterBottom>
           Your Showcase
