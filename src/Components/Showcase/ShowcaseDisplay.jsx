@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Box, Typography, Button, Grid, CircularProgress, Container, Paper } from "@mui/material";
 import ShowcaseItem from "./ShowcaseItem";
 import { useAuth } from "../../helpers/AuthContext";
-import { getShowcaseById, createShowcase, addItemsToShowcase, getShowcasesByUserUid } from "../../helpers/showcaseHelpers";
+import { getShowcaseById, createShowcase, addItemsToShowcase, getShowcasesByUserUid, removeItemsFromShowcase } from "../../helpers/showcaseHelpers";
 import copy from 'copy-to-clipboard';
 
  function ShowcaseDisplay() {
@@ -53,7 +53,7 @@ import copy from 'copy-to-clipboard';
     };
 
     loadOrCreateShowcase();
-  }, [user, location.state]);
+  }, [user, location.state, id]);
 
   if (isLoading) {
     return (
@@ -77,9 +77,28 @@ import copy from 'copy-to-clipboard';
     console.log(link);
   }
 
-  // console.log(items);
+  const handleDelete = async (itemId) => {
+    try {
+      await removeItemsFromShowcase(showcaseId, itemId);
+      setItems(items.filter(item => item.id !== itemId));
+    } catch (error) {
+      console.error("Error deleting item:", error);
+      setError("Failed to delete item. Please try again.");
+    }
+  };
+
+  const handleUpdate = async (itemId, updatedData) => {
+    try {
+      const updatedItem = await updateItemInShowcase(showcaseId, itemId, updatedData);
+      setItems(items.map(item => item.id === itemId ? updatedItem : item));
+    } catch (error) {
+      console.error("Error updating item:", error);
+      setError("Failed to update item. Please try again.");
+    }
+  };
+
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" sx={{ mt: 10, mb: 4 }}>
       <Box my={4}>
         <Typography variant="h3" component="h1" gutterBottom>
           Your Showcase
@@ -97,7 +116,11 @@ import copy from 'copy-to-clipboard';
             {items.map((item, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
                 <Paper elevation={3}>
-                  <ShowcaseItem item={item} />
+                  <ShowcaseItem 
+                    item={item} 
+                    onDelete={handleDelete}
+                    onUpdate={handleUpdate}
+                  />
                 </Paper>
               </Grid>
             ))}

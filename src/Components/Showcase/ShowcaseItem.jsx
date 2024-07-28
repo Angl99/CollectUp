@@ -1,10 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
+import ItemForm from "./ItemForm";
 
-export default function ShowcaseItem({ item }) {
-  const { title, category, ean, brand, images } = item.product.data;
-  // console.log("prod data: ", item.product.data);
+export default function ShowcaseItem({ item, onDelete, onUpdate }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { id, title, category, ean, brand, images, condition, userDescription } = item.product.data;
   const imageUrl = images && images.length > 0 ? images[0] : null;
   const highest_recorded_price = item.highest_recorded_price || item.data?.highest_recorded_price;
+
+  const handleEdit = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = () => {
+    onDelete(id);
+  };
+
+  const handleUpdate = (updatedData) => {
+    onUpdate(id, updatedData);
+    setIsModalOpen(false);
+  };
+
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -23,7 +38,27 @@ export default function ShowcaseItem({ item }) {
         <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Code:</span> {ean || 'N/A'}</p>
         <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Brand:</span> {brand || 'N/A'}</p>
         <p className="text-sm text-gray-600"><span className="font-medium">Price:</span> {highest_recorded_price ? `$${highest_recorded_price}` : 'N/A'}</p>
+        <div className="mt-4 flex justify-end space-x-2">
+          <button
+            onClick={handleEdit}
+            className="px-4 py-2 bg-white border border-blue-500 text-blue-500 rounded hover:bg-blue-600 hover:text-white"
+          >
+            Edit
+          </button>
+          <button
+            onClick={handleDelete}
+            className="px-4 py-2 bg-white border border-red-500 text-red-500 rounded hover:bg-red-600 hover:text-white"
+          >
+            Delete
+          </button>
+        </div>
       </div>
+      <ItemForm
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleUpdate}
+        item={{ id, imageUrl, condition, userDescription }}
+      />
     </div>
   );
 }

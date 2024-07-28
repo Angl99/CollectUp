@@ -61,6 +61,7 @@ export default function ProfileForm({ onClose, user }) {
     width: 400,
     bgcolor: 'background.paper',
     border: '2px solid #000',
+    borderRadius: '20px',
     boxShadow: 24,
     p: 4,
     maxHeight: '90vh',
@@ -69,7 +70,7 @@ export default function ProfileForm({ onClose, user }) {
 
   return (
     <Box sx={style}>
-      <Typography id="modal-modal-title" variant="h6" component="h2" gutterBottom>
+      <Typography id="modal-modal-title" variant="h6" component="h2" gutterBottom sx={{ marginBottom: '20px', fontWeight: 'bold' }}>
         Edit Profile
       </Typography>
       <form onSubmit={handleSubmit}>
