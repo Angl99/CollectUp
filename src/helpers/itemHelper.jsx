@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const INTERNAL_API_URL = 'http://localhost:3000/items';
+const INTERNAL_API_URL = `${import.meta.env.VITE_API_URL}/items`;
 
 export const getAllItems = async () => {
   try {

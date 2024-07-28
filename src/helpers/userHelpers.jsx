@@ -1,8 +1,10 @@
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const index = async () => {
     try {
-        const response = await axios.get("http://localhost:3000/users");
+        const response = await axios.get(`${API_URL}/users`);
         return response.data;
     } catch (error) {
         console.error(error);
@@ -12,7 +14,7 @@ export const index = async () => {
 
 export const getById = async (id) => {
     try {
-        const response = await axios.get(`http://localhost:3000/users/${id}`);
+        const response = await axios.get(`${API_URL}/users/${id}`);
         return response.data;
     } catch (error) {
         console.error(error);
@@ -22,7 +24,7 @@ export const getById = async (id) => {
 
 export const create = async (userData) => {
     try {
-        const response = await axios.post("http://localhost:3000/users", userData);
+        const response = await axios.post(`${API_URL}/users`, userData);
         return response.data;
     } catch (error) {
         console.error(error);
@@ -32,7 +34,7 @@ export const create = async (userData) => {
 
 export const updateById = async (id, userData) => {
     try {
-        const response = await axios.put(`http://localhost:3000/users/${id}`, userData);
+        const response = await axios.put(`${API_URL}/users/${id}`, userData);
         return response.data;
     } catch (error) {
         console.error(error);
@@ -42,7 +44,7 @@ export const updateById = async (id, userData) => {
 
 export const getByFirebaseId = async (uid) => {
     try {
-        const response = await axios.get(`http://localhost:3000/users/firebase/${uid}`);
+        const response = await axios.get(`${API_URL}/users/firebase/${uid}`);
         return response.data;
     } catch (error) {
         console.error(error);
@@ -53,7 +55,7 @@ export const getByFirebaseId = async (uid) => {
 
 export const deleteById = async (id) => {
     try {
-        const response = await axios.delete(`http://localhost:3000/users/${id}`);
+        const response = await axios.delete(`${API_URL}/users/${id}`);
         return response.data;
     } catch (error) {
         console.error(error);

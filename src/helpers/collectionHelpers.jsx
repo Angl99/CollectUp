@@ -1,8 +1,10 @@
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const index = async () => {
     try {
-        const response = await axios.get("http://localhost:3000/collections");
+        const response = await axios.get(`${API_URL}/collections`);
         return response.data;
     } catch (error) {
         console.error(error);
@@ -12,7 +14,7 @@ export const index = async () => {
 
 export const getById = async (id) => {
     try {
-        const response = await axios.get(`http://localhost:3000/collections/${id}`);
+        const response = await axios.get(`${API_URL}/collections/${id}`);
         return response.data;
     } catch (error) {
         console.error(error);
@@ -22,7 +24,7 @@ export const getById = async (id) => {
 
 export const create = async (collectionData) => {
     try {
-        const response = await axios.post("http://localhost:3000/collections", collectionData);
+        const response = await axios.post(`${API_URL}/collections`, collectionData);
         return response.data;
     } catch (error) {
         console.error(error);
@@ -32,7 +34,7 @@ export const create = async (collectionData) => {
 
 export const update = async (id, collectionData) => {
     try {
-        const response = await axios.put(`http://localhost:3000/collections/${id}`, collectionData);
+        const response = await axios.put(`${API_URL}/collections/${id}`, collectionData);
         return response.data;
     } catch (error) {
         console.error(error);
@@ -42,7 +44,7 @@ export const update = async (id, collectionData) => {
 
 export const deleteById = async (id) => {
     try {
-        const response = await axios.delete(`http://localhost:3000/collections/${id}`);
+        const response = await axios.delete(`${API_URL}/collections/${id}`);
         return response.data;
     } catch (error) {
         console.error(error);
@@ -52,7 +54,7 @@ export const deleteById = async (id) => {
 
 export const addItem = async (collectionId, itemId) => {
     try {
-        const response = await axios.post(`http://localhost:3000/collections/addItem`, { collectionId, itemId });
+        const response = await axios.post(`${API_URL}/collections/addItem`, { collectionId, itemId });
         return response.data;
     } catch (error) {
         console.error(error);
