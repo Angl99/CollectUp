@@ -6,8 +6,7 @@ export default function ItemDisplay({ generatedItem }) {
   const { title, category, ean, brand, description, images, publisher } = generatedItem.data.data.data;
   const { condition, userDescription, imgUrl } = generatedItem;
   const imageUrl = imgUrl || (images && images.length > 0 ? images[0] : null);
-  const highest_recorded_price = generatedItem.highest_recorded_price || generatedItem.data?.data?.highest_recorded_price;
-
+  const highest_recorded_price = generatedItem.highest_recorded_price || generatedItem.data?.data?.data?.highest_recorded_price;
   const displayDescription = userDescription || description || 'No description available';
   
   return (

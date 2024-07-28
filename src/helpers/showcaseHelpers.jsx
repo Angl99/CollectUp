@@ -72,7 +72,6 @@ export const removeItemsFromShowcase = async (showcaseId, itemId) => {
     }
 };
 
-// This function is not directly mapped to a backend route, but it's useful for our frontend logic
 export const getShowcasesByUserUid = async (uid) => {
     try {
         const response = await axios.get(`${API_URL}?uid=${uid}`);
