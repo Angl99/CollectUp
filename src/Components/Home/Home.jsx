@@ -111,10 +111,10 @@ export default function Home() {
                     </Box>
 
                     <Button 
-                        variant="contained" 
+                        variant="outlined" 
                         color="primary" 
                         startIcon={<Explore />}
-                        sx={{ mt: 3 }}
+                        sx={{ mt: 3, backgroundColor: 'white', color: 'primary.main' }}
                         onClick={handleExploreClick}
                     >
                         Explore Marketplace

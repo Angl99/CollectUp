@@ -3,7 +3,8 @@ import ItemForm from "./ItemForm";
 
 export default function ShowcaseItem({ item, onDelete, onUpdate }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { id, title, category, ean, brand, images, condition, userDescription } = item.product.data;
+  const { title, category, ean, brand, images, condition, userDescription } = item.product.data;
+  const { id } = item;
   const imageUrl = images && images.length > 0 ? images[0] : null;
   const highest_recorded_price = item.highest_recorded_price || item.data?.highest_recorded_price;
 

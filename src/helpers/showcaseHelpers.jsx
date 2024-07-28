@@ -62,9 +62,9 @@ export const deleteShowcaseById = async (id) => {
     }
 }
 
-export const removeItemsFromShowcase = async (showcaseId, itemId) => {
+export const removeItemsFromShowcase = async (showcaseId, items) => {
     try {
-        const response = await axios.delete(`${API_URL}/${showcaseId}/items`, { data: { itemId } });
+        const response = await axios.post(`${API_URL}/${showcaseId}/items`, items);
         return response.data;
     } catch (error) {
         console.error("Error removing item from showcase:", error);
