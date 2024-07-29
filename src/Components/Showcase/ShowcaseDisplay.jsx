@@ -87,9 +87,9 @@ import copy from 'copy-to-clipboard';
     }
   };
 
-  const handleUpdate = async (itemId) => {
+  const handleUpdate = async (itemId, updatedData) => {
     try {
-      const updatedItem = await updateItemInShowcase(showcaseId, [{id: itemId, type: "Item"}]);
+      const updatedItem = await updateItemInShowcase(itemId, updatedData);
       console.log("Updated item:", updatedItem);
       setItems(items.map(item => item.id === itemId ? updatedItem : item));
     } catch (error) {

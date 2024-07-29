@@ -72,12 +72,19 @@ export const removeItemsFromShowcase = async (showcaseId, items) => {
     }
 };
 
-export const updateItemInShowcase = async (showcaseId, updatedData) => {
+export const updateItemInShowcase = async (itemId, updatedData) => {
     try {
-        const response = await axios.put(`${API_URL}/${showcaseId}/items`, updatedData);
-        return response;
+        const { imageUrl, condition, userDescription, forSale } = updatedData;
+        const response = await axios.put(`${API_URL}/items/${itemId}`, {
+            imageUrl,
+            condition,
+            userDescription,
+            forSale
+        });
+        return response.data;
     } catch (error) {
-        console.log("trouble updating item");
+        console.error("Error updating item:", error);
+        throw error;
     }
 }
 
