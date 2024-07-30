@@ -87,9 +87,9 @@ import copy from 'copy-to-clipboard';
     }
   };
 
-  const handleUpdate = async (itemId, updatedData) => {
+  const handleUpdate = async (showcaseId, itemId, updatedData) => {
     try {
-      const updatedItem = await updateItemInShowcase(itemId, updatedData);
+      const updatedItem = await updateItemInShowcase(showcaseId, itemId, updatedData);
       console.log("Updated item:", updatedItem);
       setItems(items.map(item => item.id === itemId ? updatedItem : item));
     } catch (error) {
