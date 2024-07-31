@@ -9,11 +9,11 @@ const firebaseKey = import.meta.env.VITE_FIREBASE_KEY
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: firebaseKey,
-  authDomain: "capstone-ac11e.firebaseapp.com",
-  projectId: "capstone-ac11e",
-  storageBucket: "capstone-ac11e.appspot.com",
-  messagingSenderId: "555826150151",
-  appId: "1:555826150151:web:fa308d02d680874e8e63a2",
+  authDomain: "capstoneprod",
+  projectId: "capstoneprod",
+  storageBucket: "capstoneprod.appspot.com",
+  messagingSenderId: "916329696238",
+  appId: "1:916329696238:web:f5e503d837f374409d5cff",
   measurementId: "G-R2D1VKRLQV"
 };
 
