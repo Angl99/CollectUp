@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect, createContext } from "react";
 import { auth } from "../Components/firebase/firebaseConfig";
 import { doCreateUserWithEmailAndPassword, doSignInWithEmailAndPassword, doSignOut } from "../Components/firebase/auth";
 import { onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { create } from "../helpers/userHelpers";
+import { create, updateById } from "../helpers/userHelpers";
 import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
@@ -36,22 +36,21 @@ export const AuthProvider = ({ children }) => {
       const firstName = result.user.displayName.split(' ')[0];
       const lastName = result.user.displayName.split(' ')[1];
       const email = result.user.email;
+      const firebaseUid = result.user.uid;
 
       // Create backend user first
       try {
         const backendUser = await create({ firstName, lastName, email });
         console.log("Backend user created successfully", backendUser);
 
-        // Now update the Firebase user with the backend user's ID
-        await result.user.updateProfile({
-          uid: backendUser.id.toString() // Assuming the backend returns an 'id' field
-        });
+        // Update the backend user with the Firebase UID
+        await updateById(backendUser.id, { firebaseUid });
 
         setUser(result.user);
         console.log('Google sign-in and user creation successful', result.user);
         navigate("/");
       } catch (error) {
-        console.log('Error creating backend user:', error);
+        console.log('Error creating or updating backend user:', error);
         // If backend user creation fails, sign out the Firebase user
         await auth.signOut();
         throw error;
