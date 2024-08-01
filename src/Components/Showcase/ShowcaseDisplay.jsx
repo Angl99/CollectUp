@@ -16,13 +16,14 @@ import copy from 'copy-to-clipboard';
   const [showcaseId, setShowcaseId] = useState(null);
   const {id} = useParams();
 
+  
   useEffect(() => {
     const loadOrCreateShowcase = async () => {
       if (user) {
         try {
           setIsLoading(true);
           const showcase = await getShowcaseById(id);
-          
+          console.log('showcase', showcase);
           setShowcaseId(showcase.id);
 
           if (location.state?.items) {

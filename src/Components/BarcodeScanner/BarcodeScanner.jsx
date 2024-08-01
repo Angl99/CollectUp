@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { BarcodeDetectorPolyfill } from '@undecaf/barcode-detector-polyfill';
 
 export default function BarcodeScanner({ setScannedBarcode }) {
   const videoRef = useRef(null);
