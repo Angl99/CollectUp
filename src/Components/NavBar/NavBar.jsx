@@ -173,11 +173,23 @@ export default function NavBar() {
   // Effect to set the showcase ID based on the user
   useEffect(() => {
     const getShowcaseId = async () => {
-      if (user) {
-        const showcases = await getShowcasesByUserUid(user.uid);
-        setShowcaseId(showcases[0].id);
-        const currentUser = await getByFirebaseId(user.uid);
-        setUserId(currentUser.id);
+      if (user && user.uid) {
+        try {
+          const showcases = await getShowcasesByUserUid(user.uid);
+          if (showcases && showcases.length > 0) {
+            setShowcaseId(showcases[0].id);
+          } else {
+            console.log('No showcases found for user');
+          }
+          const currentUser = await getByFirebaseId(user.uid);
+          if (currentUser) {
+            setUserId(currentUser.id);
+          } else {
+            console.log('User not found in backend');
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
       }
     }
     getShowcaseId();
