@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
         console.log("Backend user created successfully", backendUser);
 
         // Update the backend user with the Firebase UID
-        await updateById(backendUser.id, { firebaseUid });
+        await updateById(backendUser.id, { uid: firebaseUid });
 
         setUser(result.user);
         console.log('Google sign-in and user creation successful', result.user);
