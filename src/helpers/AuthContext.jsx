@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect, createContext } from "react";
 import { auth } from "../Components/firebase/firebaseConfig";
 import { doCreateUserWithEmailAndPassword, doSignInWithEmailAndPassword, doSignOut } from "../Components/firebase/auth";
 import { onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { create } from "../helpers/userHelpers";
+import { create, updateById } from "../helpers/userHelpers";
 import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
@@ -32,25 +32,29 @@ export const AuthProvider = ({ children }) => {
     try {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
-      setUser(result.user);
-      console.log('Google sign-in successful', result.user);
-      console.log(result.user.displayName);
-      console.log(result.user.email);
-      console.log(result.user.uid);
-
+      
       const firstName = result.user.displayName.split(' ')[0];
       const lastName = result.user.displayName.split(' ')[1];
       const email = result.user.email;
-      const uid = result.user.uid;
+      const firebaseUid = result.user.uid;
 
+      // Create backend user first
       try {
-        await create({ firstName, lastName, email, uid });
-        console.log("User added successfully");
+        const backendUser = await create({ firstName, lastName, email });
+        console.log("Backend user created successfully", backendUser);
+
+        // Update the backend user with the Firebase UID
+        await updateById(backendUser.id, { uid: firebaseUid });
+
+        setUser(result.user);
+        console.log('Google sign-in and user creation successful', result.user);
         navigate("/");
       } catch (error) {
-        console.log('Error adding user:', error);
+        console.log('Error creating or updating backend user:', error);
+        // If backend user creation fails, sign out the Firebase user
+        await auth.signOut();
+        throw error;
       }
-
     } catch (error) {
       console.error('Google sign-in error:', error);
     }

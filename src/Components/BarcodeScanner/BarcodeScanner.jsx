@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { BarcodeDetectorPolyfill } from '@undecaf/barcode-detector-polyfill';
 
 export default function BarcodeScanner({ setScannedBarcode }) {
   const videoRef = useRef(null);
@@ -6,6 +7,11 @@ export default function BarcodeScanner({ setScannedBarcode }) {
   const [isBarcodeDetectorSupported, setIsBarcodeDetectorSupported] = useState(true);
 
   useEffect(() => {
+    // If browswer is not supported, use polyfill 
+    if (!('BarcodeDetector' in window)) {
+      window.BarcodeDetector = BarcodeDetectorPolyfill;
+    }
+
     const setupCamera = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
@@ -30,7 +36,7 @@ export default function BarcodeScanner({ setScannedBarcode }) {
     const detectBarcode = async () => {
       if (!videoRef.current || !canvasRef.current) return;
 
-      const barcodeDetector = new BarcodeDetector();
+      const barcodeDetector = new window.BarcodeDetector({});
       const canvas = canvasRef.current;
       const context = canvas.getContext('2d');
       let isCancelled = false;
