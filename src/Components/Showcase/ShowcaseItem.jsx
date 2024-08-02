@@ -3,7 +3,8 @@ import ItemForm from "./ItemForm";
 
 export default function ShowcaseItem({ item, onDelete, onUpdate }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { title, category, ean, brand, images, condition, userDescription } = item.product.data;
+  const { title, category, ean, brand, images, condition, userDescription, forSale } = item.product.data || item.product;
+  console.log(item.product);
   const { id } = item;
   const imageUrl = images && images.length > 0 ? images[0] : null;
   const highest_recorded_price = item.highest_recorded_price || item.data?.highest_recorded_price;
@@ -21,7 +22,6 @@ export default function ShowcaseItem({ item, onDelete, onUpdate }) {
     setIsModalOpen(false);
   };
 
-
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="h-48 overflow-hidden">
@@ -38,6 +38,9 @@ export default function ShowcaseItem({ item, onDelete, onUpdate }) {
         <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Category:</span> {category || 'N/A'}</p>
         <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Code:</span> {ean || 'N/A'}</p>
         <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Brand:</span> {brand || 'N/A'}</p>
+        <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Condition:</span> {condition || 'N/A'}</p>
+        <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Description:</span> {userDescription || 'N/A'}</p>
+        <p className="text-sm text-gray-600 mb-1"><span className="font-medium">For Sale:</span> {forSale ? 'Yes' : 'No'}</p>
         <p className="text-sm text-gray-600"><span className="font-medium">Price:</span> {highest_recorded_price ? `$${highest_recorded_price}` : 'N/A'}</p>
         <div className="mt-4 flex justify-end space-x-2">
           <button
@@ -58,7 +61,7 @@ export default function ShowcaseItem({ item, onDelete, onUpdate }) {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={handleUpdate}
-        item={{ id, imageUrl, condition, userDescription }}
+        item={{ id, imageUrl, condition, userDescription, forSale }}
       />
     </div>
   );

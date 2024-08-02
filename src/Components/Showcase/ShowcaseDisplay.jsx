@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Box, Typography, Button, Grid, CircularProgress, Container, Paper } from "@mui/material";
 import ShowcaseItem from "./ShowcaseItem";
 import { useAuth } from "../../helpers/AuthContext";
+import {updateItemById} from '../../helpers/itemHelper'
 import { getShowcaseById, createShowcase, addItemsToShowcase, getShowcasesByUserUid, removeItemsFromShowcase } from "../../helpers/showcaseHelpers";
 import copy from 'copy-to-clipboard';
 
@@ -23,7 +24,7 @@ import copy from 'copy-to-clipboard';
         try {
           setIsLoading(true);
           const showcase = await getShowcaseById(id);
-          console.log('showcase', showcase);
+          // console.log('showcase', showcase);
           setShowcaseId(showcase.id);
 
           if (location.state?.items) {
@@ -88,16 +89,16 @@ import copy from 'copy-to-clipboard';
     }
   };
 
-  const handleUpdate = async (itemId, updatedData) => {
-    try {
-      const updatedItem = await updateItemInShowcase(itemId, updatedData);
-      console.log("Updated item:", updatedItem);
-      setItems(items.map(item => item.id === itemId ? updatedItem : item));
-    } catch (error) {
-      console.error("Error updating item:", error);
-      setError("Failed to update item. Please try again.");
-    }
-  };
+ const handleUpdate = async (itemId, updatedData) => {
+  try {
+    const updatedItem = await updateItemById(itemId, updatedData);
+    console.log("Updated item:", updatedItem);
+    setItems(items.map(item => item.id === itemId ? updatedItem : item));
+  } catch (error) {
+    console.error("Error updating item:", error);
+    setError("Failed to update item. Please try again.");
+  }
+};
 
   return (
     <Container maxWidth="lg" sx={{ mt: 12, mb: 4 }}>

@@ -24,9 +24,9 @@ export const createItem = async (uid, productEan) => {
 };
 
 
-export const updateItemById = async (id, name, description) => {
+export const updateItemById = async (id, updatedData) => {
   try {
-    const response = await axios.put(`${INTERNAL_API_URL}/${id}`, { name, description });
+    const response = await axios.put(`${INTERNAL_API_URL}/${id}`, updatedData);
     return response.data;
   } catch (error) {
     console.error('Error updating item:', error);
