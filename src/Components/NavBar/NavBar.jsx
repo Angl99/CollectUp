@@ -96,7 +96,7 @@ const AnimatedBottomNav = styled('div')(({ theme }) => ({
 }));
 
 // Styled component for each menu item in the bottom navigation
-const AnimatedMenuItem = styled('button')(({ theme, active, bgColorItem }) => ({
+const AnimatedMenuItem = styled('button')(({ theme }) => ({
   all: 'unset',
   flexGrow: 1,
   zIndex: 100,
@@ -107,35 +107,15 @@ const AnimatedMenuItem = styled('button')(({ theme, active, bgColorItem }) => ({
   alignItems: 'center',
   justifyContent: 'center',
   padding: '0.55em 0 0.85em',
-  transition: 'transform 0.7s',
-  transform: active ? 'translate3d(0, -0.8em, 0)' : 'none',
-  '&::before': {
-    content: '""',
-    zIndex: -1,
-    width: '4.2em',
-    height: '4.2em',
-    borderRadius: '50%',
-    position: 'absolute',
-    transform: active ? 'scale(1)' : 'scale(0)',
-    transition: 'background-color 0.7s, transform 0.7s',
-    backgroundColor: active ? bgColorItem : 'transparent',
-  },
 }));
 
 // Styled component for the icon in each menu item
-const AnimatedIcon = styled('svg')(({ theme, active }) => ({
+const AnimatedIcon = styled('div')(({ theme }) => ({
   width: '2.6em',
   height: '2.6em',
-  strokeMiterlimit: 10,
-  strokeLinecap: 'round',
-  strokeLinejoin: 'round',
-  strokeDasharray: 400,
-  animation: active ? 'strok 1.5s reverse' : 'none',
-  '@keyframes strok': {
-    '100%': {
-      strokeDashoffset: 400,
-    },
-  },
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 }));
 
 // Styled component for the border of the active menu item
@@ -258,11 +238,12 @@ export default function NavBar() {
 
   // Define menu items for the bottom navigation
   const menuItems = [
-  { icon: <HomeIcon />, path: '/', bgColor: theme.palette.primary.main },
-  { icon: <StoreIcon />, path: '/marketplace', bgColor: theme.palette.primary.main },
-  { icon: <ShowcaseIcon />, path: `/showcases/${showcaseId}`, bgColor: theme.palette.primary.main },
-  { icon: <AccountCircleIcon />, path: `/profile/${userId}`, bgColor: theme.palette.primary.main },
+    { icon: <HomeIcon />, outlinedIcon: <HomeOutlinedIcon />, path: '/' },
+    { icon: <StoreIcon />, outlinedIcon: <StoreOutlinedIcon />, path: '/marketplace' },
+    { icon: <ShowcaseIcon />, outlinedIcon: <ShowcaseOutlinedIcon />, path: `/showcases/${showcaseId}` },
+    { icon: <AccountCircleIcon />, outlinedIcon: <AccountCircleOutlinedIcon />, path: `/profile/${userId}` },
   ];
+
 
   // Define the top navigation bar
   const TopBar = (
@@ -359,28 +340,16 @@ export default function NavBar() {
   // Define the bottom navigation bar
   const BottomBar = (
     <AnimatedBottomNav>
-    {menuItems.map((item, index) => (
-      <AnimatedMenuItem
-        key={index}
-        active={activeIndex === index}
-        bgColorItem={item.bgColor}
-        onClick={() => handleItemClick(index, item.path)}
-      >
-        <AnimatedIcon viewBox="0 0 24 24" active={activeIndex === index}>
-          {item.icon}
+      {menuItems.map((item, index) => (
+        <AnimatedMenuItem
+          key={index}
+          onClick={() => handleItemClick(index, item.path)}
+        >
+          <AnimatedIcon>
+            {activeIndex === index ? item.outlinedIcon : item.icon}
           </AnimatedIcon>
         </AnimatedMenuItem>
       ))}
-      <MenuBorder activeIndex={activeIndex} />
-      <svg width="0" height="0">
-        <defs>
-          <clipPath id="menu" clipPathUnits="objectBoundingBox">
-            <path d="M6.7,45.5c5.7,0.1,14.1-0.4,23.3-4c5.7-2.3,9.9-5,18.1-10.5c10.7-7.1,11.8-9.2,20.6-14.3c5-2.9,9.2-5.2,15.2-7
-              c7.1-2.1,13.3-2.3,17.6-2.1c4.2-0.2,10.5,0.1,17.6,2.1c6.1,1.8,10.2,4.1,15.2,7c8.8,5,9.9,7.1,20.6,14.3c8.3,5.5,12.4,8.2,18.1,10.5
-              c9.2,3.6,17.6,4.2,23.3,4H6.7z" />
-          </clipPath>
-        </defs>
-      </svg>
     </AnimatedBottomNav>
   );
 
