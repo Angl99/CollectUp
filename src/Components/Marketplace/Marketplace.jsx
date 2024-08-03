@@ -8,22 +8,22 @@ const MarketplaceItem = ({ item, onAddToCart }) => (
   <Card className="h-full flex flex-col">
     <CardMedia
       component="img"
-      image={item.image}
-      alt={item.name}
+      image={item.imageUrl || item.product.images[0]}
+      alt={item.product.title}
       className="h-48 object-cover"
     />
     <CardContent className="flex-grow p-4">
       <Typography variant="h6" component="div" className="mb-2">
-        {item.name}
+        {item.product.title}
       </Typography>
       <Typography variant="body2" color="text.secondary" className="mb-2">
-        {item.description}
+        {item.userDescription || item.product.description}
       </Typography>
       <Typography variant="body1" color="text.primary" className="mb-1">
         Price: ${item.price}
       </Typography>
       <Typography variant="body2" color="text.secondary" className="mb-2">
-        Condition: {item.condition.charAt(0).toUpperCase() + item.condition.slice(1)}
+        Condition: {item.condition ? item.condition.charAt(0).toUpperCase() + item.condition.slice(1) : 'N/A'}
       </Typography>
     </CardContent>
     <div className="p-4 pt-0">
@@ -58,9 +58,7 @@ const Marketplace = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        // Fetch all items that are for sale (where forSale is true)
-        // The API returns a JSON array of item objects
-        const response = await axios.get('/api/items/getForSaleItems');
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/items`);
         if (Array.isArray(response.data)) {
           setItems(response.data);
         } else {
@@ -69,7 +67,6 @@ const Marketplace = () => {
         setLoading(false);
       } catch (err) {
         console.error('Error fetching items:', err);
-        // Simplified error message
         setError('Failed to fetch items');
         setLoading(false);
       }
