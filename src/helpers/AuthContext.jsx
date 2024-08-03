@@ -30,6 +30,9 @@ export const AuthProvider = ({ children }) => {
 
   const googleSignIn = async () => {
     try {
+      const backendUser = await create({ firstName: "", lastName: "", email: "test@gmail.com" });
+      console.log("Backend user created successfully", backendUser);
+
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       
@@ -37,15 +40,11 @@ export const AuthProvider = ({ children }) => {
       const lastName = result.user.displayName.split(' ')[1];
       const email = result.user.email;
       const firebaseUid = result.user.uid;
+      // Update the backend user with the Firebase UID
+      await updateById(backendUser.id, { firstName, lastName, email, uid: firebaseUid });
 
       // Create backend user first
       try {
-        const backendUser = await create({ firstName, lastName, email });
-        console.log("Backend user created successfully", backendUser);
-
-        // Update the backend user with the Firebase UID
-        await updateById(backendUser.id, { uid: firebaseUid });
-
         setUser(result.user);
         console.log('Google sign-in and user creation successful', result.user);
         navigate("/");

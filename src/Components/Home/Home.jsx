@@ -104,11 +104,6 @@ export default function Home() {
                         Welcome to Auction Alley, where anime enthusiasts and manga collectors unite. 
                         Explore, buy, and sell extraordinary items from your favorite series and artists.
                     </Typography>
-                    <Box component="ul" sx={{ listStyleType: 'disc', pl: 4 }}>
-                        <li>Rare manga volumes and special editions</li>
-                        <li>Authentic collectibles</li>
-                        <li>Connect with fellow otaku and collectors</li>
-                    </Box>
 
                     <Button 
                         variant="outlined" 
