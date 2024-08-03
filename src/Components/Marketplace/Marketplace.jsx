@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardMedia, Typography, Grid, Button, TextField, SwipeableDrawer, FormControl, FormControlLabel, Radio, RadioGroup, Slider, CircularProgress } from '@mui/material';
+import { Card, CardContent, CardMedia, Typography, Grid, Button, TextField, SwipeableDrawer, FormControl, FormControlLabel, Radio, RadioGroup, Slider, CircularProgress, Snackbar } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import axios from 'axios';
 
 // Component for individual marketplace items
-const MarketplaceItem = ({ item }) => (
+const MarketplaceItem = ({ item, onAddToCart }) => (
   <Card className="h-full flex flex-col">
     <CardMedia
       component="img"
@@ -52,6 +52,8 @@ const Marketplace = () => {
     condition: 'all'
   });
   const [tempFilters, setTempFilters] = useState({...filters});
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -97,6 +99,20 @@ const Marketplace = () => {
     (filters.condition === 'all' || item.condition === filters.condition)
   );
 
+  const handleAddToCart = (item) => {
+    // Here you would typically add the item to the cart in your state management solution
+    // For this example, we'll just show a snackbar notification
+    setSnackbarMessage(`${item.name} added to cart!`);
+    setSnackbarOpen(true);
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
+
   return (
     <div className="container mx-auto p-4 pt-24">
       <Typography variant="h4" component="h1" className="mb-6 text-center">
@@ -132,7 +148,7 @@ const Marketplace = () => {
         <Grid container spacing={4}>
           {filteredItems.map(item => (
             <Grid item xs={12} sm={6} key={item.id}>
-              <MarketplaceItem item={item} />
+              <MarketplaceItem item={item} onAddToCart={handleAddToCart} />
             </Grid>
           ))}
         </Grid>
@@ -183,6 +199,16 @@ const Marketplace = () => {
           </div>
         </div>
       </SwipeableDrawer>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        message={snackbarMessage}
+      />
     </div>
   );
 };
