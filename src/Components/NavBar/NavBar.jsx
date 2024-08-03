@@ -96,7 +96,7 @@ const AnimatedBottomNav = styled('div')(({ theme }) => ({
 }));
 
 // Styled component for each menu item in the bottom navigation
-const AnimatedMenuItem = styled('button')(({ theme, active, bgColorItem, isPlus }) => ({
+const AnimatedMenuItem = styled('button')(({ theme, active, bgColorItem }) => ({
   all: 'unset',
   flexGrow: 1,
   zIndex: 100,
@@ -108,17 +108,17 @@ const AnimatedMenuItem = styled('button')(({ theme, active, bgColorItem, isPlus 
   justifyContent: 'center',
   padding: '0.55em 0 0.85em',
   transition: 'transform 0.7s',
-  transform: isPlus ? 'translate3d(0, -1.2em, 0)' : (active ? 'translate3d(0, -0.8em, 0)' : 'none'),
+  transform: active ? 'translate3d(0, -0.8em, 0)' : 'none',
   '&::before': {
     content: '""',
     zIndex: -1,
-    width: isPlus ? '5em' : '4.2em',
-    height: isPlus ? '5em' : '4.2em',
+    width: '4.2em',
+    height: '4.2em',
     borderRadius: '50%',
     position: 'absolute',
-    transform: (active || isPlus) ? 'scale(1)' : 'scale(0)',
+    transform: active ? 'scale(1)' : 'scale(0)',
     transition: 'background-color 0.7s, transform 0.7s',
-    backgroundColor: isPlus ? theme.palette.primary.main : (active ? bgColorItem : 'transparent'),
+    backgroundColor: active ? bgColorItem : 'transparent',
   },
 }));
 
@@ -260,7 +260,6 @@ export default function NavBar() {
   const menuItems = [
   { icon: <HomeIcon />, path: '/', bgColor: theme.palette.primary.main },
   { icon: <StoreIcon />, path: '/marketplace', bgColor: theme.palette.primary.main },
-  { icon: <AddIcon />, path: '/genItem', bgColor: theme.palette.accent.main },
   { icon: <ShowcaseIcon />, path: `/showcases/${showcaseId}`, bgColor: theme.palette.primary.main },
   { icon: <AccountCircleIcon />, path: `/profile/${userId}`, bgColor: theme.palette.primary.main },
   ];
@@ -365,7 +364,6 @@ export default function NavBar() {
         key={index}
         active={activeIndex === index}
         bgColorItem={item.bgColor}
-        isPlus={index === 2} // Check if it's the plus button
         onClick={() => handleItemClick(index, item.path)}
       >
         <AnimatedIcon viewBox="0 0 24 24" active={activeIndex === index}>
