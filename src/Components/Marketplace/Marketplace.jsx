@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardMedia, Typography, Grid, Button, TextField, SwipeableDrawer, FormControl, FormControlLabel, Radio, RadioGroup, Slider } from '@mui/material';
+import { Card, CardContent, CardMedia, Typography, Grid, Button, TextField, SwipeableDrawer, FormControl, FormControlLabel, Radio, RadioGroup, Slider, CircularProgress } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import axios from 'axios';
 
 // Component for individual marketplace items
-const MarketplaceItem = ({ item, onAddToCart }) => (
+const MarketplaceItem = ({ item }) => (
   <Card className="h-full flex flex-col">
     <CardMedia
       component="img"
@@ -41,6 +42,8 @@ const MarketplaceItem = ({ item, onAddToCart }) => (
 // Main Marketplace component
 const Marketplace = () => {
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filters, setFilters] = useState({
@@ -51,14 +54,18 @@ const Marketplace = () => {
   const [tempFilters, setTempFilters] = useState({...filters});
 
   useEffect(() => {
-    setItems([
-        { id: 1, name: 'Item 1', description: 'Description 1', image: 'https://via.placeholder.com/150', category: 'figurines', price: 500, condition: 'new' },
-        { id: 2, name: 'Item 2', description: 'Description 2', image: 'https://via.placeholder.com/150', category: 'books', price: 50, condition: 'used' },
-        { id: 3, name: 'Item 3', description: 'Description 3', image: 'https://via.placeholder.com/150', category: 'figurines', price: 300, condition: 'used' },
-        { id: 4, name: 'Item 4', description: 'Description 4', image: 'https://via.placeholder.com/150', category: 'books', price: 25, condition: 'new' },
-        { id: 5, name: 'Item 5', description: 'Description 5', image: 'https://via.placeholder.com/150', category: 'figurines', price: 750, condition: 'new' },
-        { id: 6, name: 'Item 6', description: 'Description 6', image: 'https://via.placeholder.com/150', category: 'books', price: 100, condition: 'used' },
-    ]);
+    const fetchItems = async () => {
+      try {
+        const response = await axios.get('https://api.example.com/marketplace-items');
+        setItems(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to fetch items. Please try again later.');
+        setLoading(false);
+      }
+    };
+
+    fetchItems();
   }, []);
 
   const toggleDrawer = (open) => (event) => {
@@ -112,13 +119,23 @@ const Marketplace = () => {
           Filter
         </Button>
       </div>
-      <Grid container spacing={4}>
-        {filteredItems.map(item => (
-          <Grid item xs={12} sm={6} key={item.id}>
-            <MarketplaceItem item={item} />
-          </Grid>
-        ))}
-      </Grid>
+      {loading ? (
+        <div className="flex justify-center items-center h-64">
+          <CircularProgress />
+        </div>
+      ) : error ? (
+        <Typography color="error" className="text-center mt-8">
+          {error}
+        </Typography>
+      ) : (
+        <Grid container spacing={4}>
+          {filteredItems.map(item => (
+            <Grid item xs={12} sm={6} key={item.id}>
+              <MarketplaceItem item={item} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
       <SwipeableDrawer
         anchor="right"
         open={isFilterOpen}
