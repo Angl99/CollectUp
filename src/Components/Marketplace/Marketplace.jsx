@@ -56,6 +56,7 @@ const Marketplace = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
+        // Fetch all items that are for sale
         const response = await axios.get('/items');
         setItems(response.data);
         setLoading(false);
