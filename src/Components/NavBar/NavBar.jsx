@@ -146,6 +146,7 @@ export default function NavBar() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [showcaseId, setShowcaseId] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [showSearch, setShowSearch] = useState(false);
 
   // Effect to handle scroll events
   useEffect(() => {
@@ -194,11 +195,6 @@ export default function NavBar() {
     setLastScrollY(currentScrollY);
   };
 
-  // Functions to handle menu interactions
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -234,6 +230,10 @@ export default function NavBar() {
   const handleItemClick = (index, path) => {
     setActiveIndex(index);
     navigate(path);
+  };
+
+  const toggleSearch = () => {
+    setShowSearch(!showSearch);
   };
 
   // Define menu items for the bottom navigation
@@ -306,19 +306,33 @@ export default function NavBar() {
         </IconButton>
           </Link>
         )}
-        {/* Search bar */}
-        <Search>
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBase
-            placeholder="Search…"
-            inputProps={{ 'aria-label': 'search' }}
-          />
-        </Search>
 
-        {/* Account button */}
-        <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
+        {/* Search bar */}
+        {showSearch ? (
+          <Search sx={{ flexGrow: 1 }}>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search…"
+              inputProps={{ 'aria-label': 'search' }}
+              autoFocus
+            />
+          </Search>
+        ) : (
+          <Box sx={{ flexGrow: 1 }} />
+        )}
+
+        {/* Search and Account icons */}
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <IconButton
+            size="large"
+            aria-label="search"
+            onClick={toggleSearch}
+            color="inherit"
+          >
+            <SearchIcon />
+          </IconButton>
           <IconButton
             size="large"
             aria-label={user ? "account of current user" : "login/register"}
@@ -326,7 +340,6 @@ export default function NavBar() {
             aria-haspopup="true"
             onClick={() => navigate(user ? `/profile/${userId}` : '/login')}
             color="inherit"
-            sx={{ ml: 2 }}
           >
             <AccountCircleIcon />
           </IconButton>
