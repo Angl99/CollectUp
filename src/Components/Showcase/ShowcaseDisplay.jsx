@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { Box, Typography, Button, Grid, CircularProgress, Container, Paper } from "@mui/material";
+import { Box, Typography, Button, Grid, CircularProgress, Container, Paper, Fab } from "@mui/material";
 import ShowcaseItem from "./ShowcaseItem";
 import { useAuth } from "../../helpers/AuthContext";
 import { getShowcaseById, addItemsToShowcase, removeItemsFromShowcase } from "../../helpers/showcaseHelpers";
 import { updateItemById } from "../../helpers/itemHelper";
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import copy from 'copy-to-clipboard';
 
  function ShowcaseDisplay() {
@@ -15,7 +16,8 @@ import copy from 'copy-to-clipboard';
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showcaseId, setShowcaseId] = useState(null);
-  const {id} = useParams();
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const { id } = useParams();
 
   
   useEffect(() => {
@@ -56,6 +58,27 @@ import copy from 'copy-to-clipboard';
 
     loadOrCreateShowcase();
   }, [user, location.state, id]);
+
+  useEffect(() => {
+    const toggleVisibility = () => {
+      if (window.pageYOffset > 300) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+
+    window.addEventListener('scroll', toggleVisibility);
+
+    return () => window.removeEventListener('scroll', toggleVisibility);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
 
   if (isLoading) {
     return (
@@ -137,15 +160,24 @@ import copy from 'copy-to-clipboard';
           >
             Add Item
           </Button>
-          <Button 
-            variant="contained" 
-            color="primary" 
-            onClick={() => navigate('/')}
-          >
-            Back to Home
-          </Button>
         </Box>
       </Box>
+      {showScrollTop && (
+        <Box
+          onClick={scrollToTop}
+          role="presentation"
+          sx={{
+            position: 'fixed',
+            bottom: 16,
+            right: 16,
+            zIndex: 1000,
+          }}
+        >
+          <Fab color="primary" size="small" aria-label="scroll back to top">
+            <KeyboardArrowUpIcon />
+          </Fab>
+        </Box>
+      )}
     </Container>
   );
 }

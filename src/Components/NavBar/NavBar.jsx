@@ -81,17 +81,19 @@ const AnimatedBottomNav = styled('div')(({ theme }) => ({
 }));
 
 // component for each menu item in the bottom navigation
-const AnimatedMenuItem = styled('button')(({ theme }) => ({
+const AnimatedMenuItem = styled('button')(({ theme, active }) => ({
   all: 'unset',
   flexGrow: 1,
   zIndex: 100,
   display: 'flex',
+  flexDirection: 'column',
   cursor: 'pointer',
   position: 'relative',
   borderRadius: '50%',
   alignItems: 'center',
   justifyContent: 'center',
   padding: '0.55em 0 0.85em',
+  color: active ? theme.palette.primary.main : theme.palette.text.primary,
 }));
 
 // component for the icon in each menu item
@@ -101,6 +103,11 @@ const AnimatedIcon = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  marginBottom: '0.3em',
+}));
+
+const IconLabel = styled('span')(({ theme }) => ({
+  fontSize: '0.8em',
 }));
 
 export default function NavBar() {
@@ -213,9 +220,9 @@ export default function NavBar() {
 
   // define menu items for the bottom navigation
   const menuItems = [
-    { icon: <HomeIcon />, outlinedIcon: <HomeOutlinedIcon />, path: '/' },
-    { icon: <StoreIcon />, outlinedIcon: <StoreOutlinedIcon />, path: '/marketplace' },
-    { icon: <ShowcaseIcon />, outlinedIcon: <ShowcaseOutlinedIcon />, path: `/showcases/${showcaseId}` },
+    { icon: <HomeOutlinedIcon />, filledIcon: <HomeIcon />, path: '/', label: 'Home' },
+    { icon: <StoreOutlinedIcon />, filledIcon: <StoreIcon />, path: '/marketplace', label: 'Marketplace' },
+    { icon: <ShowcaseOutlinedIcon />, filledIcon: <ShowcaseIcon />, path: `/showcases/${showcaseId}`, label: 'Showcase' },
   ];
 
   // define the top navigation bar
@@ -327,10 +334,17 @@ export default function NavBar() {
         <AnimatedMenuItem
           key={index}
           onClick={() => handleItemClick(index, item.path)}
+          active={activeIndex === index}
         >
           <AnimatedIcon>
-            {activeIndex === index ? item.outlinedIcon : item.icon}
+            {React.cloneElement(
+              activeIndex === index ? item.filledIcon : item.icon,
+              {
+                color: activeIndex === index ? 'primary' : 'inherit',
+              }
+            )}
           </AnimatedIcon>
+          <IconLabel>{item.label}</IconLabel>
         </AnimatedMenuItem>
       ))}
     </AnimatedBottomNav>

@@ -41,7 +41,7 @@ export default function ShowcaseItem({ item, onDelete, onUpdate }) {
         <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Code:</span> {ean || 'N/A'}</p>
         <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Brand:</span> {brand || publisher || 'N/A'}</p>
         <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Price:</span> ${price}</p>
-        <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Condition:</span> {condition || 'N/A'}</p>
+        <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Condition:</span> {condition}</p>
         <p className="text-sm text-gray-600 mb-1"><span className="font-medium">For Sale:</span> {forSale ? 'Yes' : 'No'}</p>
         <div className="mt-4 flex justify-end space-x-2">
           <button

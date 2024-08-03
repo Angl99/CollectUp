@@ -352,7 +352,7 @@ export default function GenerateItem() {
                                         condition: item.condition,
                                         userDescription: item.userDescription,
                                         imgUrl: item.imgUrl,
-                                        highest_recorded_price: item.highest_recorded_price
+                                        highest_recorded_price: "1.00"
                                     }} />
                                 ))}
                                 <Button
