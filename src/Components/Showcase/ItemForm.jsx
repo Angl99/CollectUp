@@ -54,6 +54,33 @@ export default function EditModal({ isOpen, onClose, onSave, item }) {
               rows="3"
             ></textarea>
           </div>
+          <div className="mb-4">
+            <label className="block mb-2">For Sale</label>
+            <div>
+              <label className="inline-flex items-center mr-4">
+                <input
+                  type="radio"
+                  name="forSale"
+                  value="yes"
+                  checked={formData.forSale === "yes"}
+                  onChange={handleChange}
+                  className="mr-2"
+                />
+                Yes
+              </label>
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="forSale"
+                  value="no"
+                  checked={formData.forSale === "no"}
+                  onChange={handleChange}
+                  className="mr-2"
+                />
+                No
+              </label>
+            </div>
+          </div>
           <div className="flex justify-end space-x-2">
             <button
               type="button"

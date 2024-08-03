@@ -273,7 +273,7 @@ export default function GenerateItem() {
                                         />
                                         <Typography variant="body1" sx={{ mx: 1 }}>or</Typography>
                                         <Button variant="contained" onClick={handleOpenModal}>
-                                            Scan Code
+                                            Scan
                                         </Button>
                                     </Box>
                                     {itemType && <Typography variant="caption" display="block" gutterBottom>Detected Code Type: {itemType}</Typography>}
