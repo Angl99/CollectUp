@@ -72,7 +72,11 @@ const Marketplace = () => {
         if (err.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
-          setError(`Server error: ${err.response.status}. Please try again later.`);
+          if (err.response.status === 500) {
+            setError('Server error (500): The server encountered an unexpected condition. Please try again later.');
+          } else {
+            setError(`Server error: ${err.response.status}. Please try again later.`);
+          }
         } else if (err.request) {
           // The request was made but no response was received
           setError('Network error. Please check your internet connection.');
