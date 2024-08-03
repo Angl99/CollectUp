@@ -59,10 +59,16 @@ const Marketplace = () => {
     const fetchItems = async () => {
       try {
         // Fetch all items that are for sale (where forSale is true)
+        // The API returns a JSON array of item objects
         const response = await axios.get('/api/items/getForSaleItems');
-        setItems(response.data);
+        if (Array.isArray(response.data)) {
+          setItems(response.data);
+        } else {
+          throw new Error('Unexpected response format');
+        }
         setLoading(false);
       } catch (err) {
+        console.error('Error fetching items:', err);
         setError('Failed to fetch items. Please try again later.');
         setLoading(false);
       }
