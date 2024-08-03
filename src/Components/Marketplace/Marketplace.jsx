@@ -95,9 +95,10 @@ const Marketplace = () => {
     setTempFilters({...filters});
     setIsFilterOpen(false);
   };
+  console.log(items, searchTerm);
 
   const filteredItems = items.filter(item =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    item.product.data.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
     (filters.category === 'all' || item.category === filters.category) &&
     item.price >= filters.priceRange[0] && item.price <= filters.priceRange[1] &&
     (filters.condition === 'all' || item.condition === filters.condition)
