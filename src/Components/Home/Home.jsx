@@ -2,12 +2,11 @@ import React from 'react';
 import { useNavigate } from "react-router-dom";
 import { Button, Typography, Box, Paper, Grid, Stack } from '@mui/material';
 import Carousel from 'react-material-ui-carousel';
-import { Explore, AddBox, AccountBalanceWallet } from '@mui/icons-material';
+import { Explore } from '@mui/icons-material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import data from '../../mockData/data.json'
 import customBanner from '../../assets/AAfull.png';
 
-// Define a custom theme for the Home component
 const theme = createTheme({
   palette: {
     primary: {

@@ -6,7 +6,6 @@ import { getById } from '../../helpers/userHelpers';
 import { useAuth } from '../../helpers/AuthContext';
 import ProfileForm from './ProfileForm';
 
-// Create a custom theme for the Profile component
 const theme = createTheme({
   palette: {
     primary: {

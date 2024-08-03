@@ -14,7 +14,6 @@ import { create, getByFirebaseId } from '../../helpers/userHelpers';
 // Get Firebase auth instance
 const auth = getAuth();
 
-// Create a custom theme for the component
 const theme = createTheme({
   palette: {
     primary: {
