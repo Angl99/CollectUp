@@ -58,8 +58,8 @@ const Marketplace = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        // Fetch all items that are for sale
-        const response = await axios.get('/api/items/getAllItems');
+        // Fetch all items that are for sale (where forSale is true)
+        const response = await axios.get('/api/items/getForSaleItems');
         setItems(response.data);
         setLoading(false);
       } catch (err) {
