@@ -69,21 +69,8 @@ const Marketplace = () => {
         setLoading(false);
       } catch (err) {
         console.error('Error fetching items:', err);
-        if (err.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          if (err.response.status === 500) {
-            setError('Server error (500): The server encountered an unexpected condition. Please try again later.');
-          } else {
-            setError(`Server error: ${err.response.status}. Please try again later.`);
-          }
-        } else if (err.request) {
-          // The request was made but no response was received
-          setError('Network error. Please check your internet connection.');
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          setError('An unexpected error occurred. Please try again later.');
-        }
+        // Simplified error message
+        setError('Failed to fetch items');
         setLoading(false);
       }
     };
