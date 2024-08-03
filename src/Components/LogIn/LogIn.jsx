@@ -348,19 +348,19 @@ export default function Register() {
           >
             {/* Avatar icon */}
             <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-              {tabValue === 0 ? <LoginSharpIcon /> : <LockPersonSharp />}
+              {tabValue === 1 ? <LoginSharpIcon /> : <LockPersonSharp />}
             </Avatar>
             {/* Title */}
             <Typography component="h1" variant="h5" color="text.primary">
-              {tabValue ===  0 ? "Sign in to your account" : "Let's get your account set up!"}
+              {tabValue ===  1 ? "Sign in to your account" : "Let's get your account set up!"}
             </Typography>
             {/* Tabs for switching between Login and Sign Up */}
             <Tabs value={tabValue} onChange={handleTabChange} aria-label="auth tabs">
-              <Tab label="Login" />
               <Tab label="Sign Up" />
+              <Tab label="Login" />
             </Tabs>
             {/* Login form */}
-            <TabPanel value={tabValue} index={0}>
+            <TabPanel value={tabValue} index={1}>
               <Box component="form" onSubmit={handleLoginSubmit} noValidate sx={{ mt: 1 }}>
                 <TextField
                   margin="normal"
@@ -415,7 +415,7 @@ export default function Register() {
               </Box>
             </TabPanel>
             {/* Sign Up form */}
-            <TabPanel value={tabValue} index={1}>
+            <TabPanel value={tabValue} index={0}>
               <Box component="form" noValidate sx={{ mt: 3 }}>
                 {renderSignupStep()}
                 {/* Divider */}

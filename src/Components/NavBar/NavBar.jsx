@@ -241,9 +241,7 @@ export default function NavBar() {
     { icon: <HomeIcon />, outlinedIcon: <HomeOutlinedIcon />, path: '/' },
     { icon: <StoreIcon />, outlinedIcon: <StoreOutlinedIcon />, path: '/marketplace' },
     { icon: <ShowcaseIcon />, outlinedIcon: <ShowcaseOutlinedIcon />, path: `/showcases/${showcaseId}` },
-    { icon: <AccountCircleIcon />, outlinedIcon: <AccountCircleOutlinedIcon />, path: `/profile/${userId}` },
   ];
-
 
   // Define the top navigation bar
   const TopBar = (
@@ -318,18 +316,34 @@ export default function NavBar() {
             inputProps={{ 'aria-label': 'search' }}
           />
         </Search>
-        {/* More options menu for non-logged-in users */}
-        {!user && (
-          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
+        {/* User profile button for logged-in users */}
+        <Box sx={{ flexGrow: 1 }} />
+          {user && (
             <IconButton
               size="large"
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              onClick={handleMenu}
+              onClick={() => navigate(`/profile/${userId}`)}
               color="inherit"
+              sx={{ ml: 2 }}
             >
-              <MoreIcon />
+              <AccountCircleIcon />
+            </IconButton>
+          )}
+        {/* More options menu for non-logged-in users */}
+        {!user && (
+          <Box sx={{ flexGrow: 1 }}>
+            <IconButton
+              size="large"
+              aria-label="login/register"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={() => navigate(`/login`)}
+              color="inherit"
+              sx={{ ml: 2 }}
+            >
+              <AccountCircleIcon />
             </IconButton>
           </Box>
         )}
