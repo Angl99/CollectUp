@@ -3,7 +3,8 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Box, Typography, Button, Grid, CircularProgress, Container, Paper } from "@mui/material";
 import ShowcaseItem from "./ShowcaseItem";
 import { useAuth } from "../../helpers/AuthContext";
-import { getShowcaseById, createShowcase, addItemsToShowcase, getShowcasesByUserUid, removeItemsFromShowcase } from "../../helpers/showcaseHelpers";
+import { getShowcaseById, addItemsToShowcase, removeItemsFromShowcase } from "../../helpers/showcaseHelpers";
+import { updateItemById } from "../../helpers/itemHelper";
 import copy from 'copy-to-clipboard';
 
  function ShowcaseDisplay() {
@@ -90,7 +91,7 @@ import copy from 'copy-to-clipboard';
 
   const handleUpdate = async (itemId, updatedData) => {
     try {
-      const updatedItem = await updateItemInShowcase(itemId, updatedData);
+      const updatedItem = await updateItemById(itemId, updatedData);
       console.log("Updated item:", updatedItem);
       setItems(items.map(item => item.id === itemId ? updatedItem : item));
     } catch (error) {

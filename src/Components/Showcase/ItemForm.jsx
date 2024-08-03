@@ -5,6 +5,8 @@ export default function EditModal({ isOpen, onClose, onSave, item }) {
     imageUrl: item.imageUrl || "",
     condition: item.condition || "",
     userDescription: item.userDescription || "",
+    forSale: item.forSale ? "yes" : "no",
+    price: item.price || Math.min(item.product.data.offers.map((offer) => offer.price)),
   });
 
   const handleChange = (e) => {
@@ -42,6 +44,16 @@ export default function EditModal({ isOpen, onClose, onSave, item }) {
               value={formData.condition}
               onChange={handleChange}
               className="w-full p-2 border rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-2">Price</label>
+            <input
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+              type="number"
             />
           </div>
           <div className="mb-4">
