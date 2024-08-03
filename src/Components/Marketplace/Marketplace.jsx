@@ -57,7 +57,7 @@ const Marketplace = () => {
     const fetchItems = async () => {
       try {
         // Fetch all items that are for sale
-        const response = await axios.get('/items');
+        const response = await axios.get('/api/items/getAllItems');
         setItems(response.data);
         setLoading(false);
       } catch (err) {
