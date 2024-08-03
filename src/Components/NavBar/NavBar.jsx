@@ -316,37 +316,21 @@ export default function NavBar() {
             inputProps={{ 'aria-label': 'search' }}
           />
         </Search>
-        {/* User profile button for logged-in users */}
-        <Box sx={{ flexGrow: 1 }} />
-          {user && (
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={() => navigate(`/profile/${userId}`)}
-              color="inherit"
-              sx={{ ml: 2 }}
-            >
-              <AccountCircleIcon />
-            </IconButton>
-          )}
-        {/* More options menu for non-logged-in users */}
-        {!user && (
-          <Box sx={{ flexGrow: 1 }}>
-            <IconButton
-              size="large"
-              aria-label="login/register"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={() => navigate(`/login`)}
-              color="inherit"
-              sx={{ ml: 2 }}
-            >
-              <AccountCircleIcon />
-            </IconButton>
-          </Box>
-        )}
+
+        {/* Account button */}
+        <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
+          <IconButton
+            size="large"
+            aria-label={user ? "account of current user" : "login/register"}
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={() => navigate(user ? `/profile/${userId}` : '/login')}
+            color="inherit"
+            sx={{ ml: 2 }}
+          >
+            <AccountCircleIcon />
+          </IconButton>
+        </Box>
       </Toolbar>
     </AppBar>
   );
