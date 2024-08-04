@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
   const googleSignIn = async () => {
     try {
       // Create a new backend user
-      const backendUser = await create({ firstName: "", lastName: "", email: "abc123@gmail.com" });
+      const backendUser = await create({ firstName: "", lastName: "", email: "asdfasf12@gmail.com" });
       console.log("Backend user created successfully", backendUser);
 
       // Sign up with Google
