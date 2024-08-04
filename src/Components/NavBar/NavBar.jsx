@@ -134,7 +134,6 @@ export default function NavBar() {
   }, [lastScrollY]);
 
   // effect to set the showcase ID based on the user
-
   useEffect(() => {
     const getShowcaseId = async () => {
       if (user && user.uid) {
@@ -155,15 +154,9 @@ export default function NavBar() {
           console.error('Error fetching user data:', error);
         }
       }
-    };
-  
-    const timerId = setTimeout(() => {
-      getShowcaseId();
-    }, 3000); // 3000 milliseconds = 3 seconds
-  
-    // Cleanup the timeout if the component unmounts before the timeout completes
-    return () => clearTimeout(timerId);
-  }, [user]);
+    }
+    getShowcaseId();
+  }, [user])
 
   // handle scroll behavior
   const handleScroll = () => {
