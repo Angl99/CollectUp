@@ -46,22 +46,22 @@ export default function ShowcaseItem({ item, onDelete, onUpdate }) {
         <Typography variant="h5" component="div" gutterBottom sx={{ fontFamily: 'Komika Axis' }}>
           {title}
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Komika Axis' }}>
+        <Typography variant="body2" color="text.secondary">
           <strong>Category:</strong> {category || 'N/A'}
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Komika Axis' }}>
+        <Typography variant="body2" color="text.secondary">
           <strong>Code:</strong> {ean || 'N/A'}
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Komika Axis' }}>
+        <Typography variant="body2" color="text.secondary">
           <strong>Brand:</strong> {brand || publisher || 'N/A'}
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Komika Axis' }}>
+        <Typography variant="body2" color="text.secondary">
           <strong>Price:</strong> ${price}
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Komika Axis' }}>
+        <Typography variant="body2" color="text.secondary">
           <strong>Condition:</strong> {condition}
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Komika Axis' }}>
+        <Typography variant="body2" color="text.secondary">
           <strong>For Sale:</strong> {forSale ? 'Yes' : 'No'}
         </Typography>
       </CardContent>

@@ -151,7 +151,7 @@ import copy from 'copy-to-clipboard';
     <Container maxWidth="lg" sx={{ mt: 12, mb: 4 }}>
       <Box my={4}>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-          <Typography variant="h4" component="h1" sx={{ fontFamily: 'Komika Axis' }}>
+          <Typography variant="h5" component="h1" sx={{ fontFamily: 'Komika Axis' }}>
             Your Showcase
           </Typography>
           <Box>
