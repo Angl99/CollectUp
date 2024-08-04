@@ -97,7 +97,7 @@ export default function Home() {
                     mx: 'auto'
                 }}>
                     <Typography variant="h3" sx={{ mb: 4, fontFamily: 'Komika Axis' }}>
-                        Discover Anime & Manga Collectibles
+                        Organize. Collect. Grow.
                     </Typography>
                     <Typography variant="body1" sx={{ mb: 4, fontFamily: 'Komika Axis' }}>
                         Welcome to Auction Alley, where anime enthusiasts and manga collectors unite. 
