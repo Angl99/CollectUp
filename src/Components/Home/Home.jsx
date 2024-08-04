@@ -101,7 +101,6 @@ export default function Home() {
                     </Typography>
                     <Typography variant="body1" sx={{ mb: 4, fontFamily: 'Komika Axis' }}>
                         Welcome to Auction Alley, where anime enthusiasts and manga collectors unite. 
-                        Explore, buy, and sell extraordinary items from your favorite series and artists.
                     </Typography>
 
                     <Button 
