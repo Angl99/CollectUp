@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { AppBar, Toolbar, IconButton, InputBase, Box, Menu, MenuItem, Slide, Typography } from '@mui/material';
+import { AppBar, Toolbar, IconButton, InputBase, Box, Menu, MenuItem, Slide } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import { AuthContext } from "../../helpers/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -10,17 +10,13 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import StoreIcon from '@mui/icons-material/Store';
 import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import MoreIcon from '@mui/icons-material/MoreVert';
 import ShowcaseIcon from '@mui/icons-material/Collections';
 import ShowcaseOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import customMenuIcon from '../../assets/AA.png';
 import { getShowcasesByUserUid } from '../../helpers/showcaseHelpers';
 import { getByFirebaseId } from '../../helpers/userHelpers';
-import AddIcon from '@mui/icons-material/Add';
 
-// Create a custom theme for the NavBar
 const theme = createTheme({
   palette: {
     primary: {
@@ -41,7 +37,7 @@ const theme = createTheme({
   },
 });
 
-// Styled component for the search bar
+// component for the search bar
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -54,18 +50,7 @@ const Search = styled('div')(({ theme }) => ({
   width: '100%',
 }));
 
-// Styled component for the search icon wrapper
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-// Styled component for the input base of the search bar
+// component for the input base of the search bar
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'black',
   width: '100%',
@@ -77,7 +62,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-// Styled component for the animated bottom navigation
+// component for the animated bottom navigation
 const AnimatedBottomNav = styled('div')(({ theme }) => ({
   position: 'fixed',
   bottom: 0,
@@ -95,41 +80,34 @@ const AnimatedBottomNav = styled('div')(({ theme }) => ({
   },
 }));
 
-// Styled component for each menu item in the bottom navigation
-const AnimatedMenuItem = styled('button')(({ theme }) => ({
+// component for each menu item in the bottom navigation
+const AnimatedMenuItem = styled('button')(({ theme, active }) => ({
   all: 'unset',
   flexGrow: 1,
   zIndex: 100,
   display: 'flex',
+  flexDirection: 'column',
   cursor: 'pointer',
   position: 'relative',
   borderRadius: '50%',
   alignItems: 'center',
   justifyContent: 'center',
   padding: '0.55em 0 0.85em',
+  color: active ? theme.palette.primary.main : theme.palette.text.primary,
 }));
 
-// Styled component for the icon in each menu item
+// component for the icon in each menu item
 const AnimatedIcon = styled('div')(({ theme }) => ({
   width: '2.6em',
   height: '2.6em',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  marginBottom: '0.3em',
 }));
 
-// Styled component for the border of the active menu item
-const MenuBorder = styled('div')(({ theme, activeIndex }) => ({
-  left: 0,
-  bottom: '99%',
-  width: '10.9em',
-  height: '2.4em',
-  position: 'absolute',
-  clipPath: 'url(#menu)',
-  willChange: 'transform',
-  backgroundColor: theme.palette.primary.main,
-  transition: 'transform 0.7s',
-  transform: `translate3d(${activeIndex * 5.45}em, 0, 0)`,
+const IconLabel = styled('span')(({ theme }) => ({
+  fontSize: '0.8em',
 }));
 
 export default function NavBar() {
@@ -146,15 +124,16 @@ export default function NavBar() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [showcaseId, setShowcaseId] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [showSearch, setShowSearch] = useState(false);
 
-  // Effect to handle scroll events
+  // effect to handle scroll events
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
-  // Effect to set the showcase ID based on the user
+  // effect to set the showcase ID based on the user
   useEffect(() => {
     const getShowcaseId = async () => {
       if (user && user.uid) {
@@ -179,7 +158,7 @@ export default function NavBar() {
     getShowcaseId();
   }, [user])
 
-  // Function to handle scroll behavior
+  // handle scroll behavior
   const handleScroll = () => {
     const currentScrollY = window.scrollY;
 
@@ -194,26 +173,24 @@ export default function NavBar() {
     setLastScrollY(currentScrollY);
   };
 
-  // Functions to handle menu interactions
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
+  // handle menu item click
   const handleClose = () => {
     setAnchorEl(null);
   };
 
+  // handle logo menu item click
   const handleLogoClick = (event) => {
     if (user) {
       setLogoAnchorEl(event.currentTarget);
     }
   };
 
+  // handle logo menu close
   const handleLogoMenuClose = () => {
     setLogoAnchorEl(null);
   };
 
-  // Function to handle user logout
+  // handle user logout
   const handleLogout = async () => {
     try {
       await logout();
@@ -224,28 +201,31 @@ export default function NavBar() {
     handleClose();
   };
 
-  // Function to handle navigation
+  // handle navigation
   const handleNavigation = (path) => {
     navigate(path);
     handleClose();
   };
 
-  // Function to handle bottom navigation item clicks
+  // handle bottom navigation item clicks
   const handleItemClick = (index, path) => {
     setActiveIndex(index);
     navigate(path);
   };
 
-  // Define menu items for the bottom navigation
+  // toggle search
+  const toggleSearch = () => {
+    setShowSearch(!showSearch);
+  };
+
+  // define menu items for the bottom navigation
   const menuItems = [
-    { icon: <HomeIcon />, outlinedIcon: <HomeOutlinedIcon />, path: '/' },
-    { icon: <StoreIcon />, outlinedIcon: <StoreOutlinedIcon />, path: '/marketplace' },
-    { icon: <ShowcaseIcon />, outlinedIcon: <ShowcaseOutlinedIcon />, path: `/showcases/${showcaseId}` },
-    { icon: <AccountCircleIcon />, outlinedIcon: <AccountCircleOutlinedIcon />, path: `/profile/${userId}` },
+    { icon: <HomeOutlinedIcon />, filledIcon: <HomeIcon />, path: '/', label: 'Home' },
+    { icon: <StoreOutlinedIcon />, filledIcon: <StoreIcon />, path: '/marketplace', label: 'Marketplace' },
+    { icon: <ShowcaseOutlinedIcon />, filledIcon: <ShowcaseIcon />, path: `/showcases/${showcaseId}`, label: 'Showcase' },
   ];
 
-
-  // Define the top navigation bar
+  // define the top navigation bar
   const TopBar = (
     <AppBar position="fixed" sx={{ top: 0, bottom: 'auto', backgroundColor: alpha(theme.palette.primary.main, 0.9) }}>
       <Toolbar>
@@ -308,31 +288,41 @@ export default function NavBar() {
         </IconButton>
           </Link>
         )}
+
         {/* Search bar */}
-        <Search>
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBase
-            placeholder="Search…"
-            inputProps={{ 'aria-label': 'search' }}
-          />
-        </Search>
-        {/* More options menu for non-logged-in users */}
-        {!user && (
-          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenu}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </Box>
+        {showSearch ? (
+          <Search sx={{ flexGrow: 1 }}>
+            <StyledInputBase
+              placeholder="Search…"
+              inputProps={{ 'aria-label': 'search' }}
+              autoFocus
+            />
+          </Search>
+        ) : (
+          <Box sx={{ flexGrow: 1 }} />
         )}
+
+        {/* Search and Account icons */}
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <IconButton
+            size="large"
+            aria-label="search"
+            onClick={toggleSearch}
+            color="inherit"
+          >
+            <SearchIcon />
+          </IconButton>
+          <IconButton
+            size="large"
+            aria-label={user ? "account of current user" : "login/register"}
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={() => navigate(user ? `/profile/${userId}` : '/login')}
+            color="inherit"
+          >
+            <AccountCircleIcon />
+          </IconButton>
+        </Box>
       </Toolbar>
     </AppBar>
   );
@@ -344,10 +334,17 @@ export default function NavBar() {
         <AnimatedMenuItem
           key={index}
           onClick={() => handleItemClick(index, item.path)}
+          active={activeIndex === index}
         >
           <AnimatedIcon>
-            {activeIndex === index ? item.outlinedIcon : item.icon}
+            {React.cloneElement(
+              activeIndex === index ? item.filledIcon : item.icon,
+              {
+                color: activeIndex === index ? 'primary' : 'inherit',
+              }
+            )}
           </AnimatedIcon>
+          <IconLabel>{item.label}</IconLabel>
         </AnimatedMenuItem>
       ))}
     </AnimatedBottomNav>

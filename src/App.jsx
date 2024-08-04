@@ -9,10 +9,32 @@ import GenerateItem from './Components/Items/GenerateItem'
 import Marketplace from './Components/Marketplace/Marketplace'
 import BarcodeScanner from './Components/BarcodeScanner/BarcodeScanner'
 import ShowcaseDisplay from './Components/Showcase/ShowcaseDisplay'
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import '../src/assets/fonts/font.css'
+
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#3498db',
+        },
+        secondary: {
+            main: '#95a5a6',
+        },
+        accent: {
+            main: '#623c8c',
+        },
+        text: {
+            primary: '#34495e',
+        },
+        background: {
+            default: '#f0f3f5',
+        },
+    },
+});
 
 function App() {
   return (
-    <div>
+    <ThemeProvider theme={theme}>
       <Router>
         <AuthProvider>
           <NavBar />
@@ -27,7 +49,7 @@ function App() {
           </Routes>
         </AuthProvider>
       </Router>
-    </div>
+    </ThemeProvider>
   )
 }
 

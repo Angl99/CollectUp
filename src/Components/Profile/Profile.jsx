@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Grid, Card, CardContent, CardMedia, Button, Typography, Box, Avatar, Modal, useMediaQuery } from '@mui/material';
+import { Container, Grid, Card, CardContent, Button, Typography, Box, Avatar, Modal, useMediaQuery } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { getById } from '../../helpers/userHelpers';
 import { useAuth } from '../../helpers/AuthContext';
 import ProfileForm from './ProfileForm';
 
-// Create a custom theme for the Profile component
 const theme = createTheme({
   palette: {
     primary: {

@@ -2,12 +2,11 @@ import React from 'react';
 import { useNavigate } from "react-router-dom";
 import { Button, Typography, Box, Paper, Grid, Stack } from '@mui/material';
 import Carousel from 'react-material-ui-carousel';
-import { Explore, AddBox, AccountBalanceWallet } from '@mui/icons-material';
+import { Explore } from '@mui/icons-material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import data from '../../mockData/data.json'
 import customBanner from '../../assets/AAfull.png';
 
-// Define a custom theme for the Home component
 const theme = createTheme({
   palette: {
     primary: {
@@ -97,10 +96,10 @@ export default function Home() {
                     maxWidth: '4xl',
                     mx: 'auto'
                 }}>
-                    <Typography variant="h2" sx={{ mb: 4 }}>
+                    <Typography variant="h3" sx={{ mb: 4, fontFamily: 'Komika Axis' }}>
                         Discover Anime & Manga Collectibles
                     </Typography>
-                    <Typography variant="body1" sx={{ mb: 4 }}>
+                    <Typography variant="body1" sx={{ mb: 4, fontFamily: 'Komika Axis' }}>
                         Welcome to Auction Alley, where anime enthusiasts and manga collectors unite. 
                         Explore, buy, and sell extraordinary items from your favorite series and artists.
                     </Typography>

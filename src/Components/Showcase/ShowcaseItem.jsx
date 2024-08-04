@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { Card, CardMedia, CardContent, CardActions, Typography, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import ItemForm from "./ItemForm";
+import { PrimaryButton, SecondaryButton } from "../../helpers/ButtonSystem";
 
 export default function ShowcaseItem({ item, onDelete, onUpdate }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const { title, category, ean, brand, images, publisher, offers } = item.product.data;
-  console.log(item.product);
   const { userDescription, condition, forSale, imageUrl: itemImage } = item;
   const { id } = item;
   const imageUrl = itemImage || (images && images.length > 0 ? images[0] : null);
@@ -14,8 +16,17 @@ export default function ShowcaseItem({ item, onDelete, onUpdate }) {
     setIsModalOpen(true);
   };
 
-  const handleDelete = () => {
+  const handleDeleteClick = () => {
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
     onDelete(id);
+    setIsDeleteDialogOpen(false);
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteDialogOpen(false);
   };
 
   const handleUpdate = (updatedData) => {
@@ -23,47 +34,76 @@ export default function ShowcaseItem({ item, onDelete, onUpdate }) {
     setIsModalOpen(false);
   };
 
-
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="h-48 overflow-hidden">
-        {imageUrl ? (
-          <img src={imageUrl} alt={title} className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-            <span className="text-gray-500">No image available</span>
-          </div>
-        )}
-      </div>
-      <div className="p-4">
-        <h3 className="text-xl font-semibold mb-2 text-gray-800">{title}</h3>
-        <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Category:</span> {category || 'N/A'}</p>
-        <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Code:</span> {ean || 'N/A'}</p>
-        <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Brand:</span> {brand || publisher || 'N/A'}</p>
-        <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Price:</span> ${price}</p>
-        <p className="text-sm text-gray-600 mb-1"><span className="font-medium">Condition:</span> {condition || 'N/A'}</p>
-        <p className="text-sm text-gray-600 mb-1"><span className="font-medium">For Sale:</span> {forSale ? 'Yes' : 'No'}</p>
-        <div className="mt-4 flex justify-end space-x-2">
-          <button
-            onClick={handleEdit}
-            className="px-4 py-2 bg-white border border-blue-500 text-blue-500 rounded hover:bg-blue-600 hover:text-white"
-          >
-            Edit
-          </button>
-          <button
-            onClick={handleDelete}
-            className="px-4 py-2 bg-white border border-red-500 text-red-500 rounded hover:bg-red-600 hover:text-white"
-          >
-            Delete
-          </button>
-        </div>
-      </div>
+    <Card sx={{ maxWidth: 345, display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <CardMedia
+        component="img"
+        height="175"
+        image={imageUrl || 'https://via.placeholder.com/300x200?text=No+Image'}
+        alt={title}
+      />
+      <CardContent sx={{ flexGrow: 1 }}>
+        <Typography variant="h5" component="div" gutterBottom sx={{ fontFamily: 'Komika Axis' }}>
+          {title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Komika Axis' }}>
+          <strong>Category:</strong> {category || 'N/A'}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Komika Axis' }}>
+          <strong>Code:</strong> {ean || 'N/A'}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Komika Axis' }}>
+          <strong>Brand:</strong> {brand || publisher || 'N/A'}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Komika Axis' }}>
+          <strong>Price:</strong> ${price}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Komika Axis' }}>
+          <strong>Condition:</strong> {condition}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Komika Axis' }}>
+          <strong>For Sale:</strong> {forSale ? 'Yes' : 'No'}
+        </Typography>
+      </CardContent>
+      <CardActions sx={{ justifyContent: 'flex-end', padding: '16px' }}>
+        <SecondaryButton onClick={handleDeleteClick} sx={{ fontFamily: 'Komika Axis' }}>
+          Delete
+        </SecondaryButton>
+        <PrimaryButton onClick={handleEdit} sx={{ fontFamily: 'Komika Axis' }}>
+          Edit
+        </PrimaryButton>
+      </CardActions>
+
       <ItemForm
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={handleUpdate}
         item={{ id, imageUrl, condition, userDescription, price, forSale }}
       />
-    </div>
+
+      <Dialog
+        open={isDeleteDialogOpen}
+        onClose={handleCancelDelete}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title" sx={{ fontWeight: "bold" }}>
+          Confirm Delete
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this item?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <SecondaryButton onClick={handleCancelDelete}>
+            No
+          </SecondaryButton>
+          <PrimaryButton onClick={handleConfirmDelete} autoFocus>
+            Yes
+          </PrimaryButton>
+        </DialogActions>
+      </Dialog>
+    </Card>
   );
 }
