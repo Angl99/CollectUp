@@ -30,9 +30,11 @@ export const AuthProvider = ({ children }) => {
 
   const googleSignIn = async () => {
     try {
-      const backendUser = await create({ firstName: "", lastName: "", email: "test@gmail.com" });
+      // Create a new backend user
+      const backendUser = await create({ firstName: "", lastName: "", email: "abc123@gmail.com" });
       console.log("Backend user created successfully", backendUser);
 
+      // Sign up with Google
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       
@@ -40,22 +42,16 @@ export const AuthProvider = ({ children }) => {
       const lastName = result.user.displayName.split(' ')[1];
       const email = result.user.email;
       const firebaseUid = result.user.uid;
+      setUser(result.user);
       // Update the backend user with the Firebase UID
       await updateById(backendUser.id, { firstName, lastName, email, uid: firebaseUid });
-
-      // Create backend user first
-      try {
-        setUser(result.user);
-        console.log('Google sign-in and user creation successful', result.user);
-        navigate("/");
-      } catch (error) {
-        console.log('Error creating or updating backend user:', error);
-        // If backend user creation fails, sign out the Firebase user
-        await auth.signOut();
-        throw error;
-      }
+      console.log('Google sign-in and user creation successful', result.user);
+      navigate("/");
     } catch (error) {
-      console.error('Google sign-in error:', error);
+      console.log('Error creating or updating backend user:', error);
+      // If backend user creation fails, sign out the Firebase user
+      await auth.signOut();
+      throw error;
     }
   };
 

@@ -5,7 +5,7 @@ import Carousel from 'react-material-ui-carousel';
 import { Explore } from '@mui/icons-material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import data from '../../mockData/data.json'
-import customBanner from '../../assets/AAfull.png';
+import customBanner from '../../assets/wp7713574 copy.jpg';
 
 const theme = createTheme({
   palette: {
@@ -90,7 +90,8 @@ export default function Home() {
                 <Box sx={{
                     my: 9,
                     p: 8,
-                    background: (theme) => `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.accent.main} 90%)`,
+                    background: src => `url(${customBanner})`,
+                    // background: (theme) => `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.accent.main} 90%)`,
                     color: 'white',
                     borderRadius: 2,
                     maxWidth: '4xl',
