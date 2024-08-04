@@ -30,7 +30,7 @@ import copy from 'copy-to-clipboard';
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   
-  setTimeout(10000).useEffect(() => {
+  useEffect(() => {
     const loadOrCreateShowcase = async () => {
       if (user) {
         try {
@@ -38,7 +38,7 @@ import copy from 'copy-to-clipboard';
           const showcase = await getShowcaseById(id);
           console.log('showcase', showcase);
           setShowcaseId(showcase.id);
-
+  
           if (location.state?.items) {
             // Prepare items for adding to showcase
             const itemsToAdd = location.state.items.map(item => ({
@@ -50,7 +50,7 @@ import copy from 'copy-to-clipboard';
             // Add new items to the showcase
             await addItemsToShowcase(showcase.id, itemsToAdd);
           }
-
+  
           // Fetch updated showcase items
           const updatedShowcase = await getShowcaseById(showcase.id);
           setItems(updatedShowcase.items || []);
@@ -65,8 +65,13 @@ import copy from 'copy-to-clipboard';
         setIsLoading(false);
       }
     };
-
-    loadOrCreateShowcase();
+  
+    const timerId = setTimeout(() => {
+      loadOrCreateShowcase();
+    }, 5000); // 5000 milliseconds = 5 seconds
+  
+    // Cleanup the timeout if the component unmounts before the timeout completes
+    return () => clearTimeout(timerId);
   }, [user, location.state, id]);
 
   useEffect(() => {
