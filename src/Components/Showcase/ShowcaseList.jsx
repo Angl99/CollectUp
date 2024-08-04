@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-import { 
-  Grid, 
-  Button, 
-  Container, 
-  Box 
-} from '@mui/material';
+import { Grid, Button, Container, Box } from '@mui/material';
 import GridViewIcon from '@mui/icons-material/GridView';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import ShowcaseItem from './ShowcaseItem';

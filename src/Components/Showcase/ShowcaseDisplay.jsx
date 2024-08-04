@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { Box, Typography, Button, Grid, CircularProgress, Container, Paper, Fab, useMediaQuery, useTheme,IconButton,Tooltip,Dialog,DialogTitle, DialogContent, TextField, DialogActions,
-  Snackbar
-} from "@mui/material";
+import { Box, Typography, Button, Grid, CircularProgress, Container, Paper, Fab, useMediaQuery, useTheme,IconButton,Tooltip,Dialog,DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
 import ShowcaseItem from "./ShowcaseItem";
 import { useAuth } from "../../helpers/AuthContext";
 import { getShowcaseById, addItemsToShowcase, removeItemsFromShowcase } from "../../helpers/showcaseHelpers";

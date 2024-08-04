@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useContext } from 'react';
-import { Avatar, Button, CssBaseline, TextField, Link, Grid, Box, Typography, Container, Tabs, Tab, Alert } from '@mui/material';
+import { Avatar, Button, CssBaseline, TextField, Grid, Box, Typography, Container, Tabs, Tab, Alert } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../helpers/AuthContext";
@@ -9,7 +9,7 @@ import LoginSharpIcon from '@mui/icons-material/LoginSharp';
 import LockPersonSharp from '@mui/icons-material/LockPersonSharp';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { getAuth } from 'firebase/auth';
-import { create, getByFirebaseId } from '../../helpers/userHelpers';
+import { create } from '../../helpers/userHelpers';
 
 // Get Firebase auth instance
 const auth = getAuth();
