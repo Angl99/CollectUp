@@ -51,6 +51,9 @@ export const AuthProvider = ({ children }) => {
       const backendUser = await create({ firstName, lastName, email });
       console.log("Backend user created successfully", backendUser);
   
+      // Adding a delay to ensure backend user creation is propagated
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for 2 seconds
+  
       // Update the backend user with the Firebase UID
       await updateById(backendUser.id, { uid: firebaseUid });
   
@@ -67,6 +70,7 @@ export const AuthProvider = ({ children }) => {
       }
     }
   };
+  
   
 
   const login = async (email, password) => {

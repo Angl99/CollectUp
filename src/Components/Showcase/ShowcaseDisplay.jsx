@@ -35,23 +35,34 @@ import copy from 'copy-to-clipboard';
       if (user) {
         try {
           setIsLoading(true);
-          const showcase = await getShowcaseById(id);
-          console.log('showcase', showcase);
+          console.log('Fetching showcase by ID:', id);
+  
+          // Adding a retry mechanism for fetching showcase by ID
+          let showcase;
+          for (let i = 0; i < 5; i++) { // Retry up to 5 times
+            showcase = await getShowcaseById(id);
+            if (showcase) break;
+            console.log(`Retrying fetching showcase by ID: attempt ${i + 1}`);
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second before retrying
+          }
+  
+          if (!showcase) {
+            throw new Error('Failed to fetch showcase after multiple attempts');
+          }
+  
+          console.log('Showcase fetched:', showcase);
           setShowcaseId(showcase.id);
-
+  
           if (location.state?.items) {
-            // Prepare items for adding to showcase
             const itemsToAdd = location.state.items.map(item => ({
               productEan: item.data.ean,
               condition: item.condition,
               userDescription: item.userDescription,
               imgUrl: item.imgUrl
             }));
-            // Add new items to the showcase
             await addItemsToShowcase(showcase.id, itemsToAdd);
           }
-
-          // Fetch updated showcase items
+  
           const updatedShowcase = await getShowcaseById(showcase.id);
           setItems(updatedShowcase.items || []);
           setIsLoading(false);
@@ -65,9 +76,10 @@ import copy from 'copy-to-clipboard';
         setIsLoading(false);
       }
     };
-
+  
     loadOrCreateShowcase();
   }, [user, location.state, id]);
+  
 
   useEffect(() => {
     const toggleVisibility = () => {

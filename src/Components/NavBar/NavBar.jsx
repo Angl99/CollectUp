@@ -138,15 +138,20 @@ export default function NavBar() {
     const getShowcaseId = async () => {
       if (user && user.uid) {
         try {
+          console.log('Fetching showcases for user UID:', user.uid);
           const showcases = await getShowcasesByUserUid(user.uid);
           if (showcases && showcases.length > 0) {
             setShowcaseId(showcases[0].id);
+            console.log('Showcase ID set to:', showcases[0].id);
           } else {
             console.log('No showcases found for user');
           }
+  
+          console.log('Fetching user by Firebase ID:', user.uid);
           const currentUser = await getByFirebaseId(user.uid);
           if (currentUser) {
             setUserId(currentUser.id);
+            console.log('User ID set to:', currentUser.id);
           } else {
             console.log('User not found in backend');
           }
@@ -154,9 +159,11 @@ export default function NavBar() {
           console.error('Error fetching user data:', error);
         }
       }
-    }
+    };
+  
     getShowcaseId();
-  }, [user])
+  }, [user]);
+  
 
   // handle scroll behavior
   const handleScroll = () => {

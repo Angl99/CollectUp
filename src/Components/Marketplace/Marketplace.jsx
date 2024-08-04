@@ -95,7 +95,7 @@ const Marketplace = () => {
     setTempFilters({...filters});
     setIsFilterOpen(false);
   };
-  console.log(items, searchTerm);
+  // console.log(items, searchTerm);
 
   const filteredItems = items.filter(item =>
     item.product.data.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
