@@ -30,34 +30,44 @@ export const AuthProvider = ({ children }) => {
 
   const googleSignIn = async () => {
     try {
-      const backendUser = await create({ firstName: "", lastName: "", email: "test@gmail.com" });
-      console.log("Backend user created successfully", backendUser);
-
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
-      
-      const firstName = result.user.displayName.split(' ')[0];
-      const lastName = result.user.displayName.split(' ')[1];
+  
+      if (!result.user) {
+        throw new Error('No user returned from Google sign-in');
+      }
+  
+      const displayNameParts = result.user.displayName ? result.user.displayName.split(' ') : [];
+      const firstName = displayNameParts[0] || "";
+      const lastName = displayNameParts[1] || "";
       const email = result.user.email;
       const firebaseUid = result.user.uid;
-      // Update the backend user with the Firebase UID
-      await updateById(backendUser.id, { firstName, lastName, email, uid: firebaseUid });
-
-      // Create backend user first
-      try {
-        setUser(result.user);
-        console.log('Google sign-in and user creation successful', result.user);
-        navigate("/");
-      } catch (error) {
-        console.log('Error creating or updating backend user:', error);
-        // If backend user creation fails, sign out the Firebase user
-        await auth.signOut();
-        throw error;
+  
+      if (!email) {
+        throw new Error('No email returned from Google sign-in');
       }
+  
+      // Create backend user after getting user details from Google
+      const backendUser = await create({ firstName, lastName, email });
+      console.log("Backend user created successfully", backendUser);
+  
+      // Update the backend user with the Firebase UID
+      await updateById(backendUser.id, { uid: firebaseUid });
+  
+      // Set the user in the state and navigate
+      setUser(result.user);
+      console.log('Google sign-in and user creation successful', result.user);
+      navigate("/");
     } catch (error) {
-      console.error('Google sign-in error:', error);
+      console.log('Error during Google sign-in or backend user creation:', error);
+  
+      // If backend user creation fails, sign out the Firebase user
+      if (auth.currentUser) {
+        await auth.signOut();
+      }
     }
   };
+  
 
   const login = async (email, password) => {
     try {
