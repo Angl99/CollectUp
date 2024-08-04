@@ -30,49 +30,49 @@ import copy from 'copy-to-clipboard';
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   
-  useEffect(() => {
-    const loadOrCreateShowcase = async () => {
-      if (user) {
-        try {
-          setIsLoading(true);
-          const showcase = await getShowcaseById(id);
-          console.log('showcase', showcase);
-          setShowcaseId(showcase.id);
-  
-          if (location.state?.items) {
-            // Prepare items for adding to showcase
-            const itemsToAdd = location.state.items.map(item => ({
-              productEan: item.data.ean,
-              condition: item.condition,
-              userDescription: item.userDescription,
-              imgUrl: item.imgUrl
-            }));
-            // Add new items to the showcase
-            await addItemsToShowcase(showcase.id, itemsToAdd);
-          }
-  
-          // Fetch updated showcase items
-          const updatedShowcase = await getShowcaseById(showcase.id);
-          setItems(updatedShowcase.items || []);
-          setIsLoading(false);
-        } catch (err) {
-          console.error("Error loading or creating showcase:", err);
-          setError("Failed to load or create showcase. Please try again.");
-          setIsLoading(false);
+useEffect(() => {
+  const loadOrCreateShowcase = async () => {
+    if (user) {
+      try {
+        setIsLoading(true);
+        const showcase = await getShowcaseById(id);
+        console.log('showcase', showcase);
+        setShowcaseId(showcase.id);
+
+        if (location.state?.items) {
+          // Prepare items for adding to showcase
+          const itemsToAdd = location.state.items.map(item => ({
+            productEan: item.data.ean,
+            condition: item.condition,
+            userDescription: item.userDescription,
+            imgUrl: item.imgUrl
+          }));
+          // Add new items to the showcase
+          await addItemsToShowcase(showcase.id, itemsToAdd);
         }
-      } else {
-        setError("User not logged in.");
+
+        // Fetch updated showcase items
+        const updatedShowcase = await getShowcaseById(showcase.id);
+        setItems(updatedShowcase.items || []);
+        setIsLoading(false);
+      } catch (err) {
+        console.error("Error loading or creating showcase:", err);
+        setError("Failed to load or create showcase. Please try again.");
         setIsLoading(false);
       }
-    };
-  
-    const timerId = setTimeout(() => {
-      loadOrCreateShowcase();
-    }, 5000); // 5000 milliseconds = 5 seconds
-  
-    // Cleanup the timeout if the component unmounts before the timeout completes
-    return () => clearTimeout(timerId);
-  }, [user, location.state, id]);
+    } else {
+      setError("User not logged in.");
+      setIsLoading(false);
+    }
+  };
+
+  const timerId = setTimeout(() => {
+    loadOrCreateShowcase();
+  }, 3000); 
+
+  // Cleanup the timeout if the component unmounts before the timeout completes
+  return () => clearTimeout(timerId);
+}, [user, location.state, id]);
 
   useEffect(() => {
     const toggleVisibility = () => {
