@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { Box, Typography, Button, Grid, CircularProgress, Container, Paper, Fab, useMediaQuery, useTheme,IconButton,Tooltip,Dialog,DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
+import { Box, Typography, Button, Grid, CircularProgress, Container, Fab, useMediaQuery, useTheme, IconButton, Tooltip, Dialog,DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
 import ShowcaseItem from "./ShowcaseItem";
 import { useAuth } from "../../helpers/AuthContext";
 import { getShowcaseById, addItemsToShowcase, removeItemsFromShowcase } from "../../helpers/showcaseHelpers";
@@ -151,7 +151,7 @@ import copy from 'copy-to-clipboard';
     <Container maxWidth="lg" sx={{ mt: 12, mb: 4 }}>
       <Box my={4}>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-          <Typography variant="h4" component="h1">
+          <Typography variant="h4" component="h1" sx={{ fontFamily: 'Komika Axis' }}>
             Your Showcase
           </Typography>
           <Box>

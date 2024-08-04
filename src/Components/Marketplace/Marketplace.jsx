@@ -91,14 +91,14 @@ const Marketplace = () => {
 
   return (
     <div className="container mx-auto p-4 pt-24">
-      <Typography variant="h4" component="h1" className="mb-6 text-center">
+      <Typography variant="h4" component="h1" className="mb-6 text-center" sx={{ fontFamily: 'Komika Axis' }}>
         Marketplace
       </Typography>
       <div className="flex mb-6 mt-5">
         <TextField
           fullWidth
           variant="outlined"
-          placeholder="Search items..."
+          placeholder="Search marketplace items..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="mr-2"

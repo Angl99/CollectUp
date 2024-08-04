@@ -9,6 +9,7 @@ import { useAuth } from "../../helpers/AuthContext";
 import productHelper from "../../helpers/productHelpers";
 import { addItemsToFirstShowcase, getShowcasesByUserUid } from "../../helpers/showcaseHelpers";
 import BarcodeScanner from "../BarcodeScanner/BarcodeScanner";
+import { PrimaryButton, SecondaryButton } from "../../helpers/ButtonSystem";
 
 
 const theme = createTheme({
@@ -217,6 +218,10 @@ export default function GenerateItem() {
         }
     };
 
+    const handleDeleteItem = (indexToDelete) => {
+        setGeneratedItems(prevItems => prevItems.filter((_, index) => index !== indexToDelete));
+    };
+
     return (
         <Box sx={{
             background: 'linear-gradient(-45deg, #3498db, #623c8c, #95a5a6, #34495e)',
@@ -347,19 +352,32 @@ export default function GenerateItem() {
                             <>
                                 <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>Generated Items:</Typography>
                                 {generatedItems.map((item, index) => (
-                                    <ItemDisplay key={index} generatedItem={{
-                                        data: item,
-                                        condition: item.condition,
-                                        userDescription: item.userDescription,
-                                        imgUrl: item.imgUrl,
-                                        highest_recorded_price: "1.00"
-                                    }} />
+                                    <Box key={index} sx={{ mb: 3 }}>
+                                        <ItemDisplay generatedItem={{
+                                            data: item,
+                                            condition: item.condition,
+                                            userDescription: item.userDescription,
+                                            imgUrl: item.imgUrl,
+                                            highest_recorded_price: "1.00"
+                                        }} />
+                                        <Button 
+                                            variant="contained" 
+                                            fullWidth
+                                            onClick={() => handleDeleteItem(index)}
+                                            sx={{ 
+                                                mt: 1, 
+                                                bgcolor: 'secondary.main',
+                                            }}
+                                        >
+                                            Delete Item
+                                        </Button>
+                                    </Box>
                                 ))}
                                 <Button
                                     onClick={handleShowcaseSubmit}
                                     fullWidth
                                     variant="contained"
-                                    sx={{ mt: 3, mb: 2, bgcolor: 'secondary.main' }}
+                                    sx={{ mt: 3, mb: 2, bgcolor: 'primary.main' }}
                                 >
                                     Submit to Showcase
                                 </Button>
@@ -369,7 +387,7 @@ export default function GenerateItem() {
                                 No items generated yet.
                                 <br />
                                 Enter a code and click "Generate" to create an item.
-                                </Typography>
+                            </Typography>
                         )}
                     </Box>
                 </Container>

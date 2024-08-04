@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Card, CardMedia, CardContent, CardActions, Typography, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import ItemForm from "./ItemForm";
+import { PrimaryButton, SecondaryButton } from "../../helpers/ButtonSystem";
 
 export default function ShowcaseItem({ item, onDelete, onUpdate }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,35 +43,35 @@ export default function ShowcaseItem({ item, onDelete, onUpdate }) {
         alt={title}
       />
       <CardContent sx={{ flexGrow: 1 }}>
-        <Typography variant="h5" component="div" gutterBottom>
+        <Typography variant="h5" component="div" gutterBottom sx={{ fontFamily: 'Komika Axis' }}>
           {title}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Komika Axis' }}>
           <strong>Category:</strong> {category || 'N/A'}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Komika Axis' }}>
           <strong>Code:</strong> {ean || 'N/A'}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Komika Axis' }}>
           <strong>Brand:</strong> {brand || publisher || 'N/A'}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Komika Axis' }}>
           <strong>Price:</strong> ${price}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Komika Axis' }}>
           <strong>Condition:</strong> {condition}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Komika Axis' }}>
           <strong>For Sale:</strong> {forSale ? 'Yes' : 'No'}
         </Typography>
       </CardContent>
       <CardActions sx={{ justifyContent: 'flex-end', padding: '16px' }}>
-        <Button variant="outlined" color="error" onClick={handleDeleteClick}>
+        <SecondaryButton onClick={handleDeleteClick} sx={{ fontFamily: 'Komika Axis' }}>
           Delete
-        </Button>
-        <Button variant="outlined" color="primary" onClick={handleEdit}>
+        </SecondaryButton>
+        <PrimaryButton onClick={handleEdit} sx={{ fontFamily: 'Komika Axis' }}>
           Edit
-        </Button>
+        </PrimaryButton>
       </CardActions>
 
       <ItemForm
@@ -95,12 +96,12 @@ export default function ShowcaseItem({ item, onDelete, onUpdate }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancelDelete} color="primary">
+          <SecondaryButton onClick={handleCancelDelete}>
             No
-          </Button>
-          <Button onClick={handleConfirmDelete} color="error" autoFocus>
+          </SecondaryButton>
+          <PrimaryButton onClick={handleConfirmDelete} autoFocus>
             Yes
-          </Button>
+          </PrimaryButton>
         </DialogActions>
       </Dialog>
     </Card>
