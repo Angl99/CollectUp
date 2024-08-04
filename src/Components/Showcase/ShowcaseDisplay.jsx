@@ -30,7 +30,7 @@ import copy from 'copy-to-clipboard';
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   
-  useEffect(() => {
+  setTimeout(10000).useEffect(() => {
     const loadOrCreateShowcase = async () => {
       if (user) {
         try {
