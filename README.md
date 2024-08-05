@@ -21,7 +21,7 @@ Auction Alley is built using a robust and modern tech stack to ensure a scalable
 3. **MUI (Material-UI)**: For a sleek and professional user interface design, utilizing components from `@mui/material` and `@mui/icons-material`.
 4. **Emotion**: Styled components with `@emotion/react` and `@emotion/styled` for powerful and flexible CSS styling.
 5. **Axios**: For efficient and simple HTTP requests.
-6. **Quagga** and **Barcode Detector Polyfill**: For barcode scanning capabilities, enhancing the ease of adding items to collections.
+6. **Barcode Detection API** and **Barcode Detector Polyfill**: For barcode scanning capabilities, enhancing the ease of adding items to collections.
 7. **GSAP**: For advanced animations and user interface effects.
 8. **React Router**: Ensuring smooth navigation across different parts of the application.
 9. **TailwindCSS**: Utility-first CSS framework for rapid UI development.
@@ -34,8 +34,7 @@ Auction Alley is built using a robust and modern tech stack to ensure a scalable
 3. **PostgreSQL**: Our choice of database for reliable and scalable data storage.
 4. **Firebase**: For authentication and real-time database functionalities.
 5. **CORS**: Enabling secure cross-origin requests.
-6. **Dotenv**: For secure environment variable management.
-7. **Jest** and **Supertest**: For comprehensive testing and ensuring code reliability.
+6. **Jest** and **Supertest**: For comprehensive testing and ensuring code reliability.
 
 ## Features 😎
 
