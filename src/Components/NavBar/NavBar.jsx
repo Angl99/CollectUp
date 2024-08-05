@@ -140,7 +140,10 @@ export default function NavBar() {
 
   // effect to set the showcase ID based on the user
   useEffect(() => {
-    const getShowcaseId = async () => {
+    const getShowcaseId = async (retryCount = 0) => {
+      if (retryCount >= 3) {
+        return;
+      }
       if (user && user.uid) {
         try {
           const showcases = await getShowcasesByUserUid(user.uid);
@@ -156,6 +159,9 @@ export default function NavBar() {
             console.log('User not found in backend');
           }
         } catch (error) {
+          setTimeout(() => {
+            getShowcaseId(retryCount + 1);
+          },1000);
           console.error('Error fetching user data:', error);
         }
       }

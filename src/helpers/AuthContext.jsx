@@ -29,9 +29,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   const googleSignIn = async () => {
+    let backendUser;
     try {
       // Create a new backend user
-      const backendUser = await create({ firstName: "", lastName: "", email: "asdfasf12@gmail.com" });
+      backendUser = await create({ firstName: "", lastName: "", email: "asdfasf12@gmail.com" });
       console.log("Backend user created successfully", backendUser);
 
       // Sign up with Google
@@ -48,6 +49,9 @@ export const AuthProvider = ({ children }) => {
       console.log('Google sign-in and user creation successful', result.user);
       navigate("/");
     } catch (error) {
+      if (backendUser && !backendUser.first_name) {
+        await deleteById(backendUser.id)
+      }
       console.log('Error creating or updating backend user:', error);
       // If backend user creation fails, sign out the Firebase user
       await auth.signOut();

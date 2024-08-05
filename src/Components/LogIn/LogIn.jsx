@@ -9,7 +9,7 @@ import LoginSharpIcon from '@mui/icons-material/LoginSharp';
 import LockPersonSharp from '@mui/icons-material/LockPersonSharp';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { getAuth } from 'firebase/auth';
-import { create } from '../../helpers/userHelpers';
+import { create, updateById } from '../../helpers/userHelpers';
 
 // Get Firebase auth instance
 const auth = getAuth();
@@ -141,8 +141,9 @@ export default function Register() {
     setShowPasswordAlert(false);
 
     try {
+      const backendUser = await create({email, firstName, lastName});
       const { uid } = await signup(email, password);
-      await create({email, uid, firstName, lastName});
+      await updateById(backendUser.id, {email, uid, firstName, lastName});
       navigate("/");
       console.log("User added successfully");
     } catch (error) {
