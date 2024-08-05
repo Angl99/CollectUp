@@ -8,7 +8,7 @@ const MarketplaceItem = ({ item, onAddToCart }) => (
   <Card className="h-full flex flex-col">
     <CardMedia
       component="img"
-      image={item.imageUrl || item.product.images[0]}
+      image={item.imageUrl || (item.product?.images || [])[0]}
       alt={item.product.title}
       className="h-48 object-cover"
     />

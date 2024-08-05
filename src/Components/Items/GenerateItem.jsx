@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button, Container, Box, Typography, Grid, Avatar, CssBaseline, Select, MenuItem, FormControl, InputLabel, Modal } from '@mui/material';
+import { TextField, Radio, FormControlLabel, FormLabel,RadioGroup, Button, Container, Box, Typography, Grid, Avatar, CssBaseline, Select, MenuItem, FormControl, InputLabel, Modal } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ItemDisplay from "./ItemDisplay";
@@ -41,6 +41,8 @@ export default function GenerateItem() {
     const [condition, setCondition] = useState("");
     const [userDescription, setUserDescription] = useState("");
     const [imgUrl, setImgUrl] = useState("");
+    const [price, setPrice] = useState("");
+    const [forSale, setForSale] = useState(false);
     const [generatedItems, setGeneratedItems] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -81,6 +83,12 @@ export default function GenerateItem() {
                 break;
             case "user-description":
                 setUserDescription(value);
+                break;
+            case "price":
+                setPrice(value);
+                break;
+            case "forSale":
+                setForSale(value);
                 break;
             default:
                 break;
@@ -123,12 +131,16 @@ export default function GenerateItem() {
                     product.ean, 
                     imgUrl, 
                     condition, 
-                    userDescription
+                    userDescription,
+                    price,
+                    forSale
                 );
                 newItem.data = product;
                 newItem.condition = condition;
                 newItem.userDescription = userDescription;
                 newItem.imgUrl = imgUrl;
+                newItem.price = price;
+                newItem.forSale = forSale;
                 console.log("Existing product: ", newItem);    
                 setGeneratedItems(prevItems => [...prevItems, newItem]);
             } else {
@@ -153,6 +165,8 @@ export default function GenerateItem() {
                         newItem.condition = condition;
                         newItem.userDescription = userDescription;
                         newItem.imgUrl = imgUrl;
+                        newItem.price = price;
+                        newItem.forSale = forSale;
                         console.log("New item created!!");
                         console.log("Newly created prod: ", newItem);
                         
@@ -298,7 +312,7 @@ export default function GenerateItem() {
                                             <MenuItem value="New">New</MenuItem>
                                             <MenuItem value="New-BoxOpen">New-Box Open</MenuItem>
                                             <MenuItem value="Good">Good</MenuItem>
-                                            <MenuItem value="Acceptable">Acceptable</MenuItem>
+                                            <MenuItem value="Used">Used</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>
@@ -314,6 +328,32 @@ export default function GenerateItem() {
                                         multiline
                                         rows={3}
                                     />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        type="number"
+                                        fullWidth
+                                        id="price"
+                                        label="price"
+                                        name="price"
+                                        value={price}
+                                        onChange={handleInputChange}
+                                        placeholder="Enter price"
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <FormControl component="fieldset" margin="normal">
+                                        <FormLabel component="legend">For Sale</FormLabel>
+                                        <RadioGroup
+                                        row
+                                        name="forSale"
+                                        value={forSale}
+                                        onChange={handleInputChange}
+                                        >
+                                        <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+                                        <FormControlLabel value="no" control={<Radio />} label="No" />
+                                        </RadioGroup>
+                                    </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <input
@@ -358,7 +398,8 @@ export default function GenerateItem() {
                                             condition: item.condition,
                                             userDescription: item.userDescription,
                                             imgUrl: item.imgUrl,
-                                            highest_recorded_price: "1.00"
+                                            price: item.price,
+                                            forSale: item.forSale
                                         }} />
                                         <Button 
                                             variant="contained" 
