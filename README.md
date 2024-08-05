@@ -6,7 +6,7 @@
 
 ## Introduction 📝
 
-Auction Alley is a dedicated platform designed for enthusiasts and collectors of Anime, Comic Book, and Geek culture merchandise and memorabilia. Our goal is to provide a seamless and engaging user experience for collectors to display, purchase, sell, and manage their collections. With features like barcode scanning for item information, an online marketplace for price comparison, and stock tracking tools for item value history, Auction Alley stands out as the go-to hub for collectors.
+Auction Alley is a dedicated platform designed for enthusiasts and collectors of Anime, Comic Book, and Geek culture merchandise and memorabilia. Our goal is to provide a seamless and engaging user experience for collectors to display, purchase, sell, and manage their collections. With features like barcode scanning for item information, an online marketplace for price comparison, and value tracking tools for items. Auction Alley stands out as the go-to hub for collectors.
 
 ## Core Technologies 💻
 
