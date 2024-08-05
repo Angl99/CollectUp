@@ -1,9 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { AppBar, Toolbar, IconButton, InputBase, Box, Menu, MenuItem, Slide } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import { AppBar, Toolbar, IconButton, InputBase, Box, Menu, MenuItem, Slide, Autocomplete, TextField } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import { AuthContext } from "../../helpers/AuthContext";
-import { useNavigate } from "react-router-dom";
 import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
@@ -16,6 +15,10 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import customMenuIcon from '../../assets/AA.png';
 import { getShowcasesByUserUid } from '../../helpers/showcaseHelpers';
 import { getByFirebaseId } from '../../helpers/userHelpers';
+import productHelper from '../../helpers/productHelpers';
+import { Try } from '@mui/icons-material';
+
+const { getAllProducts } = productHelper
 
 const theme = createTheme({
   palette: {
@@ -114,7 +117,7 @@ export default function NavBar() {
   // Get user and logout function from AuthContext
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  
+
   // State variables for menu controls and navigation bar visibility
   const [anchorEl, setAnchorEl] = useState(null);
   const [logoAnchorEl, setLogoAnchorEl] = useState(null);
@@ -125,6 +128,8 @@ export default function NavBar() {
   const [showcaseId, setShowcaseId] = useState(null);
   const [userId, setUserId] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
+  const [searchProducts, setSearchProducts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // effect to handle scroll events
   useEffect(() => {
@@ -157,6 +162,18 @@ export default function NavBar() {
     }
     getShowcaseId();
   }, [user])
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const products = await getAllProducts();
+        setSearchProducts(products.map(product => ({ ...product, label: product.data.title })));
+      } catch (error) {
+
+      }
+    }
+    getProducts()
+  }, [])
 
   // handle scroll behavior
   const handleScroll = () => {
@@ -218,6 +235,12 @@ export default function NavBar() {
     setShowSearch(!showSearch);
   };
 
+  const renderOption = (props, option) => (
+    <div onClick={() => {
+        setSearchQuery("")
+        navigate(`/products/${option.ean}`)
+      }}><img src={option.data.images[0]} /><span>{option.data.title}</span></div>)
+
   // define menu items for the bottom navigation
   const menuItems = [
     { icon: <HomeOutlinedIcon />, filledIcon: <HomeIcon />, path: '/', label: 'Home' },
@@ -233,8 +256,8 @@ export default function NavBar() {
           // Logo button for logged-in users
           <IconButton
             onClick={handleLogoClick}
-            sx={{ 
-              color: 'black', 
+            sx={{
+              color: 'black',
               mr: 2,
               width: '64px',
               height: '64px',
@@ -242,62 +265,67 @@ export default function NavBar() {
               overflow: 'hidden',
             }}
           >
-          <Box
-            component="img"
-            src={customMenuIcon}
-            alt="Menu"
-            sx={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              transition: 'transform 0.3s ease',
-              '&:hover': {
-                transform: 'scale(1.1)',
-              },
-            }}
-          />
-        </IconButton>
+            <Box
+              component="img"
+              src={customMenuIcon}
+              alt="Menu"
+              sx={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                transition: 'transform 0.3s ease',
+                '&:hover': {
+                  transform: 'scale(1.1)',
+                },
+              }}
+            />
+          </IconButton>
         ) : (
           // Logo button for non-logged-in users
           <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
             <IconButton
-            onClick={handleLogoClick}
-            sx={{ 
-              color: 'black', 
-              mr: 2,
-              width: '64px',
-              height: '64px',
-              padding: 0,
-              overflow: 'hidden',
-            }}
-          >
-          <Box
-            component="img"
-            src={customMenuIcon}
-            alt="Menu"
-            sx={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              transition: 'transform 0.3s ease',
-              '&:hover': {
-                transform: 'scale(1.1)',
-              },
-            }}
-          />
-        </IconButton>
+              onClick={handleLogoClick}
+              sx={{
+                color: 'black',
+                mr: 2,
+                width: '64px',
+                height: '64px',
+                padding: 0,
+                overflow: 'hidden',
+              }}
+            >
+              <Box
+                component="img"
+                src={customMenuIcon}
+                alt="Menu"
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  transition: 'transform 0.3s ease',
+                  '&:hover': {
+                    transform: 'scale(1.1)',
+                  },
+                }}
+              />
+            </IconButton>
           </Link>
         )}
 
         {/* Search bar */}
         {showSearch ? (
-          <Search sx={{ flexGrow: 1 }}>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-              autoFocus
-            />
-          </Search>
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={searchProducts}
+            openOnFocus={false}
+            sx={{ width: 300 }}
+            renderInput={(params) => <TextField {...params} label="Search" />}
+            value={searchQuery}
+            onInputChange={(e, v) => setSearchQuery(v)}
+            renderOption={renderOption}
+            open={!!searchQuery}
+          />
         ) : (
           <Box sx={{ flexGrow: 1 }} />
         )}
