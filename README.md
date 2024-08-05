@@ -1,5 +1,8 @@
+# Auction Alley: 
+
 ![Auction_Alley_Banner](/src/assets/Project_Imgs/Auction_Alley_Banner.png)
-# Auction Alley: The Ultimate Collector Hub and Marketplace 🚀
+
+# The Ultimate Collector Hub and Marketplace 🚀
 
 ## Introduction 📝
 
