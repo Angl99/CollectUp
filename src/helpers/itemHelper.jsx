@@ -13,9 +13,9 @@ export const getAllItems = async () => {
 };
 
 
-export const createItem = async (uid, productEan) => {
+export const createItem = async (uid, productEan, imgUrl, condition, userDescription) => {
   try {
-    const response = await axios.post(INTERNAL_API_URL, { uid, productEan });
+    const response = await axios.post(INTERNAL_API_URL, { uid, productEan, imgUrl, condition, userDescription });
     return response.data;
   } catch (error) {
     console.error('Error creating item:', error);

@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect, createContext } from "react";
 import { auth } from "../Components/firebase/firebaseConfig";
 import { doCreateUserWithEmailAndPassword, doSignInWithEmailAndPassword, doSignOut } from "../Components/firebase/auth";
 import { onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { create, updateById } from "../helpers/userHelpers";
+import { create, deleteById, updateById, getByFirebaseId } from "../helpers/userHelpers";
 import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
@@ -52,6 +52,7 @@ export const AuthProvider = ({ children }) => {
       if (backendUser && !backendUser.first_name) {
         await deleteById(backendUser.id)
       }
+
       console.log('Error creating or updating backend user:', error);
       // If backend user creation fails, sign out the Firebase user
       await auth.signOut();
