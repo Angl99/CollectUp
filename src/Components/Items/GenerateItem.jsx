@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { TextField, Radio, FormControlLabel, FormLabel, RadioGroup, Button, Container, Box, Typography, Grid, Avatar, CssBaseline, Select, MenuItem, FormControl, InputLabel, Modal, List, ListItem, ListItemText } from '@mui/material';
+import { TextField, Radio, FormControlLabel, FormLabel, RadioGroup, Button, Container, Box, Typography, Grid, Avatar, CssBaseline, Select, MenuItem, FormControl, InputLabel, Modal, List, ListItem, ListItemText, Card, CardMedia, CardContent } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ItemDisplay from "./ItemDisplay";
@@ -486,11 +486,27 @@ function GenerateItem() {
                                     button 
                                     key={index} 
                                     onClick={() => handleProductSelect(product)}
+                                    sx={{ padding: 0, marginBottom: 2 }}
                                 >
-                                    <ListItemText 
-                                        primary={product.title || 'Unknown Title'} 
-                                        secondary={`UPC: ${product.upc || 'N/A'}, EAN: ${product.ean || 'N/A'}`} 
-                                    />
+                                    <Card sx={{ display: 'flex', width: '100%' }}>
+                                        <CardMedia
+                                            component="img"
+                                            sx={{ width: 100, height: 100, objectFit: 'contain' }}
+                                            image={product.images && product.images.length > 0 ? product.images[0] : 'https://via.placeholder.com/100x100?text=No+Image'}
+                                            alt={product.title || 'Product Image'}
+                                        />
+                                        <CardContent sx={{ flex: '1 0 auto' }}>
+                                            <Typography variant="h6" component="div" sx={{ fontFamily: 'Komika Axis' }}>
+                                                {product.title || 'Unknown Title'}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                UPC: {product.upc || 'N/A'}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                EAN: {product.ean || 'N/A'}
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
                                 </ListItem>
                             ))}
                         </List>
