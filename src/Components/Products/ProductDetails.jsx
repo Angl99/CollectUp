@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Typography, Grid, Container, Box } from '@mui/material';
 import ProductItem from './ProductItem';
 import { useAuth } from '../../helpers/AuthContext';
+import { getByFirebaseId } from '../../helpers/userHelpers';
 
 const ProductDetails = () => {
   const { productEan } = useParams();
@@ -11,12 +12,14 @@ const ProductDetails = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { user } = useAuth();
+  const [currentUser, setCurrentUser] = useState(null);
+  const { user: firebaseUser } = useAuth();
 
   useEffect(() => {
-    const fetchProductDetails = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
+        
         // Fetch product details
         const productResponse = await axios.get(`${import.meta.env.VITE_API_URL}/products/${productEan}`);
         setProduct(productResponse.data);
@@ -25,16 +28,22 @@ const ProductDetails = () => {
         const itemsResponse = await axios.get(`${import.meta.env.VITE_API_URL}/products/${productEan}/items`);
         setItems(itemsResponse.data);
 
+        // Fetch current user data if firebaseUser exists
+        if (firebaseUser) {
+          const userData = await getByFirebaseId(firebaseUser.uid);
+          setCurrentUser(userData);
+        }
+
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching product details:', error);
-        setError('Failed to load product details. Please try again later.');
+        console.error('Error fetching data:', error);
+        setError('Failed to load data. Please try again later.');
         setLoading(false);
       }
     };
 
-    fetchProductDetails();
-  }, [productEan]);
+    fetchData();
+  }, [productEan, firebaseUser]);
 
   const handleDeleteItem = async (itemId) => {
     try {
@@ -86,7 +95,7 @@ const ProductDetails = () => {
                 item={item}
                 onDelete={handleDeleteItem}
                 onUpdate={handleUpdateItem}
-                isOwner={user && user.id === item.userId}
+                isOwner={currentUser && currentUser.id === item.userId}
               />
             </Grid>
           ))}
