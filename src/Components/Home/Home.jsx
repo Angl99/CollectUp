@@ -115,29 +115,6 @@ export default function Home() {
                     </Button>
                 </Box>
 
-                {/* Categories section */}
-                <Box sx={{ my: 8, mx: 'auto', maxWidth: '4xl' }}>
-                    <Typography variant="h4" sx={{ mb: 4, textAlign: 'center' }}>Categories</Typography>
-                    <Grid container spacing={3}>
-                        {[
-                            { name: 'Manga', icon: '📚' },
-                            { name: 'Anime Art', icon: '🎨' },
-                            { name: 'Figurines', icon: '🗿' },
-                            { name: 'Merchandise', icon: '👕' },
-                        ].map((category) => (
-                            <Grid item xs={6} sm={3} key={category.name}>
-                                <Button 
-                                    variant="outlined" 
-                                    sx={{ width: '100%', height: '6rem', fontSize: '1.125rem' }}
-                                    startIcon={<span style={{ fontSize: '1.5rem' }}>{category.icon}</span>}
-                                >
-                                    {category.name}
-                                </Button>
-                            </Grid>
-                        ))}
-                    </Grid>
-                </Box>
-
                 {/* Suggestions section */}
                 <Box sx={{
                     width: '100%',
@@ -146,12 +123,18 @@ export default function Home() {
                     alignItems: 'center',
                     padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
                 }}>
-                    <Typography variant="h4" component="h1" gutterBottom align="center" color="#34495e">
+                    <Typography variant="h4" component="h1" gutterBottom align="left" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>
                         Suggestions
                     </Typography>
                     <Box sx={{ width: '100%', maxWidth: '1200px' }}>
                         {/* Carousel for suggested items */}
-                        <Carousel indicators={false} navButtonsAlwaysVisible={false}>
+                        <Carousel 
+                            autoPlay={true} 
+                            interval={8000} 
+                            indicators={false} 
+                            navButtonsAlwaysVisible={false}
+                            stopAutoPlayOnHover={true}
+                        >
                             {listings.map((item, i) => <Item key={i} item={item} />)}
                         </Carousel>
                     </Box>
@@ -164,42 +147,46 @@ export default function Home() {
                     flexDirection: 'column',
                     alignItems: 'center',
                     padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
-                    backgroundColor: '#ffffff',
                 }}>
-                    <Typography variant="h4" component="h2" gutterBottom align="center" color="#34495e">
+                    <Typography variant="h4" component="h2" gutterBottom align="center" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>
                         Popular Series
                     </Typography>
                     <Box sx={{ width: '100%', maxWidth: '1200px' }}>
                         {/* Carousel for popular series */}
                         <Carousel
-                            indicators={true}
-                            navButtonsAlwaysVisible={true}
-                            animation="slide"
-                            autoPlay={false}
-                            cycleNavigation={true}
-                            navButtonsProps={{
-                                style: {
-                                    backgroundColor: '#3498db',
-                                    borderRadius: 0
-                                }
-                            }}
-                            indicatorIconButtonProps={{
-                                style: {
-                                    padding: '5px',
-                                    color: '#95a5a6'
-                                }
-                            }}
-                            activeIndicatorIconButtonProps={{
-                                style: {
-                                    backgroundColor: '#3498db'
-                                }
-                            }}
+                            indicators={false}
+                            navButtonsAlwaysVisible={false}
+                            stopAutoPlayOnHover={true}
+                            autoPlay
+                            interval={10000}
                         >
                             {popularSeries.map((series, index) => (
                                 <PopularSeriesItem key={index} series={series} />
                             ))}
                         </Carousel>
                     </Box>
+                    {/* Categories section */}
+                    {/* <Box sx={{ my: 8, mx: 'auto', maxWidth: '4xl' }}>
+                        <Typography variant="h5" sx={{ mb: 4, textAlign: 'center' }}>Categories</Typography>
+                        <Grid container spacing={3}>
+                            {[
+                                { name: 'Manga', icon: '📚' },
+                                { name: 'Anime Art', icon: '🎨' },
+                                { name: 'Figurines', icon: '🗿' },
+                                { name: 'Merchandise', icon: '👕' },
+                            ].map((category) => (
+                                <Grid item xs={6} sm={3} key={category.name}>
+                                    <Button 
+                                        variant="outlined" 
+                                        sx={{ width: '100%', height: '6rem', fontSize: '1.125rem' }}
+                                        startIcon={<span style={{ fontSize: '1.5rem' }}>{category.icon}</span>}
+                                    >
+                                        {category.name}
+                                    </Button>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </Box> */}
                 </Box>
             </Box>
         </ThemeProvider>
@@ -226,9 +213,8 @@ function Item(props) {
             {/* Content container */}
             <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div>
-                    <Typography variant="h6" color="#34495e">{props.item.title}</Typography>
+                    <Typography variant="inherit" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>{props.item.title}</Typography>
                     <Typography variant="subtitle2" color="#95a5a6" sx={{ mb: 1 }}>{props.item.publisher}</Typography>
-                    <Typography variant="body2" color="#95a5a6">{props.item.description}</Typography>
                 </div>
                 <div>
                     <Typography variant="subtitle1" fontWeight="bold" color="#34495e" sx={{ mt: 1 }}>${props.item.price}</Typography>
@@ -251,23 +237,38 @@ function Item(props) {
 // Component for rendering individual items in the Popular Series carousel
 function PopularSeriesItem({ series }) {
     return (
-        <Paper elevation={3} sx={{ backgroundColor: '#ffffff', height: '100%' }}>
-            <img src={series.image} alt={series.title} style={{ width: '100%', height: '200px', objectFit: 'cover' }}/>
-            <Box p={2}>
-                <Typography variant="h6" color="#34495e">{series.title}</Typography>
-                <Typography variant="body2" color="#95a5a6">{series.description}</Typography>
-                <Button 
-                    sx={{
-                        mt: 2,
-                        backgroundColor: '#3498db',
-                        color: '#ffffff',
-                        '&:hover': {
-                            backgroundColor: '#2980b9',
-                        },
+        <Paper sx={{ backgroundColor: '#ffffff', height: '100%', display: 'flex', flexDirection: 'column' }}>
+            {/* Image container */}
+            <Box sx={{ height: '200px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+                <img 
+                    src={series.image} 
+                    alt={series.title} 
+                    style={{ 
+                        maxWidth: '100%', 
+                        maxHeight: '100%', 
+                        objectFit: 'contain',
+                        paddingTop: '10px'
                     }}
-                >
-                    View Series
-                </Button>
+                />
+            </Box>
+            {/* Content container */}
+            <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div>
+                    <Typography variant="h6" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>{series.title}</Typography>
+                    <Typography variant="body2" color="#95a5a6">{series.description}</Typography>
+                </div>
+                <div>
+                    <Button 
+                        sx={{
+                            backgroundColor: '#623c8c',
+                            color: '#ffffff',
+                            mt: 1,
+                            alignItems: 'center'
+                        }}
+                    >
+                        View Series
+                    </Button>
+                </div>
             </Box>
         </Paper>
     );

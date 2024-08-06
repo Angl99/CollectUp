@@ -13,7 +13,7 @@ const MarketplaceItem = ({ item, onAddToCart }) => (
       className="h-48 object-cover"
     />
     <CardContent className="flex-grow p-4">
-      <Typography variant="h6" component="div" className="mb-2">
+      <Typography variant="inherit" component="div" sx={{ fontFamily: 'Komika Axis', mb: 1 }}>
         {item.product.title || item.product.data.title}
       </Typography>
       <Typography variant="body1" color="text.primary" className="mb-1">
