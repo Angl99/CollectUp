@@ -130,11 +130,12 @@ function GenerateItem() {
         try {
             // Search the external API
             const externalData = await searchExternalApi(searchQuery);
-            if (externalData && externalData.length > 0) {
-                if (externalData.length === 1) {
-                    await createItemFromProduct(externalData[0]);
+            const items = externalData.items || externalData;
+            if (items && items.length > 0) {
+                if (items.length === 1) {
+                    await createItemFromProduct(items[0]);
                 } else {
-                    setProductList(externalData);
+                    setProductList(items);
                     handleOpenProductModal();
                 }
             } else {
