@@ -31,7 +31,7 @@ const theme = createTheme({
     },
 });
 
-export default function GenerateItem() {
+function GenerateItem() {
     const { getProductByCode, createProduct } = productHelper;
     const navigate = useNavigate();
     const { user } = useAuth();
@@ -171,7 +171,6 @@ export default function GenerateItem() {
             setError("An error occurred while generating the item");
         } finally {
             setIsLoading(false);
-            setItemCode("");
             setCondition("");
             setUserDescription("");
             setImgUrl("");
@@ -438,3 +437,5 @@ export default function GenerateItem() {
         </Box>
     );
 }
+
+export default GenerateItem;
