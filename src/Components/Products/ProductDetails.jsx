@@ -86,7 +86,7 @@ const ProductDetails = () => {
                 item={item}
                 onDelete={handleDeleteItem}
                 onUpdate={handleUpdateItem}
-                isOwner={user && user.uid === item.userId}
+                isOwner={user && user.id === item.userId}
               />
             </Grid>
           ))}
