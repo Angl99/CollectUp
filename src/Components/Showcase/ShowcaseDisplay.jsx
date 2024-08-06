@@ -155,15 +155,6 @@ import copy from 'copy-to-clipboard';
             Your Showcase
           </Typography>
           <Box>
-            <Tooltip title="Add Item">
-              <IconButton 
-                color="primary" 
-                onClick={() => navigate('/genItem')}
-                size="large"
-              >
-                <AddIcon />
-              </IconButton>
-            </Tooltip>
             <Tooltip title={isGridView ? "List View" : "Grid View"}>
               <IconButton 
                 color="primary" 
@@ -183,6 +174,15 @@ import copy from 'copy-to-clipboard';
               </IconButton>
             </Tooltip>
           </Box>
+          <Tooltip title="Add Item">
+            <IconButton 
+              color="primary" 
+              onClick={() => navigate('/genItem')}
+              size="large"
+            >
+              <AddIcon />
+            </IconButton>
+          </Tooltip>
         </Box>
         {items.length === 0 ? (
           <Typography variant="body1" color="textSecondary">

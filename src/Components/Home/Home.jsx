@@ -88,7 +88,7 @@ export default function Home() {
 
                 {/* Brief Introduction section */}
                 <Box sx={{
-                    my: 9,
+                    my: 8,
                     p: 8,
                     background: src => `url(${customBanner})`,
                     // background: (theme) => `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.accent.main} 90%)`,

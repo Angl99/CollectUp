@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { TextField, Radio, FormControlLabel, FormLabel, RadioGroup, Button, Container, Box, Typography, Grid, Avatar, CssBaseline, Select, MenuItem, FormControl, InputLabel, Modal, List, ListItem, ListItemText, Card, CardMedia, CardContent } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { TextField, Radio, FormControlLabel, FormLabel, RadioGroup, Button, Container, Box, Typography, Grid, Avatar, CssBaseline, Select, MenuItem, FormControl, InputLabel, Modal, List, ListItem, ListItemText, Card, CardMedia, CardContent, useMediaQuery, InputAdornment } from '@mui/material';
+import { createTheme, ThemeProvider, useTheme} from '@mui/material/styles';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ItemDisplay from "./ItemDisplay";
 import { searchExternalApi, createItem } from "../../helpers/itemHelper";
@@ -53,6 +53,11 @@ function GenerateItem() {
     const handleCloseBarcodeModal = () => setIsBarcodeModalOpen(false);
     const handleOpenProductModal = () => setIsProductModalOpen(true);
     const handleCloseProductModal = () => setIsProductModalOpen(false);
+    const [isItemModalOpen, setIsItemModalOpen] = useState(false);
+    const [currentItem, setCurrentItem] = useState(null);
+
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     useEffect(() => {
         if (scannedBarcode) {
@@ -114,6 +119,12 @@ function GenerateItem() {
             };
             reader.readAsDataURL(file);
         }
+    };
+
+    const handleOpenItemModal = () => setIsItemModalOpen(true);
+    const handleCloseItemModal = () => {
+        setIsItemModalOpen(false);
+        setCurrentItem(null);
     };
 
     const handleSubmit = async (e) => {
@@ -188,6 +199,8 @@ function GenerateItem() {
             }]);
             
             setGeneratedItems(prevItems => [...prevItems, newItem]);
+            setCurrentItem(newItem);
+            handleOpenItemModal();
             setCondition("");
             setUserDescription("");
             setImgUrl("");
@@ -332,30 +345,33 @@ function GenerateItem() {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField
-                                        type="number"
-                                        fullWidth
-                                        id="price"
-                                        label="Price"
-                                        name="price"
-                                        value={price}
-                                        onChange={handleInputChange}
-                                        placeholder="Enter price"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <FormControl component="fieldset" margin="normal">
-                                        <FormLabel component="legend">For Sale</FormLabel>
-                                        <RadioGroup
-                                        row
-                                        name="forSale"
-                                        value={forSale}
-                                        onChange={handleInputChange}
-                                        >
-                                        <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-                                        <FormControlLabel value="no" control={<Radio />} label="No" />
-                                        </RadioGroup>
-                                    </FormControl>
+                                    <Box display="flex" alignItems="center" justifyContent="space-between">
+                                        <TextField
+                                            type="number"
+                                            InputProps={{
+                                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                            }}
+                                            id="price"
+                                            label="Price"
+                                            name="price"
+                                            value={price}
+                                            onChange={handleInputChange}
+                                            placeholder="Enter price"
+                                            sx={{ width: '40%' }}
+                                        />
+                                        <FormControl component="fieldset">
+                                            <FormLabel component="legend">For Sale</FormLabel>
+                                            <RadioGroup
+                                                row
+                                                name="forSale"
+                                                value={forSale}
+                                                onChange={handleInputChange}
+                                            >
+                                                <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+                                                <FormControlLabel value="no" control={<Radio />} label="No" />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </Box>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <input
@@ -381,16 +397,15 @@ function GenerateItem() {
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                sx={{ mt: 3, mb: 2, bgcolor: 'primary.main' }}
+                                sx={{ mt: 3, bgcolor: 'primary.main' }}
                                 disabled={isLoading}
                             >
                                 {isLoading ? "Generating..." : "Generate"}
                             </Button>
                         </Box>
                         {error && <Typography color="error">{error}</Typography>}
-                        {isLoading ? (
-                            <Typography>Loading...</Typography>
-                        ) : generatedItems.length > 0 ? (
+                        {isLoading && <Typography>Loading...</Typography>}
+                        {generatedItems.length > 0 && (
                             <>
                                 <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>Generated Items:</Typography>
                                 {generatedItems.map((item, index) => (
@@ -425,15 +440,76 @@ function GenerateItem() {
                                     Submit to Showcase
                                 </Button>
                             </>
-                        ) : (
-                            <Typography sx={{ mt: 2 }}>
-                                No items generated yet.
-                                <br />
-                                Enter a code and click "Generate" to create an item.
-                            </Typography>
                         )}
                     </Box>
                 </Container>
+                {/* Responsive Item Display Modal */}
+                <Modal
+                    open={isItemModalOpen}
+                    onClose={handleCloseItemModal}
+                    aria-labelledby="item-modal"
+                    aria-describedby="modal-to-display-generated-item"
+                >
+                    <Box sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: isSmallScreen ? '90%' : '60%',
+                        maxWidth: '345px',
+                        maxHeight: '80%',
+                        overflow: 'auto',
+                        bgcolor: 'background.paper',
+                        border: '2px solid #000',
+                        boxShadow: 24,
+                        p: { xs: 2, sm: 3, md: 4 },
+                        borderRadius: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                    }}>
+                        {currentItem && (
+                            <>
+                                <Button
+                                    variant="contained"
+                                    fullWidth
+                                    onClick={() => {
+                                        handleShowcaseSubmit();
+                                        handleCloseItemModal();
+                                    }}
+                                    sx={{
+                                        mb: 2,
+                                        bgcolor: 'primary.main',
+                                    }}
+                                >
+                                    Submit to Showcase
+                                </Button>
+                                <ItemDisplay generatedItem={{
+                                    data: currentItem,
+                                    condition: currentItem.condition,
+                                    userDescription: currentItem.userDescription,
+                                    imgUrl: currentItem.imgUrl,
+                                    price: currentItem.price,
+                                    forSale: currentItem.forSale
+                                }} />
+                                <Button 
+                                    variant="contained" 
+                                    fullWidth
+                                    onClick={() => {
+                                        setGeneratedItems(prevItems => prevItems.filter(item => item !== currentItem));
+                                        handleCloseItemModal();
+                                    }}
+                                    sx={{ 
+                                        mt: 2, 
+                                        bgcolor: 'secondary.main',
+                                    }}
+                                >
+                                    Cancel
+                                </Button>
+                            </>
+                        )}
+                    </Box>
+                </Modal>
+
                 <Modal
                     open={isBarcodeModalOpen}
                     onClose={handleCloseBarcodeModal}
@@ -454,7 +530,7 @@ function GenerateItem() {
                         <Typography id="barcode-scanner-modal" variant="h6" component="h2">
                             Scan Barcode
                         </Typography>
-                        <BarcodeScanner setScannedBarcode={setScannedBarcode} />
+                        <BarcodeScanner setScannedBarcode={setScannedBarcode} onClose={handleCloseBarcodeModal}/>
                         <Button onClick={handleCloseBarcodeModal}>Close</Button>
                     </Box>
                 </Modal>
