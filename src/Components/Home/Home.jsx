@@ -31,32 +31,32 @@ export default function Home() {
     // Create an array of listings from items in the data
     const listings = data.slice(0, 3).map(item => ({
         title: item.items[0].title,
-        description: item.items[0].description || "No description available",
+        description: item.items[0].description || "Lorem ipsum odor amet, consectetuer adipiscing elit. Eget quisque parturient mauris; porttitor erat sapien faucibus lacinia." || "No description available",
         price: item.items[0].offers[0].price,
         image: item.items[0].images[0],
-        publisher: item.items[0].publisher || "Publisher not available"
+        publisher: item.items[0].publisher || item.items.brand || "Publisher not available"
     }));
 
     const popularSeries = [
         {
-            title: "Popular Series 1",
-            description: "Description",
-            image: "https://via.placeholder.com/300x200"
+            title: "One Piece",
+            description: "One Piece is a Japanese anime series based on Eiichiro Oda's manga of the same name, following the adventures of Monkey D. Luffy and his pirate crew as they search for the legendary One Piece treasure to become the Pirate King. The series is renowned for its rich world-building, diverse characters, and compelling story arcs.",
+            image: "https://imgsrv.crunchyroll.com/cdn-cgi/image/fit=contain,format=auto,quality=85,width=1200,height=675/catalog/crunchyroll/a249096c7812deb8c3c2c907173f3774.jpg"
         },
         {
-            title: "Popular Series 2",
-            description: "Description",
-            image: "https://via.placeholder.com/300x200"
+            title: "Berserk",
+            description: "Berserk is a Japanese anime series based on Kentaro Miura's dark fantasy manga, following the story of Guts, a lone mercenary with a tragic past, and his struggle against demonic forces and his own inner demons. The series is known for its intense, mature themes, graphic violence, and deep exploration of human nature and suffering.",
+            image: "https://m.media-amazon.com/images/M/MV5BNzgwY2QwYjItYTM1NS00OTZmLThlMjUtNmE0Mzg0OGE0NzE3XkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_.jpg"
         },
         {
-            title: "Popular Series 3",
-            description: "Description",
-            image: "https://via.placeholder.com/300x200"
+            title: "Jujutsu Kaisen",
+            description: "Jujutsu Kaisen is a Japanese anime series based on Gege Akutami's manga, centered on Yuji Itadori, a high school student who becomes involved in the world of jujutsu sorcerers after ingesting a powerful cursed object. The series combines supernatural action, dark fantasy, and compelling character development as Yuji and his allies battle malevolent curses.",
+            image: "https://imgsrv.crunchyroll.com/cdn-cgi/image/fit=contain,format=auto,quality=85,width=480,height=720/catalog/crunchyroll/e4e80c83c792d81c138e320874dbdffc.jpe"
         },
         {
-            title: "Popular Series 4",
-            description: "Description",
-            image: "https://via.placeholder.com/300x200"
+            title: "Demon Slayer: Kimetsu no Yaiba",
+            description: "Demon Slayer: Kimetsu no Yaiba is a Japanese anime series based on Koyoharu Gotouge's manga, following Tanjiro Kamado, a kind-hearted boy who becomes a demon slayer after his family is slaughtered and his sister Nezuko is turned into a demon. The series is praised for its stunning animation, emotional storytelling, and intense battles as Tanjiro seeks a cure for Nezuko and avenges his family.",
+            image: "https://m.media-amazon.com/images/M/MV5BZjZjNzI5MDctY2Y4YS00NmM4LTljMmItZTFkOTExNGI3ODRhXkEyXkFqcGdeQXVyNjc3MjQzNTI@._V1_.jpg"
         }
     ];
 

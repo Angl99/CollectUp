@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { TextField, Radio, FormControlLabel, FormLabel,RadioGroup, Button, Container, Box, Typography, Grid, Avatar, CssBaseline, Select, MenuItem, FormControl, InputLabel, Modal } from '@mui/material';
+import { TextField, Radio, FormControlLabel, FormLabel, RadioGroup, Button, Container, Box, Typography, Grid, Avatar, CssBaseline, Select, MenuItem, FormControl, InputLabel, Modal, List, ListItem, ListItemText, Card, CardMedia, CardContent } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ItemDisplay from "./ItemDisplay";
@@ -9,7 +9,6 @@ import { useAuth } from "../../helpers/AuthContext";
 import productHelper from "../../helpers/productHelpers";
 import { addItemsToFirstShowcase, getShowcasesByUserUid } from "../../helpers/showcaseHelpers";
 import BarcodeScanner from "../BarcodeScanner/BarcodeScanner";
-import { PrimaryButton, SecondaryButton } from "../../helpers/ButtonSystem";
 
 
 const theme = createTheme({
@@ -32,12 +31,12 @@ const theme = createTheme({
     },
 });
 
-export default function GenerateItem() {
+function GenerateItem() {
     const { getProductByCode, createProduct } = productHelper;
     const navigate = useNavigate();
     const { user } = useAuth();
-    const [itemCode, setItemCode] = useState("");
-    const [itemType, setItemType] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchType, setSearchType] = useState("");
     const [condition, setCondition] = useState("");
     const [userDescription, setUserDescription] = useState("");
     const [imgUrl, setImgUrl] = useState("");
@@ -46,37 +45,48 @@ export default function GenerateItem() {
     const [generatedItems, setGeneratedItems] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isBarcodeModalOpen, setIsBarcodeModalOpen] = useState(false);
+    const [isProductModalOpen, setIsProductModalOpen] = useState(false);
     const [scannedBarcode, setScannedBarcode] = useState(null);
-    const handleOpenModal = () => setIsModalOpen(true);
-    const handleCloseModal = () => setIsModalOpen(false);
+    const [productList, setProductList] = useState([]);
+    const handleOpenBarcodeModal = () => setIsBarcodeModalOpen(true);
+    const handleCloseBarcodeModal = () => setIsBarcodeModalOpen(false);
+    const handleOpenProductModal = () => setIsProductModalOpen(true);
+    const handleCloseProductModal = () => setIsProductModalOpen(false);
 
     useEffect(() => {
         if (scannedBarcode) {
-            setItemCode(scannedBarcode);
+            setSearchQuery(scannedBarcode);
             handleCloseModal();
         }
     }, [scannedBarcode]);
 
     useEffect(() => {
-        if (itemCode.length === 13) {
-            if (itemCode.startsWith('0')) {
-                setItemType("UPC-A (GTIN-12)");
+        const sanitizedQuery = searchQuery.replace(/-/g, '');
+    
+        if (/^\d+$/.test(sanitizedQuery)) {
+            if (sanitizedQuery.length === 13) {
+                if (sanitizedQuery.startsWith('0')) {
+                    setSearchType("UPC-A (GTIN-12)");
+                } else {
+                    setSearchType("EAN-13 (ISBN/ GTIN-13)");
+                }
+            } else if (sanitizedQuery.length === 12) {
+                setSearchType("UPC-A (GTIN-12)");
             } else {
-                setItemType("EAN-13 (ISBN/ GTIN-13)");
+                setSearchType("Code");
             }
-        } else if (itemCode.length === 12) {
-            setItemType("UPC-A (GTIN-12)");
         } else {
-            setItemType("");
+            setSearchType("Keyword");
         }
-    }, [itemCode]);
-
+        setSearchQuery(sanitizedQuery);
+    }, [searchQuery]);
+    
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         switch(name) {
-            case "item-code":
-                setItemCode(value);
+            case "search-query":
+                setSearchQuery(value);
                 break;
             case "condition":
                 setCondition(value);
@@ -118,86 +128,78 @@ export default function GenerateItem() {
         }
       
         try {
-            // First, search in the internal database
-            let product;
-            try {
-                product  = await getProductByCode(itemCode);
-            } catch (error) {
-                console.log("error");
-            }
-            if (product) {
-                const newItem = await createItem(
-                    user.uid, 
-                    product.ean, 
-                    imgUrl, 
-                    condition, 
-                    userDescription,
-                    price,
-                    forSale
-                );
-                newItem.data = product;
-                newItem.condition = condition;
-                newItem.userDescription = userDescription;
-                newItem.imgUrl = imgUrl;
-                newItem.price = price;
-                newItem.forSale = forSale;
-                console.log("Existing product: ", newItem);    
-                setGeneratedItems(prevItems => [...prevItems, newItem]);
-            } else {
-                // If not found internally, search the external API
-                const externalData = await searchExternalApi(itemCode);
-                // console.log(externalData);
-                if (externalData && externalData.items && externalData.items.length > 0) {
-                    product = externalData.items[0];
-                    // Create the product in our internal database
-                    try {
-                        const cleanedData = {
-                            upc: product.upc,
-                            isbn: product.isbn,
-                            ean: product.ean,
-                            data: product,
-                        }
-                        const newProduct = await createProduct(cleanedData);
-                        console.log("New product created!!");
-
-                        const newItem = await createItem(user.uid, newProduct.ean, imgUrl, condition, userDescription);
-                        newItem.data = newProduct;
-                        newItem.condition = condition;
-                        newItem.userDescription = userDescription;
-                        newItem.imgUrl = imgUrl;
-                        newItem.price = price;
-                        newItem.forSale = forSale;
-                        console.log("New item created!!");
-                        console.log("Newly created prod: ", newItem);
-                        
-                        // Add the new item to the first showcase
-                        await addItemsToFirstShowcase(
-                            user.uid, [{
-                            productEan: newItem.data.ean,
-                            condition: newItem.condition,
-                            userDescription: newItem.userDescription,
-                            imgUrl: newItem.imgUrl
-                        }]);
-                        
-                        setGeneratedItems(prevItems => [...prevItems, newItem]);
-                    } catch (error) {
-                        console.log("failed to create prod");
-                        setError("Failed to create product");
-                    }
+            // Search the external API
+            const externalData = await searchExternalApi(searchQuery);
+            const items = externalData.items || externalData;
+            if (items && items.length > 0) {
+                if (items.length === 1) {
+                    await createItemFromProduct(items[0]);
                 } else {
-                    setError("No product found for the given code");
+                    setProductList(items);
+                    handleOpenProductModal();
                 }
+            } else {
+                setError("No product found for the given search query");
             }
         } catch (error) {
             console.error("Error during item generation:", error);
             setError("An error occurred while generating the item");
         } finally {
             setIsLoading(false);
-            setItemCode("");
+        }
+    };
+
+    const createItemFromProduct = async (product) => {
+        try {
+            let existingProduct = await getProductByCode(product.ean);
+            let newProduct;
+
+            if (!existingProduct) {
+                const cleanedData = {
+                    upc: product.upc,
+                    isbn: product.isbn,
+                    ean: product.ean,
+                    data: product,
+                }
+                newProduct = await createProduct(cleanedData);
+                console.log("New product created!!");
+            } else {
+                newProduct = existingProduct;
+                console.log("Existing product found!");
+            }
+
+            const newItem = await createItem(user.uid, newProduct.ean, imgUrl, condition, userDescription, price, forSale);
+            newItem.data = newProduct;
+            newItem.condition = condition;
+            newItem.userDescription = userDescription;
+            newItem.imgUrl = imgUrl;
+            newItem.price = price;
+            newItem.forSale = forSale;
+            console.log("New item created!!");
+            console.log("Newly created prod: ", newItem);
+            
+            // Add the new item to the first showcase
+            await addItemsToFirstShowcase(
+                user.uid, [{
+                productEan: newItem.data.ean,
+                condition: newItem.condition,
+                userDescription: newItem.userDescription,
+                imgUrl: newItem.imgUrl
+            }]);
+            
+            setGeneratedItems(prevItems => [...prevItems, newItem]);
             setCondition("");
             setUserDescription("");
             setImgUrl("");
+            handleCloseProductModal();
+        } catch (error) {
+            console.log("failed to create prod");
+            setError("Failed to create product");
         }
+    };
+
+    const handleProductSelect = (product) => {
+        createItemFromProduct(product);
     };
 
     const handleShowcaseSubmit = async () => {
@@ -283,19 +285,19 @@ export default function GenerateItem() {
                                     <Box display="flex" alignItems="center">
                                         <TextField
                                             fullWidth
-                                            id="item-code"
-                                            label="Item Code"
-                                            name="item-code"
-                                            value={itemCode}
+                                            id="search-query"
+                                            label="Search Query"
+                                            name="search-query"
+                                            value={searchQuery}
                                             onChange={handleInputChange}
-                                            placeholder="Enter Code"
+                                            placeholder="Enter Code or Keyword"
                                         />
                                         <Typography variant="body1" sx={{ mx: 1 }}>or</Typography>
-                                        <Button variant="contained" onClick={handleOpenModal}>
+                                        <Button variant="contained" onClick={handleOpenBarcodeModal}>
                                             Scan
                                         </Button>
                                     </Box>
-                                    {itemType && <Typography variant="caption" display="block" gutterBottom>Detected Code Type: {itemType}</Typography>}
+                                    {searchType && <Typography variant="caption" display="block" gutterBottom>Detected Search Type: {searchType}</Typography>}
                                 </Grid>
                                 <Grid item xs={12}>
                                     <FormControl fullWidth>
@@ -433,30 +435,87 @@ export default function GenerateItem() {
                     </Box>
                 </Container>
                 <Modal
-                open={isModalOpen}
-                onClose={handleCloseModal}
-                aria-labelledby="barcode-scanner-modal"
-                aria-describedby="modal-to-scan-barcode"
-            >
-                <Box sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 400,
-                    bgcolor: 'background.paper',
-                    border: '2px solid #000',
-                    boxShadow: 24,
-                    p: 4,
-                }}>
-                    <Typography id="barcode-scanner-modal" variant="h6" component="h2">
-                        Scan Barcode
-                    </Typography>
-                    <BarcodeScanner setScannedBarcode={setScannedBarcode} />
-                    <Button onClick={handleCloseModal}>Close</Button>
-                </Box>
-            </Modal>
+                    open={isBarcodeModalOpen}
+                    onClose={handleCloseBarcodeModal}
+                    aria-labelledby="barcode-scanner-modal"
+                    aria-describedby="modal-to-scan-barcode"
+                >
+                    <Box sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 400,
+                        bgcolor: 'background.paper',
+                        border: '2px solid #000',
+                        boxShadow: 24,
+                        p: 4,
+                    }}>
+                        <Typography id="barcode-scanner-modal" variant="h6" component="h2">
+                            Scan Barcode
+                        </Typography>
+                        <BarcodeScanner setScannedBarcode={setScannedBarcode} />
+                        <Button onClick={handleCloseBarcodeModal}>Close</Button>
+                    </Box>
+                </Modal>
+                <Modal
+                    open={isProductModalOpen}
+                    onClose={handleCloseProductModal}
+                    aria-labelledby="product-selection-modal"
+                    aria-describedby="modal-to-select-product"
+                >
+                    <Box sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 400,
+                        maxHeight: '80vh',
+                        overflow: 'auto',
+                        bgcolor: 'background.paper',
+                        border: '2px solid #000',
+                        boxShadow: 24,
+                        p: 4,
+                    }}>
+                        <Typography id="product-selection-modal" variant="h6" component="h2">
+                            Select a Product
+                        </Typography>
+                        <List>
+                            {productList.map((product, index) => (
+                                <ListItem 
+                                    button 
+                                    key={index} 
+                                    onClick={() => handleProductSelect(product)}
+                                    sx={{ padding: 0, marginBottom: 2 }}
+                                >
+                                    <Card sx={{ display: 'flex', width: '100%' }}>
+                                        <CardMedia
+                                            component="img"
+                                            sx={{ width: 100, height: 100, objectFit: 'contain' }}
+                                            image={product.images && product.images.length > 0 ? product.images[0] : 'https://via.placeholder.com/100x100?text=No+Image'}
+                                            alt={product.title || 'Product Image'}
+                                        />
+                                        <CardContent sx={{ flex: '1 0 auto' }}>
+                                            <Typography variant="h6" component="div" sx={{ fontFamily: 'Komika Axis' }}>
+                                                {product.title || 'Unknown Title'}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                UPC: {product.upc || 'N/A'}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                EAN: {product.ean || 'N/A'}
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </ListItem>
+                            ))}
+                        </List>
+                        <Button onClick={handleCloseProductModal}>Close</Button>
+                    </Box>
+                </Modal>
             </ThemeProvider>
         </Box>
     );
 }
+
+export default GenerateItem;
