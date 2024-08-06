@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { TextField, Radio, FormControlLabel, FormLabel, RadioGroup, Button, Container, Box, Typography, Grid, Avatar, CssBaseline, Select, MenuItem, FormControl, InputLabel, Modal } from '@mui/material';
+import { TextField, Radio, FormControlLabel, FormLabel, RadioGroup, Button, Container, Box, Typography, Grid, Avatar, CssBaseline, Select, MenuItem, FormControl, InputLabel, Modal, List, ListItem, ListItemText } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ItemDisplay from "./ItemDisplay";
@@ -45,10 +45,14 @@ function GenerateItem() {
     const [generatedItems, setGeneratedItems] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isBarcodeModalOpen, setIsBarcodeModalOpen] = useState(false);
+    const [isProductModalOpen, setIsProductModalOpen] = useState(false);
     const [scannedBarcode, setScannedBarcode] = useState(null);
-    const handleOpenModal = () => setIsModalOpen(true);
-    const handleCloseModal = () => setIsModalOpen(false);
+    const [productList, setProductList] = useState([]);
+    const handleOpenBarcodeModal = () => setIsBarcodeModalOpen(true);
+    const handleCloseBarcodeModal = () => setIsBarcodeModalOpen(false);
+    const handleOpenProductModal = () => setIsProductModalOpen(true);
+    const handleCloseProductModal = () => setIsProductModalOpen(false);
 
     useEffect(() => {
         if (scannedBarcode) {
@@ -127,41 +131,11 @@ function GenerateItem() {
             // Search the external API
             const externalData = await searchExternalApi(searchQuery);
             if (externalData && externalData.length > 0) {
-                const product = externalData[0];
-                // Create the product in our internal database
-                try {
-                    const cleanedData = {
-                        upc: product.upc,
-                        isbn: product.isbn,
-                        ean: product.ean,
-                        data: product,
-                    }
-                    const newProduct = await createProduct(cleanedData);
-                    console.log("New product created!!");
-
-                    const newItem = await createItem(user.uid, newProduct.ean, imgUrl, condition, userDescription, price, forSale);
-                    newItem.data = newProduct;
-                    newItem.condition = condition;
-                    newItem.userDescription = userDescription;
-                    newItem.imgUrl = imgUrl;
-                    newItem.price = price;
-                    newItem.forSale = forSale;
-                    console.log("New item created!!");
-                    console.log("Newly created prod: ", newItem);
-                    
-                    // Add the new item to the first showcase
-                    await addItemsToFirstShowcase(
-                        user.uid, [{
-                        productEan: newItem.data.ean,
-                        condition: newItem.condition,
-                        userDescription: newItem.userDescription,
-                        imgUrl: newItem.imgUrl
-                    }]);
-                    
-                    setGeneratedItems(prevItems => [...prevItems, newItem]);
-                } catch (error) {
-                    console.log("failed to create prod");
-                    setError("Failed to create product");
+                if (externalData.length === 1) {
+                    await createItemFromProduct(externalData[0]);
+                } else {
+                    setProductList(externalData);
+                    handleOpenProductModal();
                 }
             } else {
                 setError("No product found for the given search query");
@@ -171,10 +145,52 @@ function GenerateItem() {
             setError("An error occurred while generating the item");
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const createItemFromProduct = async (product) => {
+        try {
+            const cleanedData = {
+                upc: product.upc,
+                isbn: product.isbn,
+                ean: product.ean,
+                data: product,
+            }
+            const newProduct = await createProduct(cleanedData);
+            console.log("New product created!!");
+
+            const newItem = await createItem(user.uid, newProduct.ean, imgUrl, condition, userDescription, price, forSale);
+            newItem.data = newProduct;
+            newItem.condition = condition;
+            newItem.userDescription = userDescription;
+            newItem.imgUrl = imgUrl;
+            newItem.price = price;
+            newItem.forSale = forSale;
+            console.log("New item created!!");
+            console.log("Newly created prod: ", newItem);
+            
+            // Add the new item to the first showcase
+            await addItemsToFirstShowcase(
+                user.uid, [{
+                productEan: newItem.data.ean,
+                condition: newItem.condition,
+                userDescription: newItem.userDescription,
+                imgUrl: newItem.imgUrl
+            }]);
+            
+            setGeneratedItems(prevItems => [...prevItems, newItem]);
             setCondition("");
             setUserDescription("");
             setImgUrl("");
+            handleCloseProductModal();
+        } catch (error) {
+            console.log("failed to create prod");
+            setError("Failed to create product");
         }
+    };
+
+    const handleProductSelect = (product) => {
+        createItemFromProduct(product);
     };
 
     const handleShowcaseSubmit = async () => {
@@ -268,7 +284,7 @@ function GenerateItem() {
                                             placeholder="Enter Code or Keyword"
                                         />
                                         <Typography variant="body1" sx={{ mx: 1 }}>or</Typography>
-                                        <Button variant="contained" onClick={handleOpenModal}>
+                                        <Button variant="contained" onClick={handleOpenBarcodeModal}>
                                             Scan
                                         </Button>
                                     </Box>
@@ -410,29 +426,68 @@ function GenerateItem() {
                     </Box>
                 </Container>
                 <Modal
-                open={isModalOpen}
-                onClose={handleCloseModal}
-                aria-labelledby="barcode-scanner-modal"
-                aria-describedby="modal-to-scan-barcode"
-            >
-                <Box sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 400,
-                    bgcolor: 'background.paper',
-                    border: '2px solid #000',
-                    boxShadow: 24,
-                    p: 4,
-                }}>
-                    <Typography id="barcode-scanner-modal" variant="h6" component="h2">
-                        Scan Barcode
-                    </Typography>
-                    <BarcodeScanner setScannedBarcode={setScannedBarcode} />
-                    <Button onClick={handleCloseModal}>Close</Button>
-                </Box>
-            </Modal>
+                    open={isBarcodeModalOpen}
+                    onClose={handleCloseBarcodeModal}
+                    aria-labelledby="barcode-scanner-modal"
+                    aria-describedby="modal-to-scan-barcode"
+                >
+                    <Box sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 400,
+                        bgcolor: 'background.paper',
+                        border: '2px solid #000',
+                        boxShadow: 24,
+                        p: 4,
+                    }}>
+                        <Typography id="barcode-scanner-modal" variant="h6" component="h2">
+                            Scan Barcode
+                        </Typography>
+                        <BarcodeScanner setScannedBarcode={setScannedBarcode} />
+                        <Button onClick={handleCloseBarcodeModal}>Close</Button>
+                    </Box>
+                </Modal>
+                <Modal
+                    open={isProductModalOpen}
+                    onClose={handleCloseProductModal}
+                    aria-labelledby="product-selection-modal"
+                    aria-describedby="modal-to-select-product"
+                >
+                    <Box sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 400,
+                        maxHeight: '80vh',
+                        overflow: 'auto',
+                        bgcolor: 'background.paper',
+                        border: '2px solid #000',
+                        boxShadow: 24,
+                        p: 4,
+                    }}>
+                        <Typography id="product-selection-modal" variant="h6" component="h2">
+                            Select a Product
+                        </Typography>
+                        <List>
+                            {productList.map((product, index) => (
+                                <ListItem 
+                                    button 
+                                    key={index} 
+                                    onClick={() => handleProductSelect(product)}
+                                >
+                                    <ListItemText 
+                                        primary={product.title || 'Unknown Title'} 
+                                        secondary={`UPC: ${product.upc || 'N/A'}, EAN: ${product.ean || 'N/A'}`} 
+                                    />
+                                </ListItem>
+                            ))}
+                        </List>
+                        <Button onClick={handleCloseProductModal}>Close</Button>
+                    </Box>
+                </Modal>
             </ThemeProvider>
         </Box>
     );
