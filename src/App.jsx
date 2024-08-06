@@ -9,6 +9,7 @@ import GenerateItem from './Components/Items/GenerateItem'
 import Marketplace from './Components/Marketplace/Marketplace'
 import BarcodeScanner from './Components/BarcodeScanner/BarcodeScanner'
 import ShowcaseDisplay from './Components/Showcase/ShowcaseDisplay'
+import ProductDetails from './Components/Products/ProductDetails'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import '../src/assets/fonts/font.css'
 
@@ -46,6 +47,7 @@ function App() {
             <Route path='/marketplace' element={<Marketplace />} />
             <Route path='/scan' element={<BarcodeScanner />} />
             <Route path='/showcases/:id' element={<ShowcaseDisplay />} />
+            <Route path='/product/:productEan' element={<ProductDetails />} />
           </Routes>
         </AuthProvider>
       </Router>
