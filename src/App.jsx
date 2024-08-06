@@ -47,7 +47,7 @@ function App() {
             <Route path='/marketplace' element={<Marketplace />} />
             <Route path='/scan' element={<BarcodeScanner />} />
             <Route path='/showcases/:id' element={<ShowcaseDisplay />} />
-            <Route path='/product/:productEan' element={<ProductDetails />} />
+            <Route path='/products/:productEan' element={<ProductDetails />} />
           </Routes>
         </AuthProvider>
       </Router>
