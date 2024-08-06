@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { TextField, Radio, FormControlLabel, FormLabel,RadioGroup, Button, Container, Box, Typography, Grid, Avatar, CssBaseline, Select, MenuItem, FormControl, InputLabel, Modal } from '@mui/material';
+import { TextField, Radio, FormControlLabel, FormLabel, RadioGroup, Button, Container, Box, Typography, Grid, Avatar, CssBaseline, Select, MenuItem, FormControl, InputLabel, Modal } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ItemDisplay from "./ItemDisplay";
@@ -9,7 +9,6 @@ import { useAuth } from "../../helpers/AuthContext";
 import productHelper from "../../helpers/productHelpers";
 import { addItemsToFirstShowcase, getShowcasesByUserUid } from "../../helpers/showcaseHelpers";
 import BarcodeScanner from "../BarcodeScanner/BarcodeScanner";
-import { PrimaryButton, SecondaryButton } from "../../helpers/ButtonSystem";
 
 
 const theme = createTheme({
@@ -36,8 +35,8 @@ export default function GenerateItem() {
     const { getProductByCode, createProduct } = productHelper;
     const navigate = useNavigate();
     const { user } = useAuth();
-    const [itemCode, setItemCode] = useState("");
-    const [itemType, setItemType] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchType, setSearchType] = useState("");
     const [condition, setCondition] = useState("");
     const [userDescription, setUserDescription] = useState("");
     const [imgUrl, setImgUrl] = useState("");
@@ -53,33 +52,37 @@ export default function GenerateItem() {
 
     useEffect(() => {
         if (scannedBarcode) {
-            setItemCode(scannedBarcode);
+            setSearchQuery(scannedBarcode);
             handleCloseModal();
         }
     }, [scannedBarcode]);
 
     useEffect(() => {
-        const sanitizedCode = itemCode.replace(/-/g, '');
+        const sanitizedQuery = searchQuery.replace(/-/g, '');
     
-        if (sanitizedCode.length === 13) {
-            if (sanitizedCode.startsWith('0')) {
-                setItemType("UPC-A (GTIN-12)");
+        if (/^\d+$/.test(sanitizedQuery)) {
+            if (sanitizedQuery.length === 13) {
+                if (sanitizedQuery.startsWith('0')) {
+                    setSearchType("UPC-A (GTIN-12)");
+                } else {
+                    setSearchType("EAN-13 (ISBN/ GTIN-13)");
+                }
+            } else if (sanitizedQuery.length === 12) {
+                setSearchType("UPC-A (GTIN-12)");
             } else {
-                setItemType("EAN-13 (ISBN/ GTIN-13)");
+                setSearchType("Code");
             }
-        } else if (sanitizedCode.length === 12) {
-            setItemType("UPC-A (GTIN-12)");
         } else {
-            setItemType("");
+            setSearchType("Keyword");
         }
-        setItemCode(sanitizedCode);
-    }, [itemCode]);
+        setSearchQuery(sanitizedQuery);
+    }, [searchQuery]);
     
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         switch(name) {
-            case "item-code":
-                setItemCode(value);
+            case "search-query":
+                setSearchQuery(value);
                 break;
             case "condition":
                 setCondition(value);
@@ -121,75 +124,47 @@ export default function GenerateItem() {
         }
       
         try {
-            // First, search in the internal database
-            let product;
-            try {
-                product  = await getProductByCode(itemCode);
-            } catch (error) {
-                console.log("error");
-            }
-            if (product) {
-                const newItem = await createItem(
-                    user.uid, 
-                    product.ean, 
-                    imgUrl, 
-                    condition, 
-                    userDescription,
-                    price,
-                    forSale
-                );
-                newItem.data = product;
-                newItem.condition = condition;
-                newItem.userDescription = userDescription;
-                newItem.imgUrl = imgUrl;
-                newItem.price = price;
-                newItem.forSale = forSale;
-                console.log("Existing product: ", newItem);    
-                setGeneratedItems(prevItems => [...prevItems, newItem]);
-            } else {
-                // If not found internally, search the external API
-                const externalData = await searchExternalApi(itemCode);
-                // console.log(externalData);
-                if (externalData && externalData.items && externalData.items.length > 0) {
-                    product = externalData.items[0];
-                    // Create the product in our internal database
-                    try {
-                        const cleanedData = {
-                            upc: product.upc,
-                            isbn: product.isbn,
-                            ean: product.ean,
-                            data: product,
-                        }
-                        const newProduct = await createProduct(cleanedData);
-                        console.log("New product created!!");
-
-                        const newItem = await createItem(user.uid, newProduct.ean, imgUrl, condition, userDescription);
-                        newItem.data = newProduct;
-                        newItem.condition = condition;
-                        newItem.userDescription = userDescription;
-                        newItem.imgUrl = imgUrl;
-                        newItem.price = price;
-                        newItem.forSale = forSale;
-                        console.log("New item created!!");
-                        console.log("Newly created prod: ", newItem);
-                        
-                        // Add the new item to the first showcase
-                        await addItemsToFirstShowcase(
-                            user.uid, [{
-                            productEan: newItem.data.ean,
-                            condition: newItem.condition,
-                            userDescription: newItem.userDescription,
-                            imgUrl: newItem.imgUrl
-                        }]);
-                        
-                        setGeneratedItems(prevItems => [...prevItems, newItem]);
-                    } catch (error) {
-                        console.log("failed to create prod");
-                        setError("Failed to create product");
+            // Search the external API
+            const externalData = await searchExternalApi(searchQuery);
+            if (externalData && externalData.length > 0) {
+                const product = externalData[0];
+                // Create the product in our internal database
+                try {
+                    const cleanedData = {
+                        upc: product.upc,
+                        isbn: product.isbn,
+                        ean: product.ean,
+                        data: product,
                     }
-                } else {
-                    setError("No product found for the given code");
+                    const newProduct = await createProduct(cleanedData);
+                    console.log("New product created!!");
+
+                    const newItem = await createItem(user.uid, newProduct.ean, imgUrl, condition, userDescription, price, forSale);
+                    newItem.data = newProduct;
+                    newItem.condition = condition;
+                    newItem.userDescription = userDescription;
+                    newItem.imgUrl = imgUrl;
+                    newItem.price = price;
+                    newItem.forSale = forSale;
+                    console.log("New item created!!");
+                    console.log("Newly created prod: ", newItem);
+                    
+                    // Add the new item to the first showcase
+                    await addItemsToFirstShowcase(
+                        user.uid, [{
+                        productEan: newItem.data.ean,
+                        condition: newItem.condition,
+                        userDescription: newItem.userDescription,
+                        imgUrl: newItem.imgUrl
+                    }]);
+                    
+                    setGeneratedItems(prevItems => [...prevItems, newItem]);
+                } catch (error) {
+                    console.log("failed to create prod");
+                    setError("Failed to create product");
                 }
+            } else {
+                setError("No product found for the given search query");
             }
         } catch (error) {
             console.error("Error during item generation:", error);
@@ -286,19 +261,19 @@ export default function GenerateItem() {
                                     <Box display="flex" alignItems="center">
                                         <TextField
                                             fullWidth
-                                            id="item-code"
-                                            label="Item Code"
-                                            name="item-code"
-                                            value={itemCode}
+                                            id="search-query"
+                                            label="Search Query"
+                                            name="search-query"
+                                            value={searchQuery}
                                             onChange={handleInputChange}
-                                            placeholder="Enter Code"
+                                            placeholder="Enter Code or Keyword"
                                         />
                                         <Typography variant="body1" sx={{ mx: 1 }}>or</Typography>
                                         <Button variant="contained" onClick={handleOpenModal}>
                                             Scan
                                         </Button>
                                     </Box>
-                                    {itemType && <Typography variant="caption" display="block" gutterBottom>Detected Code Type: {itemType}</Typography>}
+                                    {searchType && <Typography variant="caption" display="block" gutterBottom>Detected Search Type: {searchType}</Typography>}
                                 </Grid>
                                 <Grid item xs={12}>
                                     <FormControl fullWidth>
