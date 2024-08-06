@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card, CardMedia, CardContent, CardActions, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { PrimaryButton, SecondaryButton } from "../../helpers/ButtonSystem";
 
-export default function ProductItem({ item, onDelete, onUpdate }) {
+export default function ProductItem({ item, onDelete, onUpdate, isOwner }) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const { id, productEan, imageUrl, condition, userDescription, forSale, price } = item;
   const { searchableTitle, searchableBrand, searchableDescription } = item.product;
@@ -61,14 +61,16 @@ export default function ProductItem({ item, onDelete, onUpdate }) {
           </Typography>
         )}
       </CardContent>
-      <CardActions sx={{ justifyContent: 'flex-end', padding: '16px' }}>
-        <SecondaryButton onClick={handleDeleteClick} sx={{ fontFamily: 'Komika Axis' }}>
-          Delete
-        </SecondaryButton>
-        <PrimaryButton onClick={handleEdit} sx={{ fontFamily: 'Komika Axis' }}>
-          Edit
-        </PrimaryButton>
-      </CardActions>
+      {isOwner && (
+        <CardActions sx={{ justifyContent: 'flex-end', padding: '16px' }}>
+          <SecondaryButton onClick={handleDeleteClick} sx={{ fontFamily: 'Komika Axis' }}>
+            Delete
+          </SecondaryButton>
+          <PrimaryButton onClick={handleEdit} sx={{ fontFamily: 'Komika Axis' }}>
+            Edit
+          </PrimaryButton>
+        </CardActions>
+      )}
 
       <Dialog
         open={isDeleteDialogOpen}

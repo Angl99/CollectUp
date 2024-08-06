@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Typography, Grid, Container, Box } from '@mui/material';
 import ProductItem from './ProductItem';
+import { useAuth } from '../../helpers/AuthContext';
 
 const ProductDetails = () => {
   const { productEan } = useParams();
@@ -10,6 +11,7 @@ const ProductDetails = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -84,6 +86,7 @@ const ProductDetails = () => {
                 item={item}
                 onDelete={handleDeleteItem}
                 onUpdate={handleUpdateItem}
+                isOwner={user && user.uid === item.userId}
               />
             </Grid>
           ))}
