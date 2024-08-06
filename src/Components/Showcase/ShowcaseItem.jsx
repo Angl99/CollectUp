@@ -66,10 +66,10 @@ export default function ShowcaseItem({ item, onDelete, onUpdate }) {
         </Typography>
       </CardContent>
       <CardActions sx={{ justifyContent: 'flex-end', padding: '16px' }}>
-        <SecondaryButton onClick={handleDeleteClick} sx={{ fontFamily: 'Komika Axis' }}>
+        <SecondaryButton onClick={handleDeleteClick}>
           Delete
         </SecondaryButton>
-        <PrimaryButton onClick={handleEdit} sx={{ fontFamily: 'Komika Axis' }}>
+        <PrimaryButton onClick={handleEdit}>
           Edit
         </PrimaryButton>
       </CardActions>

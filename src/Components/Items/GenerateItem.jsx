@@ -336,7 +336,7 @@ function GenerateItem() {
                                         type="number"
                                         fullWidth
                                         id="price"
-                                        label="price"
+                                        label="Price"
                                         name="price"
                                         value={price}
                                         onChange={handleInputChange}

@@ -16,14 +16,14 @@ const MarketplaceItem = ({ item, onAddToCart }) => (
       <Typography variant="h6" component="div" className="mb-2">
         {item.product.title || item.product.data.title}
       </Typography>
-      <Typography variant="body2" color="text.secondary" className="mb-2">
-        {item.userDescription || item.product.description}
-      </Typography>
       <Typography variant="body1" color="text.primary" className="mb-1">
         Price: ${item.price}
       </Typography>
       <Typography variant="body2" color="text.secondary" className="mb-2">
         Condition: {item.condition ? item.condition.charAt(0).toUpperCase() + item.condition.slice(1) : 'N/A'}
+      </Typography>
+      <Typography variant="body2" color="text.secondary" className="mb-2">
+        {item.userDescription || item.product.description}
       </Typography>
     </CardContent>
     <div className="p-4 pt-0">
@@ -95,7 +95,6 @@ const Marketplace = () => {
     setTempFilters({...filters});
     setIsFilterOpen(false);
   };
-  console.log(items, searchTerm);
 
   const filteredItems = items.filter(item =>
     item.product.data.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
