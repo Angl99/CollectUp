@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { Typography, Grid, Container, Box } from '@mui/material';
+import ProductItem from './ProductItem';
 
 const ProductDetails = () => {
   const { productEan } = useParams();
@@ -32,59 +34,62 @@ const ProductDetails = () => {
     fetchProductDetails();
   }, [productEan]);
 
-  // Function to render product details
-  const renderProductDetails = () => {
-    // TODO: Implement a more detailed view of the product
-    return (
-      <div>
-        <h2>{product.searchableTitle}</h2>
-        <p>EAN: {product.ean}</p>
-        <p>Brand: {product.searchableBrand}</p>
-        <p>Description: {product.searchableDescription}</p>
-        {/* TODO: Add more product details here */}
-      </div>
-    );
+  const handleDeleteItem = async (itemId) => {
+    try {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/items/${itemId}`);
+      setItems(items.filter(item => item.id !== itemId));
+    } catch (error) {
+      console.error('Error deleting item:', error);
+      // TODO: Add error handling UI
+    }
   };
 
-  // Function to render items list
-  const renderItemsList = () => {
-    // TODO: Implement a more detailed view of items
-    return (
-      <ul>
-        {items.map(item => (
-          <li key={item.id}>
-            Item ID: {item.id}
-            {/* TODO: Add more item details here */}
-          </li>
-        ))}
-      </ul>
-    );
+  const handleUpdateItem = async (itemId, updatedData) => {
+    try {
+      const response = await axios.put(`${import.meta.env.VITE_API_URL}/items/${itemId}`, updatedData);
+      setItems(items.map(item => item.id === itemId ? response.data : item));
+    } catch (error) {
+      console.error('Error updating item:', error);
+      // TODO: Add error handling UI
+    }
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Typography>Loading...</Typography>;
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <Typography color="error">{error}</Typography>;
   }
 
   return (
-    <div>
-      <h1>Product Details</h1>
-      {renderProductDetails()}
-      
-      <h3>Items:</h3>
-      {renderItemsList()}
-
-      {/* TODO: Add additional sections as needed */}
-      {/* For example: 
-      - Product images gallery
-      - User reviews
-      - Related products
-      - Add to cart functionality
-      */}
-    </div>
+    <Container>
+      <Box my={4}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Product Details
+        </Typography>
+        {product && (
+          <Box mb={4}>
+            <Typography variant="h5">{product.searchableTitle}</Typography>
+            <Typography>EAN: {product.ean}</Typography>
+            <Typography>Brand: {product.searchableBrand}</Typography>
+            <Typography>Description: {product.searchableDescription}</Typography>
+          </Box>
+        )}
+        <Typography variant="h5" gutterBottom>Items:</Typography>
+        <Grid container spacing={3}>
+          {items.map(item => (
+            <Grid item xs={12} sm={6} md={4} key={item.id}>
+              <ProductItem
+                item={item}
+                onDelete={handleDeleteItem}
+                onUpdate={handleUpdateItem}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    </Container>
   );
 };
 
