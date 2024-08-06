@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { Box, Typography, Button, Grid, CircularProgress, Container, Fab, useMediaQuery, useTheme, IconButton, Tooltip, Dialog,DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
+import { Box, Typography, Button, Grid, CircularProgress, Container, Fab, useTheme, IconButton, Tooltip, Dialog,DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
 import ShowcaseItem from "./ShowcaseItem";
 import { useAuth } from "../../helpers/AuthContext";
 import { getShowcaseById, addItemsToShowcase, removeItemsFromShowcase } from "../../helpers/showcaseHelpers";
@@ -27,7 +27,6 @@ import copy from 'copy-to-clipboard';
   const [isCopied, setIsCopied] = useState(false);
   const { id } = useParams();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   
   useEffect(() => {
@@ -150,20 +149,11 @@ import copy from 'copy-to-clipboard';
   return (
     <Container maxWidth="lg" sx={{ mt: 12, mb: 4 }}>
       <Box my={4}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
           <Typography variant="h5" component="h1" sx={{ fontFamily: 'Komika Axis' }}>
             Your Showcase
           </Typography>
           <Box>
-            <Tooltip title="Add Item">
-              <IconButton 
-                color="primary" 
-                onClick={() => navigate('/genItem')}
-                size="large"
-              >
-                <AddIcon />
-              </IconButton>
-            </Tooltip>
             <Tooltip title={isGridView ? "List View" : "Grid View"}>
               <IconButton 
                 color="primary" 
@@ -184,6 +174,16 @@ import copy from 'copy-to-clipboard';
             </Tooltip>
           </Box>
         </Box>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          fullWidth 
+          startIcon={<AddIcon />}
+          onClick={() => navigate('/genItem')}
+          sx={{ mb: 3 }}
+        >
+          Add Item
+        </Button>
         {items.length === 0 ? (
           <Typography variant="body1" color="textSecondary">
             No items in the showcase yet.
@@ -192,12 +192,11 @@ import copy from 'copy-to-clipboard';
           <Grid container spacing={2}>
             {items.map((item, index) => (
               <Grid item xs={isGridView ? 6 : 12} sm={isGridView ? 6 : 12} md={isGridView ? 4 : 12} key={index} sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <ShowcaseItem 
-                    item={item} 
-                    onDelete={handleDelete}
-                    onUpdate={handleUpdate}
-                  />
-        
+                <ShowcaseItem 
+                  item={item} 
+                  onDelete={handleDelete}
+                  onUpdate={handleUpdate}
+                />
               </Grid>
             ))}
           </Grid>

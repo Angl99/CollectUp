@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardMedia, Typography, Grid, Button, TextField, SwipeableDrawer, FormControl, FormControlLabel, Radio, RadioGroup, Slider, CircularProgress, Snackbar } from '@mui/material';
+import { Card, CardContent, CardMedia, Typography, Grid, Button, IconButton, TextField, SwipeableDrawer, FormControl, FormControlLabel, Radio, RadioGroup, Slider, CircularProgress, Snackbar } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import axios from 'axios';
 
@@ -16,14 +16,14 @@ const MarketplaceItem = ({ item, onAddToCart }) => (
       <Typography variant="h6" component="div" className="mb-2">
         {item.product.title || item.product.data.title}
       </Typography>
-      <Typography variant="body2" color="text.secondary" className="mb-2">
-        {item.userDescription || item.product.description}
-      </Typography>
       <Typography variant="body1" color="text.primary" className="mb-1">
         Price: ${item.price}
       </Typography>
       <Typography variant="body2" color="text.secondary" className="mb-2">
         Condition: {item.condition ? item.condition.charAt(0).toUpperCase() + item.condition.slice(1) : 'N/A'}
+      </Typography>
+      <Typography variant="body2" color="text.secondary" className="mb-2">
+        {item.userDescription || item.product.description}
       </Typography>
     </CardContent>
     <div className="p-4 pt-0">
@@ -95,7 +95,6 @@ const Marketplace = () => {
     setTempFilters({...filters});
     setIsFilterOpen(false);
   };
-  console.log(items, searchTerm);
 
   const filteredItems = items.filter(item =>
     item.product.data.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
@@ -105,8 +104,6 @@ const Marketplace = () => {
   );
 
   const handleAddToCart = (item) => {
-    // Here you would typically add the item to the cart in your state management solution
-    // For this example, we'll just show a snackbar notification
     setSnackbarMessage(`${item.name} added to cart!`);
     setSnackbarOpen(true);
   };
@@ -132,14 +129,14 @@ const Marketplace = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="mr-2"
         />
-        <Button
-          variant="contained"
+        <IconButton
           color="primary"
           onClick={toggleDrawer(true)}
-          startIcon={<FilterListIcon />}
+          aria-label="filter"
+          style={{ marginLeft: '16px' }}
         >
-          Filter
-        </Button>
+          <FilterListIcon />
+        </IconButton>
       </div>
       {loading ? (
         <div className="flex justify-center items-center h-64">

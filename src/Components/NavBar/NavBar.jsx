@@ -71,7 +71,7 @@ const AnimatedBottomNav = styled('div')(({ theme }) => ({
   bottom: 0,
   left: 0,
   right: 0,
-  backgroundColor: theme.palette.background.default,
+  backgroundColor: 'black', // Changed to black
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -96,7 +96,7 @@ const AnimatedMenuItem = styled('button')(({ theme, active }) => ({
   alignItems: 'center',
   justifyContent: 'center',
   padding: '0.55em 0 0.85em',
-  color: active ? theme.palette.primary.main : theme.palette.text.primary,
+  color: active ? theme.palette.primary.main : theme.palette.background.default,
 }));
 
 // component for the icon in each menu item
@@ -109,8 +109,9 @@ const AnimatedIcon = styled('div')(({ theme }) => ({
   marginBottom: '0.3em',
 }));
 
-const IconLabel = styled('span')(({ theme }) => ({
+const IconLabel = styled('span')(({ theme, active }) => ({
   fontSize: '0.8em',
+  color: active ? theme.palette.primary.main : theme.palette.background.default,
 }));
 
 export default function NavBar() {
@@ -375,10 +376,11 @@ export default function NavBar() {
               activeIndex === index ? item.filledIcon : item.icon,
               {
                 color: activeIndex === index ? 'primary' : 'inherit',
+                style: { color: activeIndex === index ? theme.palette.primary.main : theme.palette.background.default },
               }
             )}
           </AnimatedIcon>
-          <IconLabel>{item.label}</IconLabel>
+          <IconLabel active={activeIndex === index}>{item.label}</IconLabel>
         </AnimatedMenuItem>
       ))}
     </AnimatedBottomNav>

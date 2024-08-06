@@ -43,7 +43,7 @@ export default function ShowcaseItem({ item, onDelete, onUpdate }) {
         alt={title}
       />
       <CardContent sx={{ flexGrow: 1 }}>
-        <Typography variant="h5" component="div" gutterBottom sx={{ fontFamily: 'Komika Axis' }}>
+        <Typography variant="inherit" component="div" gutterBottom sx={{ fontFamily: 'Komika Axis' }}>
           {title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
@@ -66,12 +66,19 @@ export default function ShowcaseItem({ item, onDelete, onUpdate }) {
         </Typography>
       </CardContent>
       <CardActions sx={{ justifyContent: 'flex-end', padding: '16px' }}>
-        <SecondaryButton onClick={handleDeleteClick} sx={{ fontFamily: 'Komika Axis' }}>
+        <Button 
+          onClick={handleDeleteClick}
+          variant="outlined"
+          color="primary"
+        >
           Delete
-        </SecondaryButton>
-        <PrimaryButton onClick={handleEdit} sx={{ fontFamily: 'Komika Axis' }}>
+        </Button>
+        <Button 
+          onClick={handleEdit}
+          variant="contained"
+        >
           Edit
-        </PrimaryButton>
+        </Button>
       </CardActions>
 
       <ItemForm

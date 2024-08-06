@@ -19,7 +19,7 @@ export const PrimaryButton = ({ children, ...props }) => (
 export const SecondaryButton = ({ children, ...props }) => (
   <Button
     variant="outlined"
-    color="accent"
+    color="primary"
     sx={{
       textTransform: 'none',
       borderRadius: '8px',
