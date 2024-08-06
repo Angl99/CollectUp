@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { Box, Typography, Button, Grid, CircularProgress, Container, Fab, useMediaQuery, useTheme, IconButton, Tooltip, Dialog,DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
+import { Box, Typography, Button, Grid, CircularProgress, Container, Fab, useTheme, IconButton, Tooltip, Dialog,DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
 import ShowcaseItem from "./ShowcaseItem";
 import { useAuth } from "../../helpers/AuthContext";
 import { getShowcaseById, addItemsToShowcase, removeItemsFromShowcase } from "../../helpers/showcaseHelpers";
@@ -27,7 +27,6 @@ import copy from 'copy-to-clipboard';
   const [isCopied, setIsCopied] = useState(false);
   const { id } = useParams();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   
   useEffect(() => {
