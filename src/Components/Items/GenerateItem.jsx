@@ -150,14 +150,22 @@ function GenerateItem() {
 
     const createItemFromProduct = async (product) => {
         try {
-            const cleanedData = {
-                upc: product.upc,
-                isbn: product.isbn,
-                ean: product.ean,
-                data: product,
+            let existingProduct = await getProductByCode(product.ean);
+            let newProduct;
+
+            if (!existingProduct) {
+                const cleanedData = {
+                    upc: product.upc,
+                    isbn: product.isbn,
+                    ean: product.ean,
+                    data: product,
+                }
+                newProduct = await createProduct(cleanedData);
+                console.log("New product created!!");
+            } else {
+                newProduct = existingProduct;
+                console.log("Existing product found!");
             }
-            const newProduct = await createProduct(cleanedData);
-            console.log("New product created!!");
 
             const newItem = await createItem(user.uid, newProduct.ean, imgUrl, condition, userDescription, price, forSale);
             newItem.data = newProduct;
