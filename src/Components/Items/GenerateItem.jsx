@@ -59,19 +59,22 @@ export default function GenerateItem() {
     }, [scannedBarcode]);
 
     useEffect(() => {
-        if (itemCode.length === 13) {
-            if (itemCode.startsWith('0')) {
+        const sanitizedCode = itemCode.replace(/-/g, '');
+    
+        if (sanitizedCode.length === 13) {
+            if (sanitizedCode.startsWith('0')) {
                 setItemType("UPC-A (GTIN-12)");
             } else {
                 setItemType("EAN-13 (ISBN/ GTIN-13)");
             }
-        } else if (itemCode.length === 12) {
+        } else if (sanitizedCode.length === 12) {
             setItemType("UPC-A (GTIN-12)");
         } else {
             setItemType("");
         }
+        setItemCode(sanitizedCode);
     }, [itemCode]);
-
+    
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         switch(name) {

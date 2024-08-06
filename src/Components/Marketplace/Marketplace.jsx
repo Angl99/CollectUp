@@ -8,13 +8,13 @@ const MarketplaceItem = ({ item, onAddToCart }) => (
   <Card className="h-full flex flex-col">
     <CardMedia
       component="img"
-      image={item.imageUrl || (item.product?.images || [])[0]}
+      image={item.imageUrl || (item.product?.images || [])[0] || item.product.data?.images[0]}
       alt={item.product.title}
       className="h-48 object-cover"
     />
     <CardContent className="flex-grow p-4">
       <Typography variant="h6" component="div" className="mb-2">
-        {item.product.title}
+        {item.product.title || item.product.data.title}
       </Typography>
       <Typography variant="body2" color="text.secondary" className="mb-2">
         {item.userDescription || item.product.description}
