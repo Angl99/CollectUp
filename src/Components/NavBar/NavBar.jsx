@@ -326,8 +326,32 @@ export default function NavBar() {
             id="combo-box-demo"
             options={searchProducts}
             openOnFocus={false}
-            sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Search" />}
+            sx={{ 
+              width: 300,
+              '& .MuiInputBase-root': {
+                backgroundColor: 'white',
+              },
+            }}
+            renderInput={(params) => (
+              <TextField 
+                {...params} 
+                label="Search" 
+                variant="outlined"
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: 'rgba(0, 0, 0, 0.23)', // Default border color
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'rgba(0, 0, 0, 0.87)', // Hover border color
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'primary.main', // Focused border color
+                    },
+                  },
+                }}
+              />
+            )}
             value={searchQuery}
             onInputChange={(e, v) => setSearchQuery(v)}
             renderOption={renderOption}
