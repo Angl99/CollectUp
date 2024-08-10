@@ -97,6 +97,7 @@ export default function BarcodeScanner({ setScannedBarcode, onClose }) {
     setIsCameraActive(false);
     stopCamera();
     onClose();
+    window.location.reload();
   };
 
   if (!isCameraActive) {
@@ -104,7 +105,7 @@ export default function BarcodeScanner({ setScannedBarcode, onClose }) {
   }
 
   return (
-    <div ref={containerRef} style={{ position: 'relative', width: '100%', height: '100vh' }}>
+    <div ref={containerRef} style={{ position: 'relative', width: '100%', height: '80vh' }}>
       {isBarcodeDetectorSupported ? (
         <>
           <video 

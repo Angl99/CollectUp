@@ -68,14 +68,16 @@ export default function ShowcaseItem({ item, onDelete, onUpdate }) {
       <CardActions sx={{ justifyContent: 'flex-end', padding: '16px' }}>
         <Button 
           onClick={handleDeleteClick}
-          variant="outlined"
+          variant="text"
           color="primary"
+          size="small"
         >
           Delete
         </Button>
         <Button 
           onClick={handleEdit}
           variant="contained"
+          size="small"
         >
           Edit
         </Button>
@@ -104,10 +106,10 @@ export default function ShowcaseItem({ item, onDelete, onUpdate }) {
         </DialogContent>
         <DialogActions>
           <SecondaryButton onClick={handleCancelDelete}>
-            No
+            NO
           </SecondaryButton>
           <PrimaryButton onClick={handleConfirmDelete} autoFocus>
-            Yes
+            YES
           </PrimaryButton>
         </DialogActions>
       </Dialog>

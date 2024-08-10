@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { Box, Typography, Button, Grid, CircularProgress, Container, Fab, useTheme, IconButton, Tooltip, Dialog,DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
+import { Box, Typography, Button, Grid, CircularProgress, Container, Fab, createTheme, ThemeProvider, IconButton, Tooltip, Dialog,DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
 import ShowcaseItem from "./ShowcaseItem";
 import { useAuth } from "../../helpers/AuthContext";
 import { getShowcaseById, addItemsToShowcase, removeItemsFromShowcase } from "../../helpers/showcaseHelpers";
@@ -26,9 +26,27 @@ import copy from 'copy-to-clipboard';
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const { id } = useParams();
-  const theme = useTheme();
-
   
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#3498db',
+      },
+      secondary: {
+        main: '#95a5a6',
+      },
+      accent: {
+        main: '#623c8c',
+      },
+      text: {
+        primary: '#34495e',
+      },
+      background: {
+        default: '#f0f3f5',
+      },
+    },
+  });
+
   useEffect(() => {
     const loadOrCreateShowcase = async () => {
       if (user) {
@@ -147,105 +165,115 @@ import copy from 'copy-to-clipboard';
   };
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 12, mb: 4 }}>
-      <Box my={4}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-          <Typography variant="h5" component="h1" sx={{ fontFamily: 'Komika Axis' }}>
-            Your Showcase
-          </Typography>
-          <Box>
-            <Tooltip title={isGridView ? "List View" : "Grid View"}>
-              <IconButton 
-                color="primary" 
-                onClick={toggleView}
-                size="large"
-              >
-                {isGridView ? <ViewListIcon /> : <GridViewIcon />}
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Share">
-              <IconButton 
-                color="primary" 
-                onClick={handleShareClick}
-                size="large"
-              >
-                <ShareIcon />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        </Box>
-        <Button 
-          variant="contained" 
-          color="primary" 
-          fullWidth 
-          startIcon={<AddIcon />}
-          onClick={() => navigate('/genItem')}
-          sx={{ mb: 3 }}
-        >
-          Add Item
-        </Button>
-        {items.length === 0 ? (
-          <Typography variant="body1" color="textSecondary">
-            No items in the showcase yet.
-          </Typography>
-        ) : (
-          <Grid container spacing={2}>
-            {items.map((item, index) => (
-              <Grid item xs={isGridView ? 6 : 12} sm={isGridView ? 6 : 12} md={isGridView ? 4 : 12} key={index} sx={{ display: 'flex', justifyContent: 'center' }}>
-                <ShowcaseItem 
-                  item={item} 
-                  onDelete={handleDelete}
-                  onUpdate={handleUpdate}
-                />
-              </Grid>
-            ))}
-          </Grid>
-        )}
-      </Box>
-      {showScrollTop && (
-        <Box
-          onClick={scrollToTop}
-          role="presentation"
-          sx={{
-            position: 'fixed',
-            bottom: 16,
-            right: 16,
-            zIndex: 1000,
-          }}
-        >
-          <Fab color="primary" size="small" aria-label="scroll back to top">
-            <KeyboardArrowUpIcon />
-          </Fab>
-        </Box>
-      )}
-      {/* Share Modal */}
-      <Dialog open={isShareModalOpen} onClose={handleCloseShareModal} fullWidth>
-        <DialogTitle sx={{ fontWeight: "bold" }}>Share Your Showcase</DialogTitle>
-        <DialogContent>
-          <Box display="flex" alignItems="center" mt={2}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              value={window.location.href}
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-            <IconButton color="primary" onClick={handleShare} size="large">
-              <ContentCopyIcon />
-            </IconButton>
-          </Box>
-          {isCopied && (
-            <Typography color="primary" variant="body2" mt={1}>
-              Link copied to clipboard!
+    <ThemeProvider theme={theme}>
+      <Container maxWidth="lg" sx={{ mt: 12, mb: 4, pb: 3 }}>
+        <Box my={4}>
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+            <Typography variant="h5" component="h1" sx={{ 
+              fontFamily: 'Komika Axis',
+              fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' }
+            }}>
+              Your Showcase
             </Typography>
+            <Box>
+              <Tooltip title={isGridView ? "List View" : "Grid View"}>
+                <IconButton 
+                  color="primary" 
+                  onClick={toggleView}
+                  size="large"
+                  sx={{ align: 'right' }}
+                >
+                  {isGridView ? <ViewListIcon /> : <GridViewIcon />}
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Share">
+                <IconButton 
+                  color="primary" 
+                  onClick={handleShareClick}
+                  size="large"
+                >
+                  <ShareIcon />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          </Box>
+          <Button 
+            variant="contained" 
+            fullWidth 
+            startIcon={<AddIcon />}
+            onClick={() => navigate('/genItem')}
+            sx={{ 
+              mb: 3, 
+              backgroundColor: 'primary.main', 
+              color: '#ffffff',
+              fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' }
+            }}
+          >
+            Add Item
+          </Button>
+          {items.length === 0 ? (
+            <Typography variant="body1" color="textSecondary">
+              No items in the showcase yet.
+            </Typography>
+          ) : (
+            <Grid container spacing={2}>
+              {items.map((item, index) => (
+                <Grid item xs={isGridView ? 6 : 12} sm={isGridView ? 6 : 12} md={isGridView ? 4 : 12} key={index} sx={{ display: 'flex', justifyContent: 'center' }}>
+                  <ShowcaseItem 
+                    item={item} 
+                    onDelete={handleDelete}
+                    onUpdate={handleUpdate}
+                  />
+                </Grid>
+              ))}
+            </Grid>
           )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseShareModal}>Close</Button>
-        </DialogActions>
-      </Dialog>
-    </Container>
+        </Box>
+        {showScrollTop && (
+          <Box
+            onClick={scrollToTop}
+            role="presentation"
+            sx={{
+              position: 'fixed',
+              bottom: 450,
+              right: 16,
+              zIndex: 1000,
+            }}
+          >
+            <Fab color="black" size="small" aria-label="scroll back to top" sx={{ opacity: 0.8 }}>
+              <KeyboardArrowUpIcon />
+            </Fab>
+          </Box>
+        )}
+        {/* Share Modal */}
+        <Dialog open={isShareModalOpen} onClose={handleCloseShareModal} fullWidth>
+          <DialogTitle sx={{ fontWeight: "bold" }}>Share Your Showcase</DialogTitle>
+          <DialogContent>
+            <Box display="flex" alignItems="center" mt={2}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                value={window.location.href}
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+              <IconButton color="primary" onClick={handleShare} size="large">
+                <ContentCopyIcon />
+              </IconButton>
+            </Box>
+            {isCopied && (
+              <Typography color="primary" variant="body2" mt={1}>
+                Link copied to clipboard!
+              </Typography>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseShareModal}>Close</Button>
+          </DialogActions>
+        </Dialog>
+      </Container>
+    </ThemeProvider>
   );
 }
 

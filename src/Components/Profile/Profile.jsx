@@ -62,7 +62,7 @@ export default function Profile() {
             <Grid item xs={12} md={10} lg={8}>
               <Card>
                 <Box sx={{ 
-                  backgroundColor: 'primary.main', 
+                  backgroundColor: 'accent.main', 
                   height: isMobile ? 250 : 200, 
                   position: 'relative',
                   display: 'flex',

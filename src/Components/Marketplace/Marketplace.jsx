@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardMedia, Typography, Grid, Button, IconButton, TextField, SwipeableDrawer, FormControl, FormControlLabel, Radio, RadioGroup, Slider, CircularProgress, Snackbar } from '@mui/material';
+import { Card, CardContent, CardMedia, Container, Typography, Grid, Button, Box, IconButton, TextField, SwipeableDrawer, FormControl, FormControlLabel, Radio, RadioGroup, Slider, CircularProgress, Snackbar } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import axios from 'axios';
 
@@ -26,16 +26,16 @@ const MarketplaceItem = ({ item, onAddToCart }) => (
         {item.userDescription || item.product.description}
       </Typography>
     </CardContent>
-    <div className="p-4 pt-0">
+    <Box sx={{ p: 2, pt: 0 }}>
       <Button 
         variant="contained" 
-        color="primary" 
         onClick={() => onAddToCart(item)}
         fullWidth
+        sx={{ backgroundColor: 'primary.main', color: '#ffffff',}}
       >
         Add to Cart
       </Button>
-    </div>
+    </Box>
   </Card>
 );
 
@@ -116,34 +116,34 @@ const Marketplace = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 pt-24">
-      <Typography variant="h4" component="h1" className="mb-6 text-center" sx={{ fontFamily: 'Komika Axis' }}>
+    <Container maxWidth="lg" sx={{ py: 4, pt: 12, pb: 11 }}>
+      <Typography variant="h4" component="h1" align="center" sx={{ mb: 4, fontFamily: 'Komika Axis' }}>
         Marketplace
       </Typography>
-      <div className="flex mb-6 mt-5">
+      <Box sx={{ display: 'flex', mb: 4, mt: 3 }}>
         <TextField
           fullWidth
           variant="outlined"
           placeholder="Search marketplace items..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="mr-2"
+          sx={{ mr: 2 }}
         />
         <IconButton
           color="primary"
           onClick={toggleDrawer(true)}
           aria-label="filter"
-          style={{ marginLeft: '16px' }}
+          sx={{ ml: 2 }}
         >
           <FilterListIcon />
         </IconButton>
-      </div>
+      </Box>
       {loading ? (
-        <div className="flex justify-center items-center h-64">
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
           <CircularProgress />
-        </div>
+        </Box>
       ) : error ? (
-        <Typography color="error" className="text-center mt-8">
+        <Typography color="error" align="center" sx={{ mt: 4 }}>
           {error}
         </Typography>
       ) : (
@@ -155,15 +155,16 @@ const Marketplace = () => {
           ))}
         </Grid>
       )}
+
       <SwipeableDrawer
         anchor="right"
         open={isFilterOpen}
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
       >
-        <div className="w-80 p-4">
-          <Typography variant="h6" className="mb-4">Filters</Typography>
-          <FormControl component="fieldset" className="mb-4">
+        <Box sx={{ width: 300, p: 3 }}>
+          <Typography variant="h6" sx={{ mb: 3, fontWeight: 'bold' }}>Filters</Typography>
+          <FormControl component="fieldset" sx={{ mb: 3 }}>
             <Typography variant="subtitle1">Category</Typography>
             <RadioGroup
                 value={tempFilters.category}
@@ -174,7 +175,7 @@ const Marketplace = () => {
                 <FormControlLabel value="books" control={<Radio />} label="Books" />
             </RadioGroup>
           </FormControl>
-          <div className="mb-4">
+          <Box sx={{ mb: 3 }}>
             <Typography variant="subtitle1">Price Range</Typography>
             <Slider
               value={tempFilters.priceRange}
@@ -183,8 +184,8 @@ const Marketplace = () => {
               min={0}
               max={1000}
             />
-          </div>
-          <FormControl component="fieldset" className="mb-4">
+          </Box>
+          <FormControl component="fieldset" sx={{ mb: 3 }}>
             <Typography variant="subtitle1">Condition</Typography>
             <RadioGroup
               value={tempFilters.condition}
@@ -195,11 +196,11 @@ const Marketplace = () => {
               <FormControlLabel value="used" control={<Radio />} label="Used" />
             </RadioGroup>
           </FormControl>
-          <div className="flex justify-between">
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button variant="outlined" onClick={cancelFilters}>Cancel</Button>
             <Button variant="contained" color="primary" onClick={applyFilters}>Apply</Button>
-          </div>
-        </div>
+          </Box>
+        </Box>
       </SwipeableDrawer>
       <Snackbar
         anchorOrigin={{
@@ -211,7 +212,7 @@ const Marketplace = () => {
         onClose={handleCloseSnackbar}
         message={snackbarMessage}
       />
-    </div>
+    </Container>
   );
 };
 

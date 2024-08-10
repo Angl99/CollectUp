@@ -40,25 +40,61 @@ export default function Home() {
     const popularSeries = [
         {
             title: "One Piece",
-            description: "One Piece is a Japanese anime series based on Eiichiro Oda's manga of the same name, following the adventures of Monkey D. Luffy and his pirate crew as they search for the legendary One Piece treasure to become the Pirate King. The series is renowned for its rich world-building, diverse characters, and compelling story arcs.",
+            description: "One Piece is a Japanese anime series based on Eiichiro Oda's manga of the same name, following the adventures of Monkey D. Luffy and his pirate crew as they search for the legendary One Piece treasure to become the Pirate King.",
             image: "https://imgsrv.crunchyroll.com/cdn-cgi/image/fit=contain,format=auto,quality=85,width=1200,height=675/catalog/crunchyroll/a249096c7812deb8c3c2c907173f3774.jpg"
         },
         {
-            title: "Berserk",
-            description: "Berserk is a Japanese anime series based on Kentaro Miura's dark fantasy manga, following the story of Guts, a lone mercenary with a tragic past, and his struggle against demonic forces and his own inner demons. The series is known for its intense, mature themes, graphic violence, and deep exploration of human nature and suffering.",
-            image: "https://m.media-amazon.com/images/M/MV5BNzgwY2QwYjItYTM1NS00OTZmLThlMjUtNmE0Mzg0OGE0NzE3XkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_.jpg"
-        },
-        {
             title: "Jujutsu Kaisen",
-            description: "Jujutsu Kaisen is a Japanese anime series based on Gege Akutami's manga, centered on Yuji Itadori, a high school student who becomes involved in the world of jujutsu sorcerers after ingesting a powerful cursed object. The series combines supernatural action, dark fantasy, and compelling character development as Yuji and his allies battle malevolent curses.",
+            description: "Jujutsu Kaisen is a Japanese anime series based on Gege Akutami's manga, centered on Yuji Itadori, a high school student who becomes involved in the world of jujutsu sorcerers after ingesting a powerful cursed object.",
             image: "https://imgsrv.crunchyroll.com/cdn-cgi/image/fit=contain,format=auto,quality=85,width=480,height=720/catalog/crunchyroll/e4e80c83c792d81c138e320874dbdffc.jpe"
         },
         {
             title: "Demon Slayer: Kimetsu no Yaiba",
-            description: "Demon Slayer: Kimetsu no Yaiba is a Japanese anime series based on Koyoharu Gotouge's manga, following Tanjiro Kamado, a kind-hearted boy who becomes a demon slayer after his family is slaughtered and his sister Nezuko is turned into a demon. The series is praised for its stunning animation, emotional storytelling, and intense battles as Tanjiro seeks a cure for Nezuko and avenges his family.",
+            description: "Demon Slayer: Kimetsu no Yaiba is a Japanese anime series based on Koyoharu Gotouge's manga, following Tanjiro Kamado, a kind-hearted boy who becomes a demon slayer after his family is slaughtered and his sister Nezuko is turned into a demon.",
             image: "https://m.media-amazon.com/images/M/MV5BZjZjNzI5MDctY2Y4YS00NmM4LTljMmItZTFkOTExNGI3ODRhXkEyXkFqcGdeQXVyNjc3MjQzNTI@._V1_.jpg"
         }
     ];
+
+    const shonenSeries = [
+    {
+        title: "Dragon Ball Z",
+        description: "Dragon Ball Z is a Japanese anime series and sequel to Dragon Ball, based on Akira Toriyama's manga. It follows the adventures of Goku and his allies as they defend the Earth against an assortment of villains ranging from aliens, androids, and magical creatures.",
+        image: "https://m.media-amazon.com/images/M/MV5BNGM5MTEyZDItZWNhOS00NzNkLTgwZTAtNWIzY2IzZmExOWMxXkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg"
+    },
+    {
+        title: "Naruto",
+        description: "Naruto is a Japanese anime series based on Masashi Kishimoto's manga, following the story of Naruto Uzumaki, a young ninja who seeks recognition from his peers and dreams of becoming the Hokage, the leader of his village.",
+        image: "https://upload.wikimedia.org/wikipedia/en/9/94/NarutoCoverTankobon1.jpg"
+    },
+    {
+        title: "Bleach",
+        description: "Bleach is a Japanese anime series based on Tite Kubo's manga, centered on Ichigo Kurosaki, a teenager with the ability to see ghosts. After gaining Soul Reaper powers, Ichigo takes on the duty of protecting humans from evil spirits and guiding departed souls to the afterlife.",
+        image: "https://www.japanpowered.com/media/images/1952586-bleach_wallpaper_04.jpg"
+    },
+    {
+        title: "Hunter x Hunter",
+        description: "Hunter x Hunter is a Japanese anime series based on Yoshihiro Togashi's manga, following Gon Freecss, a young boy who discovers that his father, who he thought was dead, is actually alive and a world-renowned Hunter. Gon decides to become a Hunter himself and find his father.",
+        image: "https://m.media-amazon.com/images/M/MV5BNGM0YTk3MWEtN2JlZC00ZmZmLWIwMDktZTMxZGE5Zjc2MGExXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_FMjpg_UX1000_.jpg"
+    }
+    ];
+
+    const seinenSeries = [
+    {
+        title: "Vagabond",
+        description: "Vagabond is a Japanese seinen manga series written and illustrated by Takehiko Inoue. It portrays a fictionalized account of the life of Japanese swordsman Miyamoto Musashi, based on Eiji Yoshikawa's novel 'Musashi'.",
+        image: "https://m.media-amazon.com/images/I/81AQnk9bGaL._AC_UF1000,1000_QL80_.jpg"
+    },
+    {
+        title: "Berserk",
+        description: "Berserk is a Japanese anime series based on Kentaro Miura's dark fantasy manga, following the story of Guts, a lone mercenary with a tragic past, and his struggle against demonic forces and his own inner demons.",
+        image: "https://m.media-amazon.com/images/M/MV5BNzgwY2QwYjItYTM1NS00OTZmLThlMjUtNmE0Mzg0OGE0NzE3XkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_.jpg"
+    },
+    {
+        title: "Vinland Saga",
+        description: "Vinland Saga is a Japanese historical seinen manga series written and illustrated by Makoto Yukimura. Set in 1013 AD, it follows the story of Thorfinn, a young Viking warrior seeking revenge against his father's killer.",
+        image: "https://countzeroor.com/wp-content/uploads/2023/06/vinland-saga-season-2.webp"
+    }
+];
 
     const navigate = useNavigate();
 
@@ -68,30 +104,13 @@ export default function Home() {
 
     return (
         <ThemeProvider theme={theme}>
-            <Box sx={{ width: '100vw', overflowX: 'hidden', backgroundColor: '#f0f3f5' }}>
-                {/* Custom banner section */}
-                {/* <Box sx={{
-                    width: '100%',
-                    backgroundImage: `url(${customBanner})`,
-                    backgroundSize: 'contain',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundColor: '#623c8c',
-                    height: { xs: '250px', sm: '350px', md: '450px' },
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
-                    marginTop: { xs: '75px', sm: '75px', md: '75px' },
-                }}>
-                </Box> */}
-
+            <Box sx={{ width: '100vw', overflowX: 'hidden', backgroundColor: '#f0f3f5', pb: 7 }}>
                 {/* Brief Introduction section */}
                 <Box sx={{
-                    my: 8,
+                    mt: 8,
+                    mb: 3,
                     p: 8,
                     background: src => `url(${customBanner})`,
-                    // background: (theme) => `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.accent.main} 90%)`,
                     color: 'white',
                     borderRadius: 2,
                     maxWidth: '4xl',
@@ -104,7 +123,7 @@ export default function Home() {
                         Welcome to Auction Alley, where anime enthusiasts and manga collectors unite. 
                     </Typography>
 
-                    <Button 
+                    {/* <Button 
                         variant="outlined" 
                         color="primary" 
                         startIcon={<Explore />}
@@ -112,7 +131,7 @@ export default function Home() {
                         onClick={handleExploreClick}
                     >
                         Explore Marketplace
-                    </Button>
+                    </Button> */}
                 </Box>
 
                 {/* Suggestions section */}
@@ -123,7 +142,7 @@ export default function Home() {
                     alignItems: 'center',
                     padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
                 }}>
-                    <Typography variant="h4" component="h1" gutterBottom align="left" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>
+                    <Typography variant="h4" component="h1" gutterBottom color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>
                         Suggestions
                     </Typography>
                     <Box sx={{ width: '100%', maxWidth: '1200px' }}>
@@ -139,7 +158,6 @@ export default function Home() {
                         </Carousel>
                     </Box>
                 </Box>
-
                 {/* Popular Series section */}
                 <Box sx={{
                     width: '100%',
@@ -148,7 +166,7 @@ export default function Home() {
                     alignItems: 'center',
                     padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
                 }}>
-                    <Typography variant="h4" component="h2" gutterBottom align="center" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>
+                    <Typography variant="h4" component="h2" gutterBottom color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>
                         Popular Series
                     </Typography>
                     <Box sx={{ width: '100%', maxWidth: '1200px' }}>
@@ -165,28 +183,58 @@ export default function Home() {
                             ))}
                         </Carousel>
                     </Box>
-                    {/* Categories section */}
-                    {/* <Box sx={{ my: 8, mx: 'auto', maxWidth: '4xl' }}>
-                        <Typography variant="h5" sx={{ mb: 4, textAlign: 'center' }}>Categories</Typography>
-                        <Grid container spacing={3}>
-                            {[
-                                { name: 'Manga', icon: '📚' },
-                                { name: 'Anime Art', icon: '🎨' },
-                                { name: 'Figurines', icon: '🗿' },
-                                { name: 'Merchandise', icon: '👕' },
-                            ].map((category) => (
-                                <Grid item xs={6} sm={3} key={category.name}>
-                                    <Button 
-                                        variant="outlined" 
-                                        sx={{ width: '100%', height: '6rem', fontSize: '1.125rem' }}
-                                        startIcon={<span style={{ fontSize: '1.5rem' }}>{category.icon}</span>}
-                                    >
-                                        {category.name}
-                                    </Button>
-                                </Grid>
+                </Box>
+                {/* Shonen section */}
+                <Box sx={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
+                }}>
+                    <Typography variant="h4" component="h1" gutterBottom color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>
+                        Shonen
+                    </Typography>
+                    <Box sx={{ width: '100%', maxWidth: '1200px' }}>
+                        {/* Carousel for suggested items */}
+                        <Carousel 
+                            autoPlay={true} 
+                            interval={8000} 
+                            indicators={false} 
+                            navButtonsAlwaysVisible={false}
+                            stopAutoPlayOnHover={true}
+                        >
+                            {shonenSeries.map((series, i) => (
+                                <ShonenSeriesItem key={i} series={series} />
                             ))}
-                        </Grid>
-                    </Box> */}
+                        </Carousel>
+                    </Box>
+                </Box>
+                {/* Seinen section */}
+                <Box sx={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
+                }}>
+                    <Typography variant="h4" component="h1" gutterBottom color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>
+                        Seinen
+                    </Typography>
+                    <Box sx={{ width: '100%', maxWidth: '1200px' }}>
+                        {/* Carousel for suggested items */}
+                        <Carousel 
+                            autoPlay={true} 
+                            interval={8000} 
+                            indicators={false} 
+                            navButtonsAlwaysVisible={false}
+                            stopAutoPlayOnHover={true}
+                        >
+                            {seinenSeries.map((series, i) => (
+                                <SeinenSeriesItem key={i} series={series} />
+                            ))}
+                        </Carousel>
+                    </Box>
                 </Box>
             </Box>
         </ThemeProvider>
@@ -212,23 +260,24 @@ function Item(props) {
             </Box>
             {/* Content container */}
             <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <div>
+                <Box>
                     <Typography variant="inherit" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>{props.item.title}</Typography>
                     <Typography variant="subtitle2" color="#95a5a6" sx={{ mb: 1 }}>{props.item.publisher}</Typography>
-                </div>
-                <div>
-                    <Typography variant="subtitle1" fontWeight="bold" color="#34495e" sx={{ mt: 1 }}>${props.item.price}</Typography>
-                    <Button 
-                        className="CheckButton"
-                        sx={{
-                            backgroundColor: '#623c8c',
-                            color: '#ffffff',
-                            mt: 1
-                        }}
-                    >
-                        Check it out
-                    </Button>
-                </div>
+                </Box>
+                <Box>
+                    <Typography variant="subtitle1" fontWeight="bold" color="#34495e" sx={{ mb: 1 }}>${props.item.price}</Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button 
+                            className="CheckButton"
+                            sx={{
+                                backgroundColor: 'primary.main',
+                                color: '#ffffff',
+                            }}
+                        >
+                            Check it out
+                        </Button>
+                    </Box>
+                </Box>
             </Box>
         </Paper>
     );
@@ -253,22 +302,97 @@ function PopularSeriesItem({ series }) {
             </Box>
             {/* Content container */}
             <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <div>
+                <Box>
                     <Typography variant="h6" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>{series.title}</Typography>
                     <Typography variant="body2" color="#95a5a6">{series.description}</Typography>
-                </div>
-                <div>
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <Button 
                         sx={{
-                            backgroundColor: '#623c8c',
+                            backgroundColor: 'primary.main',
                             color: '#ffffff',
                             mt: 1,
-                            alignItems: 'center'
                         }}
                     >
                         View Series
                     </Button>
-                </div>
+                </Box>
+            </Box>
+        </Paper>
+    );
+}
+
+function ShonenSeriesItem({ series }) {
+    return (
+        <Paper sx={{ backgroundColor: '#ffffff', height: '100%', display: 'flex', flexDirection: 'column' }}>
+            {/* Image container */}
+            <Box sx={{ height: '200px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+                <img 
+                    src={series.image} 
+                    alt={series.title} 
+                    style={{ 
+                        maxWidth: '100%', 
+                        maxHeight: '100%', 
+                        objectFit: 'contain',
+                        paddingTop: '10px'
+                    }}
+                />
+            </Box>
+            {/* Content container */}
+            <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <Box>
+                    <Typography variant="h6" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>{series.title}</Typography>
+                    <Typography variant="body2" color="#95a5a6">{series.description}</Typography>
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button 
+                        sx={{
+                            backgroundColor: 'primary.main',
+                            color: '#ffffff',
+                            mt: 1,
+                        }}
+                    >
+                        Explore {series.title}
+                    </Button>
+                </Box>
+            </Box>
+        </Paper>
+    );
+}
+
+function SeinenSeriesItem({ series }) {
+    return (
+        <Paper sx={{ backgroundColor: '#ffffff', height: '100%', display: 'flex', flexDirection: 'column' }}>
+            {/* Image container */}
+            <Box sx={{ height: '200px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+                <img 
+                    src={series.image} 
+                    alt={series.title} 
+                    style={{ 
+                        maxWidth: '100%', 
+                        maxHeight: '100%', 
+                        objectFit: 'contain',
+                        paddingTop: '10px'
+                    }}
+                />
+            </Box>
+            {/* Content container */}
+            <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <Box>
+                    <Typography variant="h6" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>{series.title}</Typography>
+                    <Typography variant="body2" color="#95a5a6">{series.description}</Typography>
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button 
+                        sx={{
+                            backgroundColor: 'primary.main',
+                            color: '#ffffff',
+                            mt: 1,
+                        }}
+                    >
+                        Explore {series.title}
+                    </Button>
+                </Box>
             </Box>
         </Paper>
     );

@@ -49,15 +49,16 @@ function GenerateItem() {
     const [isProductModalOpen, setIsProductModalOpen] = useState(false);
     const [scannedBarcode, setScannedBarcode] = useState(null);
     const [productList, setProductList] = useState([]);
-    const handleOpenBarcodeModal = () => setIsBarcodeModalOpen(true);
-    const handleCloseBarcodeModal = () => setIsBarcodeModalOpen(false);
-    const handleOpenProductModal = () => setIsProductModalOpen(true);
-    const handleCloseProductModal = () => setIsProductModalOpen(false);
     const [isItemModalOpen, setIsItemModalOpen] = useState(false);
     const [currentItem, setCurrentItem] = useState(null);
 
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+    const handleCloseModal = () => setIsBarcodeModalOpen(false);
+    const handleOpenBarcodeModal = () => setIsBarcodeModalOpen(true);
+    const handleCloseBarcodeModal = () => setIsBarcodeModalOpen(false);
+    const handleOpenProductModal = () => setIsProductModalOpen(true);
+    const handleCloseProductModal = () => setIsProductModalOpen(false);
 
     useEffect(() => {
         if (scannedBarcode) {
@@ -460,7 +461,6 @@ function GenerateItem() {
                         maxHeight: '80%',
                         overflow: 'auto',
                         bgcolor: 'background.paper',
-                        border: '2px solid #000',
                         boxShadow: 24,
                         p: { xs: 2, sm: 3, md: 4 },
                         borderRadius: 2,
@@ -469,20 +469,39 @@ function GenerateItem() {
                     }}>
                         {currentItem && (
                             <>
-                                <Button
-                                    variant="contained"
-                                    fullWidth
-                                    onClick={() => {
-                                        handleShowcaseSubmit();
-                                        handleCloseItemModal();
-                                    }}
-                                    sx={{
-                                        mb: 2,
-                                        bgcolor: 'primary.main',
-                                    }}
-                                >
-                                    Submit to Showcase
-                                </Button>
+                                <Box sx={{ 
+                                    display: 'flex', 
+                                    justifyContent: 'space-between', 
+                                    mb: 1,
+                                }}>
+                                    <Button 
+                                        variant="outlined" 
+                                        onClick={() => {
+                                            setGeneratedItems(prevItems => prevItems.filter(item => item !== currentItem));
+                                            handleCloseItemModal();
+                                        }}
+                                        sx={{ 
+                                            flex: 1,
+                                            mr: 1
+                                        }}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => {
+                                            handleShowcaseSubmit();
+                                            handleCloseItemModal();
+                                        }}
+                                        sx={{
+                                            bgcolor: 'primary.main',
+                                            flex: 1,
+                                            ml: 1
+                                        }}
+                                    >
+                                        Submit
+                                    </Button>
+                                </Box>
                                 <ItemDisplay generatedItem={{
                                     data: currentItem,
                                     condition: currentItem.condition,
@@ -491,20 +510,6 @@ function GenerateItem() {
                                     price: currentItem.price,
                                     forSale: currentItem.forSale
                                 }} />
-                                <Button 
-                                    variant="contained" 
-                                    fullWidth
-                                    onClick={() => {
-                                        setGeneratedItems(prevItems => prevItems.filter(item => item !== currentItem));
-                                        handleCloseItemModal();
-                                    }}
-                                    sx={{ 
-                                        mt: 2, 
-                                        bgcolor: 'secondary.main',
-                                    }}
-                                >
-                                    Cancel
-                                </Button>
                             </>
                         )}
                     </Box>
@@ -522,16 +527,17 @@ function GenerateItem() {
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
                         width: 400,
-                        bgcolor: 'background.paper',
+                        height: '100vh',
+                        bgcolor: 'rgb(0, 0, 0, 0.8)',
                         border: '2px solid #000',
                         boxShadow: 24,
                         p: 4,
+                        borderRadius: 2
                     }}>
-                        <Typography id="barcode-scanner-modal" variant="h6" component="h2">
+                        <Typography id="barcode-scanner-modal" variant="h6" component="h2" sx={{ color: 'white', fontStyle: 'bold'}}>
                             Scan Barcode
                         </Typography>
                         <BarcodeScanner setScannedBarcode={setScannedBarcode} onClose={handleCloseBarcodeModal}/>
-                        <Button onClick={handleCloseBarcodeModal}>Close</Button>
                     </Box>
                 </Modal>
                 <Modal

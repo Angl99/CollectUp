@@ -74,8 +74,8 @@ export default function EditModal({ isOpen, onClose, onSave, item }) {
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Cancel</Button>
-          <Button type="submit" variant="contained" color="primary">
+          <Button onClick={onClose} size="small">Cancel</Button>
+          <Button type="submit" variant="contained" color="primary" size="small">
             Save
           </Button>
         </DialogActions>
