@@ -6,6 +6,7 @@ import { Explore } from '@mui/icons-material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import data from '../../mockData/data.json'
 import customBanner from '../../assets/wp7713574 copy.jpg';
+import AnimeNYCAd from '../../helpers/ad';
 
 const theme = createTheme({
   palette: {
@@ -184,6 +185,7 @@ export default function Home() {
                         </Carousel>
                     </Box>
                 </Box>
+                <AnimeNYCAd />
                 {/* Shonen section */}
                 <Box sx={{
                     width: '100%',
