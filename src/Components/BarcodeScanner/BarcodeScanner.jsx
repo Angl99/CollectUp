@@ -8,19 +8,25 @@ export default function BarcodeScanner({ setScannedBarcode, onClose }) {
   const [isBarcodeDetectorSupported, setIsBarcodeDetectorSupported] = useState(true);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [isCameraActive, setIsCameraActive] = useState(true);
+  const [isVideoReady, setIsVideoReady] = useState(false);
 
   useEffect(() => {
     if (!('BarcodeDetector' in window)) {
       window.BarcodeDetector = BarcodeDetectorPolyfill;
     }
 
+    let stream = null;
+
     const setupCamera = async () => {
       if (!isCameraActive) return;
 
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
+          videoRef.current.onloadedmetadata = () => {
+            setIsVideoReady(true);
+          };
         }
       } catch (error) {
         console.error('Error accessing camera:', error);
@@ -40,41 +46,58 @@ export default function BarcodeScanner({ setScannedBarcode, onClose }) {
     window.addEventListener('resize', updateDimensions);
 
     return () => {
-      stopCamera();
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
       window.removeEventListener('resize', updateDimensions);
     };
   }, [isCameraActive]);
 
   useEffect(() => {
-    if (!isCameraActive) return;
+    if (!isCameraActive || !isVideoReady) return;
 
     const detectBarcode = async () => {
       if (!videoRef.current || !canvasRef.current) return;
 
-      const barcodeDetector = new window.BarcodeDetector({});
+      const barcodeDetector = new window.BarcodeDetector();
       const canvas = canvasRef.current;
       const context = canvas.getContext('2d');
-      let isCancelled = false;
+      let animationFrameId;
 
       const detectFrame = async () => {
-        if (isCancelled) return;
+        if (!isCameraActive || !videoRef.current) return;
 
+        canvas.width = videoRef.current.videoWidth;
+        canvas.height = videoRef.current.videoHeight;
         context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+
         try {
           const barcodes = await barcodeDetector.detect(canvas);
           if (barcodes.length > 0) {
-            setScannedBarcode(barcodes[0].rawValue);
+            const scannedCode = barcodes[0].rawValue;
+            const sanitizedCode = scannedCode.replace(/-/g, '');
+            
+            if (/^\d+$/.test(sanitizedCode) && (sanitizedCode.length === 12 || sanitizedCode.length === 13)) {
+              let barcodeType;
+              if (sanitizedCode.length === 13) {
+                barcodeType = sanitizedCode.startsWith('0') ? "UPC-A (GTIN-12)" : "EAN-13 (ISBN/ GTIN-13)";
+              } else {
+                barcodeType = "UPC-A (GTIN-12)";
+              }
+              setScannedBarcode({ code: sanitizedCode, type: barcodeType });
+            }
           }
         } catch (error) {
           console.error('Barcode detection error:', error);
         }
-        requestAnimationFrame(detectFrame);
+
+        animationFrameId = requestAnimationFrame(detectFrame);
       };
 
-      requestAnimationFrame(detectFrame);
+      detectFrame();
 
       return () => {
-        isCancelled = true;
+        cancelAnimationFrame(animationFrameId);
       };
     };
 
@@ -84,20 +107,20 @@ export default function BarcodeScanner({ setScannedBarcode, onClose }) {
       setIsBarcodeDetectorSupported(false);
       console.error('Barcode Detector is not supported in this browser');
     }
-  }, [setScannedBarcode, isCameraActive]);
+  }, [setScannedBarcode, isCameraActive, isVideoReady]);
 
   const stopCamera = () => {
     if (videoRef.current && videoRef.current.srcObject) {
       videoRef.current.srcObject.getTracks().forEach(track => track.stop());
       videoRef.current.srcObject = null;
     }
+    setIsVideoReady(false);
   };
 
   const handleClose = () => {
     setIsCameraActive(false);
     stopCamera();
     onClose();
-    window.location.reload();
   };
 
   if (!isCameraActive) {
