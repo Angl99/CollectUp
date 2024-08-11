@@ -62,8 +62,9 @@ function GenerateItem() {
 
     useEffect(() => {
         if (scannedBarcode) {
-            setSearchQuery(scannedBarcode);
-            handleCloseModal();
+            setSearchQuery(scannedBarcode.code);
+            setSearchType(scannedBarcode.type);
+            handleCloseBarcodeModal();
         }
     }, [scannedBarcode]);
 
@@ -537,7 +538,15 @@ function GenerateItem() {
                         <Typography id="barcode-scanner-modal" variant="h6" component="h2" sx={{ color: 'white', fontStyle: 'bold'}}>
                             Scan Barcode
                         </Typography>
-                        <BarcodeScanner setScannedBarcode={setScannedBarcode} onClose={handleCloseBarcodeModal}/>
+                        <BarcodeScanner 
+                            setScannedBarcode={(barcodeData) => {
+                                setScannedBarcode(barcodeData);
+                                setSearchQuery(barcodeData.code);
+                                setSearchType(barcodeData.type);
+                                handleCloseBarcodeModal();
+                            }} 
+                            onClose={handleCloseBarcodeModal}
+                            />
                     </Box>
                 </Modal>
                 <Modal
