@@ -586,7 +586,7 @@ export default function Home() {
                         {/* Carousel for suggested items */}
                         <Carousel 
                             autoPlay={true} 
-                            interval={8000} 
+                            interval={11000} 
                             indicators={false} 
                             navButtonsAlwaysVisible={false}
                             stopAutoPlayOnHover={true}
@@ -616,7 +616,7 @@ export default function Home() {
                         {/* Carousel for suggested items */}
                         <Carousel 
                             autoPlay={true} 
-                            interval={8000} 
+                            interval={10000} 
                             indicators={false} 
                             navButtonsAlwaysVisible={false}
                             stopAutoPlayOnHover={true}
@@ -645,7 +645,7 @@ export default function Home() {
                         {/* Carousel for suggested items */}
                         <Carousel 
                             autoPlay={true} 
-                            interval={8000} 
+                            interval={11000} 
                             indicators={false} 
                             navButtonsAlwaysVisible={false}
                             stopAutoPlayOnHover={true}
@@ -675,7 +675,7 @@ export default function Home() {
                         {/* Carousel for suggested items */}
                         <Carousel 
                             autoPlay={true} 
-                            interval={8000} 
+                            interval={10000} 
                             indicators={false} 
                             navButtonsAlwaysVisible={false}
                             stopAutoPlayOnHover={true}
