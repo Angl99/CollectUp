@@ -1,11 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, Typography, Box, Paper, Grid, Stack } from '@mui/material';
 import Carousel from 'react-material-ui-carousel';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import data from '../../mockData/data.json'
-import customBanner from '../../assets/wp7713574 copy.jpg';
+import customBanner from '../../assets/banner.jpg';
 import AnimeNYCAd from '../../helpers/ad';
 import WatchAd from '../../helpers/ad2';
+import AnimeExpoAd from '../../helpers/ad3';
 import image1 from '../../assets/img1.jpeg'
 import image2 from '../../assets/img2.jpeg'
 import image3 from '../../assets/img3.jpeg'
@@ -31,238 +33,9 @@ const theme = createTheme({
   },
 });
 
-function Item(props) {
-    return (
-        <Paper sx={{ backgroundColor: '#ffffff', height: '100%', display: 'flex', flexDirection: 'column' }}>
-            {/* Image container */}
-            <Box sx={{ height: '200px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
-                <img 
-                    src={props.item.image} 
-                    alt={props.item.title} 
-                    style={{ 
-                        maxWidth: '100%', 
-                        maxHeight: '100%', 
-                        objectFit: 'contain',
-                        paddingTop: '10px'
-                    }}
-                />
-            </Box>
-            {/* Content container */}
-            <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <Box>
-                    <Typography variant="inherit" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>{props.item.title}</Typography>
-                    <Typography variant="subtitle2" color="#95a5a6" sx={{ mb: 1 }}>{props.item.publisher}</Typography>
-                </Box>
-                <Box>
-                    <Typography variant="subtitle1" fontWeight="bold" color="#34495e" sx={{ mb: 1 }}>${props.item.price}</Typography>
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Button 
-                            className="CheckButton"
-                            sx={{
-                                backgroundColor: 'primary.main',
-                                color: '#ffffff',
-                            }}
-                        >
-                            Check it out
-                        </Button>
-                    </Box>
-                </Box>
-            </Box>
-        </Paper>
-    );
-}
-
-function PopularSeriesItem({ series }) {
-    return (
-        <Paper sx={{ backgroundColor: '#ffffff', height: '100%', display: 'flex', flexDirection: 'column' }}>
-            {/* Image container */}
-            <Box sx={{ height: '200px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
-                <img 
-                    src={series.image} 
-                    alt={series.title} 
-                    style={{ 
-                        maxWidth: '100%', 
-                        maxHeight: '100%', 
-                        objectFit: 'contain',
-                        paddingTop: '10px'
-                    }}
-                />
-            </Box>
-            {/* Content container */}
-            <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <Box>
-                    <Typography variant="h6" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>{series.title}</Typography>
-                    <Typography variant="body2" color="#95a5a6">{series.description}</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button 
-                        sx={{
-                            backgroundColor: 'primary.main',
-                            color: '#ffffff',
-                            mt: 1,
-                        }}
-                    >
-                        View Series
-                    </Button>
-                </Box>
-            </Box>
-        </Paper>
-    );
-}
-
-function ShonenSeriesItem({ series }) {
-    return (
-        <Paper sx={{ backgroundColor: '#ffffff', height: '100%', display: 'flex', flexDirection: 'column' }}>
-            {/* Image container */}
-            <Box sx={{ height: '200px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
-                <img 
-                    src={series.image} 
-                    alt={series.title} 
-                    style={{ 
-                        maxWidth: '100%', 
-                        maxHeight: '100%', 
-                        objectFit: 'contain',
-                        paddingTop: '10px'
-                    }}
-                />
-            </Box>
-            {/* Content container */}
-            <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <Box>
-                    <Typography variant="h6" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>{series.title}</Typography>
-                    <Typography variant="body2" color="#95a5a6">{series.description}</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button 
-                        sx={{
-                            backgroundColor: 'primary.main',
-                            color: '#ffffff',
-                            mt: 1,
-                        }}
-                    >
-                        Explore {series.title}
-                    </Button>
-                </Box>
-            </Box>
-        </Paper>
-    );
-}
-
-function SeinenSeriesItem({ series }) {
-    return (
-        <Paper sx={{ backgroundColor: '#ffffff', height: '100%', display: 'flex', flexDirection: 'column' }}>
-            {/* Image container */}
-            <Box sx={{ height: '200px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
-                <img 
-                    src={series.image} 
-                    alt={series.title} 
-                    style={{ 
-                        maxWidth: '100%', 
-                        maxHeight: '100%', 
-                        objectFit: 'contain',
-                        paddingTop: '10px'
-                    }}
-                />
-            </Box>
-            {/* Content container */}
-            <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <Box>
-                    <Typography variant="h6" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>{series.title}</Typography>
-                    <Typography variant="body2" color="#95a5a6">{series.description}</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button 
-                        sx={{
-                            backgroundColor: 'primary.main',
-                            color: '#ffffff',
-                            mt: 1,
-                        }}
-                    >
-                        Explore {series.title}
-                    </Button>
-                </Box>
-            </Box>
-        </Paper>
-    );
-}
-
-function HorrorSeriesItem({ series }) {
-    return (
-        <Paper sx={{ backgroundColor: '#262626', height: '100%', display: 'flex', flexDirection: 'column' }}>
-            {/* Image container */}
-            <Box sx={{ height: '200px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
-                <img 
-                    src={series.image} 
-                    alt={series.title} 
-                    style={{ 
-                        maxWidth: '100%', 
-                        maxHeight: '100%', 
-                        objectFit: 'contain',
-                        paddingTop: '10px'
-                    }}
-                />
-            </Box>
-            {/* Content container */}
-            <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <Box>
-                    <Typography variant="h6" color="red" sx={{ fontFamily: 'Komika Axis' }}>{series.title}</Typography>
-                    <Typography variant="body2" color="#95a5a6">{series.description}</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button 
-                        sx={{
-                            backgroundColor: 'black',
-                            color: 'red',
-                            mt: 1,
-                        }}
-                    >
-                        Explore {series.title}
-                    </Button>
-                </Box>
-            </Box>
-        </Paper>
-    );
-}
-
-function AnimeMovieItem({ movie }) {
-    return (
-        <Paper sx={{ backgroundColor: '#ffffff', height: '100%', display: 'flex', flexDirection: 'column' }}>
-            {/* Image container */}
-            <Box sx={{ height: '200px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
-                <img 
-                    src={movie.image} 
-                    alt={movie.title} 
-                    style={{ 
-                        maxWidth: '100%', 
-                        maxHeight: '100%', 
-                        objectFit: 'contain',
-                        paddingTop: '10px'
-                    }}
-                />
-            </Box>
-            {/* Content container */}
-            <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <Box>
-                    <Typography variant="h6" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>{movie.title}</Typography>
-                    <Typography variant="body2" color="#95a5a6">{movie.description}</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button 
-                        sx={{
-                            backgroundColor: 'primary.main',
-                            color: '#ffffff',
-                            mt: 1,
-                        }}
-                    >
-                        Explore {movie.title}
-                    </Button>
-                </Box>
-            </Box>
-        </Paper>
-    );
-}
-
 export default function Home() {
+    const navigate = useNavigate();
+
     const listings = data.slice(0, 3).map(item => ({
         title: item.items[0].title,
         description: item.items[0].description || "Lorem ipsum odor amet, consectetuer adipiscing elit. Eget quisque parturient mauris; porttitor erat sapien faucibus lacinia." || "No description available",
@@ -366,6 +139,242 @@ export default function Home() {
     }
     ];
 
+     function Item(props) {
+        return (
+            <Paper sx={{ backgroundColor: '#ffffff', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                {/* Image container */}
+                <Box sx={{ height: '200px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+                    <img 
+                        src={props.item.image} 
+                        alt={props.item.title} 
+                        style={{ 
+                            maxWidth: '100%', 
+                            maxHeight: '100%', 
+                            objectFit: 'contain',
+                            paddingTop: '10px'
+                        }}
+                    />
+                </Box>
+                {/* Content container */}
+                <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <Box>
+                        <Typography variant="inherit" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>{props.item.title}</Typography>
+                        <Typography variant="subtitle2" color="#95a5a6" sx={{ mb: 1 }}>{props.item.publisher}</Typography>
+                    </Box>
+                    <Box>
+                        <Typography variant="subtitle1" fontWeight="bold" color="#34495e" sx={{ mb: 1 }}>${props.item.price}</Typography>
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <Button 
+                                className="CheckButton"
+                                sx={{
+                                    backgroundColor: 'primary.main',
+                                    color: '#ffffff',
+                                }}
+                                onClick={() => navigate(`/404`)}
+                            >
+                                Check it out
+                            </Button>
+                        </Box>
+                    </Box>
+                </Box>
+            </Paper>
+        );
+    }
+
+    function PopularSeriesItem({ series }) {
+        return (
+            <Paper sx={{ backgroundColor: '#ffffff', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                {/* Image container */}
+                <Box sx={{ height: '200px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+                    <img 
+                        src={series.image} 
+                        alt={series.title} 
+                        style={{ 
+                            maxWidth: '100%', 
+                            maxHeight: '100%', 
+                            objectFit: 'contain',
+                            paddingTop: '10px'
+                        }}
+                    />
+                </Box>
+                {/* Content container */}
+                <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <Box>
+                        <Typography variant="h6" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>{series.title}</Typography>
+                        <Typography variant="body2" color="#95a5a6">{series.description}</Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button 
+                            onClick={() => navigate(`/404`)}
+                            sx={{
+                                backgroundColor: 'primary.main',
+                                color: '#ffffff',
+                                mt: 1,
+                            }}
+                        >
+                            View Series
+                        </Button>
+                    </Box>
+                </Box>
+            </Paper>
+        );
+    }
+
+    function ShonenSeriesItem({ series }) {
+        return (
+            <Paper sx={{ backgroundColor: '#ffffff', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                {/* Image container */}
+                <Box sx={{ height: '200px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+                    <img 
+                        src={series.image} 
+                        alt={series.title} 
+                        style={{ 
+                            maxWidth: '100%', 
+                            maxHeight: '100%', 
+                            objectFit: 'contain',
+                            paddingTop: '10px'
+                        }}
+                    />
+                </Box>
+                {/* Content container */}
+                <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <Box>
+                        <Typography variant="h6" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>{series.title}</Typography>
+                        <Typography variant="body2" color="#95a5a6">{series.description}</Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button 
+                            onClick={() => navigate(`/404`)}
+                            sx={{
+                                backgroundColor: 'primary.main',
+                                color: '#ffffff',
+                                mt: 1,
+                            }}
+                        >
+                            Explore {series.title}
+                        </Button>
+                    </Box>
+                </Box>
+            </Paper>
+        );
+    }
+
+    function SeinenSeriesItem({ series }) {
+        return (
+            <Paper sx={{ backgroundColor: '#ffffff', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                {/* Image container */}
+                <Box sx={{ height: '200px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+                    <img 
+                        src={series.image} 
+                        alt={series.title} 
+                        style={{ 
+                            maxWidth: '100%', 
+                            maxHeight: '100%', 
+                            objectFit: 'contain',
+                            paddingTop: '10px'
+                        }}
+                    />
+                </Box>
+                {/* Content container */}
+                <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <Box>
+                        <Typography variant="h6" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>{series.title}</Typography>
+                        <Typography variant="body2" color="#95a5a6">{series.description}</Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button 
+                            onClick={() => navigate(`/404`)}
+                            sx={{
+                                backgroundColor: 'primary.main',
+                                color: '#ffffff',
+                                mt: 1,
+                            }}
+                        >
+                            Explore {series.title}
+                        </Button>
+                    </Box>
+                </Box>
+            </Paper>
+        );
+    }
+
+    function HorrorSeriesItem({ series }) {
+        return (
+            <Paper sx={{ backgroundColor: '#262626', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                {/* Image container */}
+                <Box sx={{ height: '200px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+                    <img 
+                        src={series.image} 
+                        alt={series.title} 
+                        style={{ 
+                            maxWidth: '100%', 
+                            maxHeight: '100%', 
+                            objectFit: 'contain',
+                            paddingTop: '10px'
+                        }}
+                    />
+                </Box>
+                {/* Content container */}
+                <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <Box>
+                        <Typography variant="h6" color="red" sx={{ fontFamily: 'Komika Axis' }}>{series.title}</Typography>
+                        <Typography variant="body2" color="#95a5a6">{series.description}</Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button
+                            onClick={() => navigate(`/404`)}     
+                            sx={{
+                                backgroundColor: 'black',
+                                color: 'red',
+                                mt: 1,
+                            }}
+                        >
+                            Explore {series.title}
+                        </Button>
+                    </Box>
+                </Box>
+            </Paper>
+        );
+    }
+
+    function AnimeMovieItem({ movie }) {
+        return (
+            <Paper sx={{ backgroundColor: '#ffffff', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                {/* Image container */}
+                <Box sx={{ height: '200px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+                    <img 
+                        src={movie.image} 
+                        alt={movie.title} 
+                        style={{ 
+                            maxWidth: '100%', 
+                            maxHeight: '100%', 
+                            objectFit: 'contain',
+                            paddingTop: '10px'
+                        }}
+                    />
+                </Box>
+                {/* Content container */}
+                <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <Box>
+                        <Typography variant="h6" color="#34495e" sx={{ fontFamily: 'Komika Axis' }}>{movie.title}</Typography>
+                        <Typography variant="body2" color="#95a5a6">{movie.description}</Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button 
+                            onClick={() => navigate(`/404`)}
+                            sx={{
+                                backgroundColor: 'primary.main',
+                                color: '#ffffff',
+                                mt: 1,
+                            }}
+                        >
+                            Explore {movie.title}
+                        </Button>
+                    </Box>
+                </Box>
+            </Paper>
+        );
+    }
 
     return (
         <ThemeProvider theme={theme}>
@@ -626,7 +635,8 @@ export default function Home() {
                     flexDirection: 'column',
                     alignItems: 'center',
                     padding: { xs: '32px 16px', sm: '32px 32px', md: '32px 64px' },
-                    backgroundColor: 'black'
+                    backgroundColor: 'black',
+                    borderRadius: '8px',
                 }}>
                     <Typography variant="h4" component="h1" gutterBottom color="#34495e" sx={{ fontFamily: 'Komika Axis', color: 'red' }}>
                         Horror
@@ -646,6 +656,9 @@ export default function Home() {
                         </Carousel>
                     </Box>
                 </Box>
+
+                {/* Anime Expo Ad */}
+                <AnimeExpoAd />
 
                 {/* Anime Movies section */}
                 <Box sx={{
@@ -677,6 +690,3 @@ export default function Home() {
         </ThemeProvider>
     );
 }
-
-
-

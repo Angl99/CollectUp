@@ -4,6 +4,7 @@ import Home from './Components/Home/Home'
 import LogIn from './Components/LogIn/LogIn'
 import NavBar from './Components/NavBar/NavBar'
 import { AuthProvider } from './helpers/AuthContext'
+import NotFound from './Components/404/404'
 import Profile from './Components/Profile/Profile'
 import GenerateItem from './Components/Items/GenerateItem'
 import Marketplace from './Components/Marketplace/Marketplace'
@@ -48,6 +49,7 @@ function App() {
             <Route path='/scan' element={<BarcodeScanner />} />
             <Route path='/showcases/:id' element={<ShowcaseDisplay />} />
             <Route path='/products/:productEan' element={<ProductDetails />} />
+            <Route path="/404" element={<NotFound />} />
           </Routes>
         </AuthProvider>
       </Router>

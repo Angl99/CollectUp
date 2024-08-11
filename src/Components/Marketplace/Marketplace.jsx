@@ -150,7 +150,7 @@ const Marketplace = () => {
         <Grid container spacing={4}>
           {filteredItems.map(item => (
             <Grid item xs={12} sm={6} key={item.id}>
-              <MarketplaceItem item={item} onAddToCart={handleAddToCart} />
+              <MarketplaceItem item={item} onAddToCart={handleAddToCart} onClick={() => navigate(`/404`)} />
             </Grid>
           ))}
         </Grid>
