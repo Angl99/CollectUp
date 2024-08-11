@@ -72,7 +72,7 @@ export default function Profile() {
                   p: 2
                 }}>
                   <Avatar
-                    src=""
+                    src="https://i.pinimg.com/originals/30/5f/68/305f68b547c8b43ae7f1dc8fed76af22.jpg"
                     sx={{ 
                       width: isMobile ? 100 : 150, 
                       height: isMobile ? 100 : 150, 

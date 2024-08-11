@@ -12,7 +12,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShowcaseIcon from '@mui/icons-material/Collections';
 import ShowcaseOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import customMenuIcon from '../../assets/AA.png';
+import customMenuIcon from '../../assets/aa-white.png';
 import { getShowcasesByUserUid } from '../../helpers/showcaseHelpers';
 import { getByFirebaseId } from '../../helpers/userHelpers';
 import productHelper from '../../helpers/productHelpers';
@@ -257,7 +257,7 @@ export default function NavBar() {
 
   // define the top navigation bar
   const TopBar = (
-    <AppBar position="fixed" sx={{ top: 0, bottom: 'auto', backgroundColor: alpha(theme.palette.primary.main, 0.9) }}>
+    <AppBar position="fixed" sx={{ top: 0, bottom: 'auto', backgroundColor: 'black' }}>
       <Toolbar>
         {user ? (
           // Logo button for logged-in users
@@ -280,9 +280,8 @@ export default function NavBar() {
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
-                transition: 'transform 0.3s ease',
                 '&:hover': {
-                  transform: 'scale(1.1)',
+                  color: 'white',
                 },
               }}
             />
@@ -309,9 +308,8 @@ export default function NavBar() {
                   width: '100%',
                   height: '100%',
                   objectFit: 'cover',
-                  transition: 'transform 0.3s ease',
                   '&:hover': {
-                    transform: 'scale(1.1)',
+                    color: 'white',
                   },
                 }}
               />
